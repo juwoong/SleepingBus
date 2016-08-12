@@ -43,7 +43,7 @@ public class AlarmService extends IntentService {
 
     private boolean check() {
         boolean foo = true;
-        // TODO: Check
+        // TODO: Check method
         return foo;
     }
 }

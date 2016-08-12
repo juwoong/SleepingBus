@@ -8,10 +8,8 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
 
 import kr.tamiflus.sleepingbus.structs.ArrivingBus;
-import kr.tamiflus.sleepingbus.structs.BusStation;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;

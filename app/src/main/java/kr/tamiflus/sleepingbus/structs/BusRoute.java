@@ -10,7 +10,4 @@ public class BusRoute {
     private String id;
     private String type;
     private String locate;
-    private int[] arriveTime = new int[2];
-
-
 }

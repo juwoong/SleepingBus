@@ -53,6 +53,9 @@
             android:name=".AlarmService"
             android:exported="false">
         </service>
+
+        <activity android:name=".AlarmActivity">
+        </activity>
     </application>
 
 </manifest>

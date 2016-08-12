@@ -15,7 +15,6 @@ public class BusStationViewHolder  {
     @BindView(R.id.busStationIdText) TextView idView;
     @BindView(R.id.busStationLocationText) TextView locationView;
 
-
     public BusStationViewHolder(View v) {
         ButterKnife.bind(this, v);
     }

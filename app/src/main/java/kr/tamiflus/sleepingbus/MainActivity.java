@@ -20,7 +20,7 @@ public class MainActivity extends Activity {
         ((Button) findViewById(R.id.startBussingButton)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), GetBusStationIDActivity.class);
+                Intent intent = new Intent(getApplicationContext(), BusRouteStationListActivity.class);
                 startActivity(intent);
             }
         });

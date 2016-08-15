@@ -19,10 +19,8 @@
             android:textSize="18sp"/>
     </LinearLayout-->
 
-    <ListView
-        android:dividerHeight="0px"
-        android:divider="#ffffff"
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/busRouteListView"></ListView>
+        android:id="@+id/busRouteListView"></android.support.v7.widget.RecyclerView>
 </LinearLayout>

@@ -42,6 +42,8 @@ public class BusStationAdapter extends ArrayAdapter<BusStation>{
         holder.idView.setText(st.getId());
         holder.locationView.setText(st.getRegion());
 
+
+
         return view;
     }
 }

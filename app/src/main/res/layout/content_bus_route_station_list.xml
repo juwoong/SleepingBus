@@ -8,16 +8,6 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="kr.tamiflus.sleepingbus.BusRouteStationListActivity"
     tools:showIn="@layout/activity_bus_route_station_list">
-    <!--LinearLayout
-        android:layout_width="match_parent"
-        android:background="#fff"
-        android:layout_height="wrap_content">
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint='320 '
-            android:textSize="18sp"/>
-    </LinearLayout-->
 
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"

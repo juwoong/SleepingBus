@@ -5,10 +5,11 @@ package kr.tamiflus.sleepingbus.structs;
  */
 public class BusStation {
     private String name;
-    private String id;
+    private String id;  //ex)18312
     private String region;
-    private String code;
+    private String code;    //stationId ex)217000071
     private String x, y;
+    private String dist;   // distance from current position
 
     public String getName() {
         return name;
@@ -62,4 +63,8 @@ public class BusStation {
     public String toString() {
         return String.format("{%s, %s, %s}", name, x, y);
     }
+
+    public String getDist() { return dist; }
+
+    public void setDist(String dist) { this.dist = dist; }
 }

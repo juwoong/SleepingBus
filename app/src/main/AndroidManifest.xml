@@ -45,10 +45,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".SearchBusStationByLocationActivity"
-            android:label="@string/title_activity_search_bus_station_by_location" />
-
         <service
             android:name=".AlarmService"
             android:exported="false"></service>

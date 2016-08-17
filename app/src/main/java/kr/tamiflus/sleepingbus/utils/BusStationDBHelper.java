@@ -132,4 +132,18 @@ public class BusStationDBHelper extends SQLiteOpenHelper{
 
         return st;
     }
+    public BusStation fillStation(BusStation st) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c;
+
+        c = db.rawQuery("SELECT * FROM BusStation WHERE stCode=\'" + st.getCode() + "\'", null);
+        if(c.moveToFirst()) {
+            do {
+                st.setId(c.getString(1));
+                st.setRegion(c.getString(2));
+            }while(c.moveToNext());
+        }
+        return st;
+    }
+
 }

@@ -69,13 +69,13 @@ public class GetBusStationIDActivity extends AppCompatActivity {
             }
         });
 
-        ((FloatingActionButton) findViewById(R.id.fab)).setOnClickListener(new View.OnClickListener() {
+        /*((FloatingActionButton) findViewById(R.id.fab)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), SearchBusStationByLocationActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
     }
 
     @Override

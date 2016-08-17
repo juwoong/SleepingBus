@@ -1,5 +1,6 @@
 package kr.tamiflus.sleepingbus.utils;
 
+import android.content.Context;
 import android.util.Log;
 
 import org.xmlpull.v1.XmlPullParser;
@@ -22,10 +23,12 @@ import okhttp3.Response;
  */
 
 public class NearestStationParser {
-    public static final String FIND_RADIUS = "500";
+    public static final String FIND_RADIUS = "500"; // app finds nearest station in FIND_RADIUS (meter)
+    private Context context;
 
     private OkHttpClient client;
-    public NearestStationParser() {
+    public NearestStationParser(Context context) {
+        this.context = context;
         client = new OkHttpClient();
     }
 
@@ -73,7 +76,11 @@ public class NearestStationParser {
         return stations;
     }
 
-    public BusStation getNearestStationByXY(String x, String y) throws IOException, XmlPullParserException{ // todo 거리가 같은 경우엔 어떻게? 가까운 정류장이 없을 경우엔 어떻게?
+    /**
+     * @return null when no station was detected.
+     * 거리가 같은 경우 랜덤으로 한 개의 정류장만 리턴
+     */
+    public BusStation getNearestStationByXY(String x, String y) throws IOException, XmlPullParserException{
         List<BusStation> stations;
 
         Request request = new Request.Builder()
@@ -84,12 +91,34 @@ public class NearestStationParser {
         Response response = client.newCall(request).execute();
 
         stations = xmlToObject(response.body().string());
-        // TODO findIndexOfNearestStation 함수 작성하고 제일 가까운 정류장 리턴해주기, 근데 가까운 정류장이 없을 경우엔 어떻게?
-        return null;
+        if(stations.size() == 0) return null;
+        else {
+            int index = findIndexOfNearestStation(stations);
+            (new BusStationDBHelper(context)).fillStation(stations.get(index));
+            return stations.get(index);
+        }
     }
 
     private int findIndexOfNearestStation(List<BusStation> list) {
         // TODO 리스트에서 제일 가까운 버스정류장의 인덱스값 리턴해주는 함수 작성하기
-        return -1;
+        if(list.size() == 0) {
+            Log.d("ERROR", "size of list cannot be 0");
+            System.exit(-1);
+        }
+        int nearestDist = Integer.parseInt(FIND_RADIUS);
+        int nearestIndex = -1;
+        for(int i = 0; i<list.size(); i++) {
+            BusStation station = list.get(i);
+            int dist = Integer.parseInt(station.getDist());
+            if(dist < nearestDist) {
+                nearestDist = dist;
+                nearestIndex = i;
+            }
+        }
+        if(nearestIndex < 0) {
+            Log.d("ERROR", "unexpected nearestIndex");
+            System.exit(-1);
+        }
+        return nearestIndex;
     }
 }

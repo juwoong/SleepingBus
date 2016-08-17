@@ -20,6 +20,7 @@ import okhttp3.Response;
 
 /**
  * Created by 김정욱 on 2016-08-17.
+ * getNearestStationByXY(int, int) may useful.
  */
 
 public class NearestStationParser {
@@ -78,9 +79,10 @@ public class NearestStationParser {
 
     /**
      * @return null when no station was detected.
-     * 거리가 같은 경우 랜덤으로 한 개의 정류장만 리턴
+     * 거리가 같고 이름이 다른 경우, 랜덤으로 한 개의 BusStations을 담은 List를 리턴
+     * 이름이 같은 정류장(방향반대)이 있을 경우, 이름이 같은 정류장 두 개 모두를 담은 List를 리턴
      */
-    public BusStation getNearestStationByXY(String x, String y) throws IOException, XmlPullParserException{
+    public List<BusStation> getNearestStationByXY(String x, String y) throws IOException, XmlPullParserException{
         List<BusStation> stations;
 
         Request request = new Request.Builder()
@@ -93,9 +95,17 @@ public class NearestStationParser {
         stations = xmlToObject(response.body().string());
         if(stations.size() == 0) return null;
         else {
+            List<BusStation> result = new ArrayList<>();
             int index = findIndexOfNearestStation(stations);
             (new BusStationDBHelper(context)).fillStation(stations.get(index));
-            return stations.get(index);
+            result.add(stations.get(index));
+            stations.remove(index);
+            for(int i = 0; i<stations.size(); i++) {
+                if(stations.get(i).getName().equals(result.get(0).getName())) {
+                    result.add(stations.get(i));
+                }
+            }
+            return result;
         }
     }
 

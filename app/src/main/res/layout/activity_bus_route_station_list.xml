@@ -63,11 +63,10 @@
             </FrameLayout>
 
             <android.support.v7.widget.Toolbar
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="48dp"
                 android:layout_width="match_parent"
                 android:background="#FF686D"/>
         </android.support.design.widget.CollapsingToolbarLayout>
-
     </android.support.design.widget.AppBarLayout>
 
 
@@ -78,8 +77,6 @@
         android:clipToPadding="false"
         android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-
 
         <include layout="@layout/content_bus_route_station_list" />
 

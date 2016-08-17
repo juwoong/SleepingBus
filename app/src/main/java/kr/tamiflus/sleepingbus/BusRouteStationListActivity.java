@@ -31,6 +31,7 @@ public class BusRouteStationListActivity extends AppCompatActivity {
         llm.scrollToPosition(0);
 
         view.setLayoutManager(llm);
+        
 
         for(int i=0; i<20; i++) {
             BusStation st = new BusStation();

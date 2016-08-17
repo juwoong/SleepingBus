@@ -12,7 +12,10 @@ import java.util.List;
 import kr.tamiflus.sleepingbus.R;
 import kr.tamiflus.sleepingbus.structs.BusStation;
 
-public class BusRouteStationAdapter extends RecyclerView.Adapter<BusRouteStationViewHolder> {
+public class BusRouteStationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private static final int TYPE_HEADER = 0;
+    private static final int TYPE_ITEM = 1;
+
     Context context;
     LayoutInflater inflater;
     ArrayList<BusStation> list = new ArrayList<>();
@@ -37,28 +40,49 @@ public class BusRouteStationAdapter extends RecyclerView.Adapter<BusRouteStation
 
 
     @Override
-    public BusRouteStationViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = inflater.inflate(R.layout.busstation_route_listview, parent, false);
-        BusRouteStationViewHolder holder = new BusRouteStationViewHolder(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        return holder;
+        if(viewType == TYPE_HEADER)
+        {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.busstation_route_search_component, parent, false);
+            return new BusRouteStationHeaderViewHolder(v);
+        }
+        else{
+            View view = inflater.inflate(R.layout.busstation_route_listview, parent, false);
+            return new BusRouteStationViewHolder(view);
+        }
 
     }
 
     @Override
-    public void onBindViewHolder(BusRouteStationViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder vh, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        BusStation st = list.get(position);
+        if(vh instanceof BusRouteStationHeaderViewHolder) {
 
-        holder.name.setText(st.getName());
-        holder.id.setText(st.getId());
-        holder.location.setText(st.getRegion());
+        }
+        else{
+            BusStation st = list.get(position);
+            BusRouteStationViewHolder holder = (BusRouteStationViewHolder) vh;
 
-        if(position == 0) holder.arrowImage.setImageResource(R.drawable.start);
-        else if(position == (list.size() - 1)) holder.arrowImage.setImageResource(R.drawable.end);
-        else holder.arrowImage.setImageResource(R.drawable.midd);
+            holder.name.setText(st.getName());
+            holder.id.setText(st.getId());
+            holder.location.setText(st.getRegion());
+
+            if (position == 1) holder.arrowImage.setImageResource(R.drawable.start);
+            else if (position == (list.size() - 1))
+                holder.arrowImage.setImageResource(R.drawable.end);
+            else holder.arrowImage.setImageResource(R.drawable.midd);
+        }
     }
+
+    @Override
+    public int getItemViewType(int position) {
+        if(position == 0)
+            return TYPE_HEADER;
+        return TYPE_ITEM;
+    }
+
 
     @Override
     public int getItemCount() {

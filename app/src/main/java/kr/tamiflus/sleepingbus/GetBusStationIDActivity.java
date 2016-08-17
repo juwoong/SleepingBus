@@ -1,6 +1,7 @@
 package kr.tamiflus.sleepingbus;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,11 +18,12 @@ import android.widget.Toast;
 
 import kr.tamiflus.sleepingbus.R;
 import kr.tamiflus.sleepingbus.component.BusStationAdapter;
+import kr.tamiflus.sleepingbus.component.ClearEditText;
 import kr.tamiflus.sleepingbus.utils.BusStationDBHelper;
 
 public class GetBusStationIDActivity extends AppCompatActivity {
 
-    EditText stationSearchBar;
+    ClearEditText stationSearchBar;
     ListView listView;
     BusStationAdapter adapter;
     BusStationDBHelper db;
@@ -31,9 +33,11 @@ public class GetBusStationIDActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_bus_station_id);
 
-        stationSearchBar = (EditText) findViewById(R.id.busStationSearchEditText);
+        stationSearchBar = (ClearEditText) findViewById(R.id.busStationSearchEditText);
         listView = (ListView) findViewById(R.id.busStationListView);
 
+
+        stationSearchBar.setHintTextColor(Color.parseColor("#aaaaaa"));
         adapter = new BusStationAdapter(getApplicationContext());
         listView.setAdapter(adapter);
 

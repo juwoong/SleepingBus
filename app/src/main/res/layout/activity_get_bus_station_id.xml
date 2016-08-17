@@ -1,42 +1,38 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingTop="@dimen/activity_horizontal_margin"
-    android:orientation="vertical"
-    android:gravity="center"
-    tools:context=".GetBusStationIDActivity">
-
-
-
-
-    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true">
-        <LinearLayout
+        android:fitsSystemWindows="true"
+    android:focusable="true" android:focusableInTouchMode="true">
+
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:maxLines="1"
-                android:id="@+id/busStationSearchEditText"/>
-
-            <ListView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/busStationListView"></ListView>
-        </LinearLayout>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            android:src="@android:drawable/ic_dialog_map" />
-    </android.support.design.widget.CoordinatorLayout>
-</LinearLayout>
+            android:theme="@style/AppTheme.AppBarOverlay">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="#fff"
+                app:popupTheme="@style/AppTheme.PopupOverlay" >
+                <kr.tamiflus.sleepingbus.component.ClearEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:maxLines="1"
+                    android:hint="정류장 번호 혹은 이름 검색"
+                    android:textColor="#999"
+                    android:background="#00000000"
+                    android:id="@+id/busStationSearchEditText"/>
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.AppBarLayout>
+
+    <ListView
+        android:layout_marginTop="48dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/busStationListView"></ListView>
+</android.support.design.widget.CoordinatorLayout>

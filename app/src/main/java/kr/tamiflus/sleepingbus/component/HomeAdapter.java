@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +58,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holder.nearStationDistanceView.setText(Integer.toString(st.distance) + "m");
         } else {
             final HomeNearStationListViewHolder holder = (HomeNearStationListViewHolder) vh;
-            NearTwoStation st = (NearTwoStation) list.get(position);
+            final NearTwoStation st = (NearTwoStation) list.get(position);
             holder.layout.initLayout(true);
             holder.name.setText(st.name);
             holder.upName.setText(st.s1.getName());
@@ -69,11 +70,26 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 public void onClick(View view) {
                     if(holder.layout.isExpanded()){
                         holder.layout.collapse();
-                        holder.btn.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp);
+                        holder.btn.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
                     } else {
                         holder.layout.expand();
-                        holder.btn.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
+                        holder.btn.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp);
                     }
+
+                }
+            });
+
+            holder.upName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(context, st.name + " : " + st.s1.getName(),Toast.LENGTH_LONG).show();
+                }
+            });
+
+            holder.downName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(context, st.name + " : " + st.s2.getName(),Toast.LENGTH_LONG).show();
 
                 }
             });

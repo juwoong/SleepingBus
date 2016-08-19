@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kr.tamiflus.sleepingbus.R;
+import kr.tamiflus.sleepingbus.holders.BusRouteStationHeaderViewHolder;
+import kr.tamiflus.sleepingbus.holders.BusRouteStationViewHolder;
 import kr.tamiflus.sleepingbus.structs.BusStation;
 
 public class BusRouteStationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

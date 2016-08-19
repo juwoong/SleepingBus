@@ -6,9 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import java.util.ArrayList;
-
 import kr.tamiflus.sleepingbus.R;
+import kr.tamiflus.sleepingbus.holders.BusStationViewHolder;
 import kr.tamiflus.sleepingbus.structs.BusStation;
 
 /**

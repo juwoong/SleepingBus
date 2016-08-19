@@ -1,4 +1,4 @@
-package kr.tamiflus.sleepingbus.component;
+package kr.tamiflus.sleepingbus.views;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;

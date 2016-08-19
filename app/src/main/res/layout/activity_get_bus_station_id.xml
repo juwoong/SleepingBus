@@ -17,7 +17,7 @@
                 android:layout_height="48dp"
                 android:background="#fff"
                 app:popupTheme="@style/AppTheme.PopupOverlay" >
-                <kr.tamiflus.sleepingbus.component.ClearEditText
+                <kr.tamiflus.sleepingbus.views.ClearEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"

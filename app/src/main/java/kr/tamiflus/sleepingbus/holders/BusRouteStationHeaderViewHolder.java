@@ -1,4 +1,4 @@
-package kr.tamiflus.sleepingbus.component;
+package kr.tamiflus.sleepingbus.holders;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -12,7 +12,7 @@ import kr.tamiflus.sleepingbus.R;
  * Created by tamiflus on 16. 8. 15..
  */
 public class BusRouteStationHeaderViewHolder extends RecyclerView.ViewHolder {
-    @BindView(R.id.busRouteStationSearchEditText) EditText text;
+    @BindView(R.id.busRouteStationSearchEditText) public EditText text;
 
     public BusRouteStationHeaderViewHolder(View v){
         super(v);

@@ -15,8 +15,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.ListIterator;
 
+import kr.tamiflus.sleepingbus.structs.BusRoute;
 import kr.tamiflus.sleepingbus.structs.BusStation;
 
 /**
@@ -158,4 +162,56 @@ public class BusStationDBHelper extends SQLiteOpenHelper{
         return st;
     }
 
+    public List<BusRoute> fillBusRoute(List<BusRoute> list) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c;
+
+        for(BusRoute busRoute : list) {
+            c = db.rawQuery("SELECT * FROM BusRoute WHERE routeId=\'" + busRoute.getRouteId() + "\'", null);
+            if(c.moveToFirst()) {
+                do {
+                    busRoute.setRegionName(c.getString(1));
+                    busRoute.setRouteName(c.getString(3));
+                    busRoute.setRouteTypeCd(c.getString(4));
+                    busRoute.setRouteTypeName(c.getString(5));
+                    Log.d("fillBusRoute", busRoute.toString());
+                }while(c.moveToNext());
+            }
+        }
+        return list;
+    }
+
+    public List<BusRoute> getBusRoutesByStationId(String stationId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c;
+        List<BusRoute> busRouteList = new ArrayList<>();
+        List<String> routeIdList = new ArrayList<>();
+
+        c = db.rawQuery("SELECT * FROM BusRouteList WHERE busStationID=\'" + stationId + "\'", null);
+        int routeIdIndex = c.getColumnIndex("busRouteID");
+        if(c.moveToFirst()) {
+            do {
+                if(!routeIdList.contains(c.getString(routeIdIndex))) {
+                    routeIdList.add(c.getString(routeIdIndex));
+                }
+            }while(c.moveToNext());
+        }
+        Comparator<String> comparator = new Comparator<String>() {
+            @Override
+            public int compare(String lhs, String rhs) {
+                return lhs.compareTo(rhs);
+            }
+        };
+        Collections.sort(routeIdList, comparator);
+
+        BusRoute busRoute;
+        for(int i = 0; i<routeIdList.size(); i++) {
+            busRoute = new BusRoute();
+            busRoute.setRouteId(routeIdList.get(i));
+            busRouteList.add(busRoute);
+        }
+        // todo fillRoute
+        busRouteList = fillBusRoute(busRouteList);
+        return busRouteList;
+    }
 }

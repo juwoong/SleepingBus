@@ -58,7 +58,7 @@ public class FindNearStationThread extends Thread {
 
         if(list.size() == 1) {
             msg.what = HomeActivity.UPDATE_NEARSTATION_ONE;
-            msg.obj = list;
+            msg.obj = list.get(0);
         } else if(list.size() == 2) {
             msg.what = HomeActivity.UPDATE_NEARSTATION_TWO;
             msg.obj = list;

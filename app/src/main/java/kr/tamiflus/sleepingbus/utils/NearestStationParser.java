@@ -56,12 +56,16 @@ public class NearestStationParser {
                     Log.i("tag", tag + " : " + xpp.getText());
 
                     if(tag.equals("itemList")) { station = new BusStation(); }
-                    else if(tag.equals("dist")) { station.setDist(xpp.getText()); }
-                    else if(tag.equals("stationId")) { station.setCode(xpp.getText()); }
+                    else if(tag.equals("dist")) { Log.d("dist", "dist"); station.setDist(xpp.getText()); }
+                    else if(tag.equals("stationId")) { Log.d("si", "si");station.setCode(xpp.getText()); }
                     else if(tag.equals("headerMsg")) {
                         if(!"정상적으로 처리되었습니다.".equals(xpp.getText())) {
-                            Log.d("ERROR", "ERROR");
-                            throw new XmlPullParserException("error");
+                            Log.d("ERROR", "Bus Info Loading Failed");
+                            BusStation st = new BusStation();
+                            st.setName("GPS 정보 불러오기 실패");
+                            st.setDist("0");
+                            stations.add(st);
+                            return stations;
                         }
 
                     }
@@ -70,7 +74,7 @@ public class NearestStationParser {
                     tag= xpp.getName();
                     if(tag.equals("itemList")) {
                         stations.add(station);
-                        Log.i("list", station.toString());
+                        Log.i("list", station.getCode() + ", " + station.getDist());
                     }
                     break;
             }
@@ -99,7 +103,8 @@ public class NearestStationParser {
         else {
             List<BusStation> result = new ArrayList<>();
             int index = findIndexOfNearestStation(stations);
-            (new BusStationDBHelper(context)).fillStation(stations.get(index));
+            (new BusStationDBHelper(context)).fillStation(stations);
+            Log.d("getNearestStationByXY", stations.get(index).getName() + ", " + stations.get(index).getCode() + ", " + stations.get(index).getDist());
             result.add(stations.get(index));
             stations.remove(index);
             for(int i = 0; i<stations.size(); i++) {

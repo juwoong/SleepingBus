@@ -15,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import kr.tamiflus.sleepingbus.structs.BusStation;
 
@@ -116,7 +117,7 @@ public class BusStationDBHelper extends SQLiteOpenHelper{
         return list;
     }
 
-    public ArrayList<BusStation> fillStation(ArrayList<BusStation> st) {
+    public List<BusStation> fillStation(List<BusStation> st) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c;
 
@@ -124,8 +125,14 @@ public class BusStationDBHelper extends SQLiteOpenHelper{
             c = db.rawQuery("SELECT * FROM BusStation WHERE stCode=\'" + i.getCode() + "\'", null);
             if(c.moveToFirst()) {
                 do {
+                    i.setName(c.getString(0));
                     i.setId(c.getString(1));
                     i.setRegion(c.getString(2));
+                    i.setRegion(c.getString(2));
+                    i.setCode(c.getString(3));
+                    i.setX(c.getString(4));
+                    i.setY(c.getString(5));
+                    Log.d("fillStation", i.toString());
                 }while(c.moveToNext());
             }
         }
@@ -139,8 +146,13 @@ public class BusStationDBHelper extends SQLiteOpenHelper{
         c = db.rawQuery("SELECT * FROM BusStation WHERE stCode=\'" + st.getCode() + "\'", null);
         if(c.moveToFirst()) {
             do {
+                st.setName(c.getString(0));
                 st.setId(c.getString(1));
                 st.setRegion(c.getString(2));
+                st.setCode(c.getString(3));
+                st.setX(c.getString(4));
+                st.setY(c.getString(5));
+//                Log.d("SQL", c.getString(0) + ", " + c.getString(1) + ", " + c.getString(2) + ", " + c.getString(3) + ", " + c.getString(4) + ", " + c.getString(5));
             }while(c.moveToNext());
         }
         return st;

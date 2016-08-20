@@ -14,5 +14,6 @@ public class NearStation extends HomeObject {
     public NearStation(BusStation st) {
         super(1);
         this.st = st;
+        this.distance = Integer.parseInt(st.getDist());
     }
 }

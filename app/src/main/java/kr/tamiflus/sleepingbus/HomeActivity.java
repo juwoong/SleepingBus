@@ -52,10 +52,10 @@ public class HomeActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(llm);
 
         BusStation st = new BusStation();
-        st.setName("한국디지털미디어고등학교");
+        st.setName("위치 확인 중..");
+        st.setDist("0");
 
         NearStation nearStation = new NearStation(st);
-        nearStation.distance=326;
 
         adapter = new HomeAdapter(getApplicationContext());
         adapter.add(nearStation);
@@ -111,10 +111,12 @@ public class HomeActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch(msg.what) {
                 case UPDATE_NEARSTATION_ONE:
-                    updateScreenContents((NearStation)msg.obj);
+                    updateScreenContents(new NearStation((BusStation)msg.obj));
                     break;
                 case UPDATE_NEARSTATION_TWO:
-                    updateScreenContents((NearTwoStation)msg.obj);
+                    List<BusStation> res = (List)msg.obj;
+                    NearTwoStation two = new NearTwoStation(res.get(0), res.get(1));
+                    updateScreenContents(two);
                     break;
                 case CANNOT_FIND_CURRENTLOCATION:
                     Log.d("D", "CANNOT find current location");

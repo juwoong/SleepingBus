@@ -16,5 +16,7 @@ public class NearTwoStation extends HomeObject {
         super(2);
         this.s1 = s1;
         this.s2 = s2;
+        this.d1 = Integer.parseInt(s1.getDist());
+        this.d2 = Integer.parseInt(s2.getDist());
     }
 }

@@ -1,6 +1,7 @@
 package kr.tamiflus.sleepingbus.component;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -105,7 +106,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             BookMark mark = (BookMark) list.get(position);
 
             holder.name.setText(mark.name);
-            holder.routeName.setTextColor(ColorMap.byID.get(mark.arrivingBus.getRouteTypeCd()));
+            holder.routeName.setTextColor(context.getResources().getColor(ColorMap.byID.get(mark.arrivingBus.getRouteTypeCd())));
             holder.routeName.setText(mark.arrivingBus.getRouteName());
             holder.course.setText(mark.startSt.getName() + " > " + mark.endSt.getName());
             holder.leftSeat.setText(String.format("(남은 좌석 : %d)", 27));

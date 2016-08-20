@@ -22,6 +22,7 @@ import java.util.ListIterator;
 
 import kr.tamiflus.sleepingbus.structs.BusRoute;
 import kr.tamiflus.sleepingbus.structs.BusStation;
+import kr.tamiflus.sleepingbus.structs.BusStationTag;
 
 /**
  * Created by tamiflus on 2016. 8. 1..
@@ -100,7 +101,7 @@ public class BusStationDBHelper extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c;
 
-        c = db.rawQuery("SELECT * FROM BusStation WHERE stId LIKE \'" + query + "%\' OR stName LIKE \'%" + query + "%\'", null);
+        c = db.rawQuery("SELECT * FROM BusStation WHERE stId LIKE \'" + query + "%\' OR stName LIKE \'%" + query + "%\' ORDER BY stLocation", null);
 
         if(c.moveToFirst()) {
             do {
@@ -118,7 +119,23 @@ public class BusStationDBHelper extends SQLiteOpenHelper{
             }while(c.moveToNext());
         }
 
-        return list;
+        ArrayList<BusStation> result = new ArrayList<>();
+        String loc = null;
+
+        if(list.size() > 0) {
+            result.add(new BusStationTag(list.get(0).getRegion()));
+            result.add(list.get(0));
+            loc = list.get(0).getRegion();
+        }
+        for(int i=1; i<list.size(); i++) {
+            if(!loc.equals(list.get(i).getRegion())) {
+                loc = list.get(i).getRegion();
+                result.add(new BusStationTag(loc));
+            }
+            result.add(list.get(i));
+        }
+
+        return result;
     }
 
     public List<BusStation> fillStation(List<BusStation> st) {

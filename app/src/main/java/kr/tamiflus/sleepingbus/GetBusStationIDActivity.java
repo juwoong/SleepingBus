@@ -3,6 +3,8 @@ package kr.tamiflus.sleepingbus;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -20,7 +22,7 @@ import kr.tamiflus.sleepingbus.utils.BusStationDBHelper;
 public class GetBusStationIDActivity extends AppCompatActivity {
 
     ClearEditText stationSearchBar;
-    ListView listView;
+    RecyclerView listView;
     BusStationAdapter adapter;
     BusStationDBHelper db;
 
@@ -30,7 +32,11 @@ public class GetBusStationIDActivity extends AppCompatActivity {
         setContentView(R.layout.activity_get_bus_station_id);
 
         stationSearchBar = (ClearEditText) findViewById(R.id.busStationSearchEditText);
-        listView = (ListView) findViewById(R.id.busStationListView);
+        listView = (RecyclerView) findViewById(R.id.busStationListView);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        llm.scrollToPosition(0);
+        listView.setLayoutManager(llm);
 
 
         stationSearchBar.setHintTextColor(Color.parseColor("#aaaaaa"));
@@ -62,12 +68,6 @@ public class GetBusStationIDActivity extends AppCompatActivity {
             }
         });
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getApplicationContext(),adapter.getItem(i).getCode(),Toast.LENGTH_LONG).show();
-            }
-        });
 
         /*((FloatingActionButton) findViewById(R.id.fab)).setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,5 +1,6 @@
 package kr.tamiflus.sleepingbus.holders;
 
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
@@ -10,12 +11,13 @@ import kr.tamiflus.sleepingbus.R;
 /**
  * Created by tamiflus on 2016. 7. 31..
  */
-public class BusStationViewHolder  {
+public class BusStationViewHolder extends RecyclerView.ViewHolder{
     @BindView(R.id.busStationNameText) public TextView nameView;
     @BindView(R.id.busStationIdText) public TextView idView;
     @BindView(R.id.busStationLocationText) public TextView locationView;
 
     public BusStationViewHolder(View v) {
+        super(v);
         ButterKnife.bind(this, v);
     }
 }

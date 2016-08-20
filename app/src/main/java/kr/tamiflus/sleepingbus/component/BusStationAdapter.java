@@ -1,48 +1,95 @@
 package kr.tamiflus.sleepingbus.component;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import kr.tamiflus.sleepingbus.R;
+import kr.tamiflus.sleepingbus.holders.BusRouteStationHeaderViewHolder;
+import kr.tamiflus.sleepingbus.holders.BusRouteStationViewHolder;
 import kr.tamiflus.sleepingbus.holders.BusStationViewHolder;
+import kr.tamiflus.sleepingbus.holders.SectionViewHolder;
 import kr.tamiflus.sleepingbus.structs.BusStation;
+import kr.tamiflus.sleepingbus.structs.BusStationTag;
 
 /**
  * Created by tamiflus on 2016. 7. 31..
  */
-public class BusStationAdapter extends ArrayAdapter<BusStation>{
+public class BusStationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     Context context;
     LayoutInflater inflater;
+    ArrayList<BusStation> list = new ArrayList<>();
+    public static int TYPE_SECTION = 1;
+    public static int TYPE_ITEM = 2;
 
     public BusStationAdapter(Context context) {
-        super(context, R.layout.busstation_listview_component);
         this.context = context;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
-        BusStation st = this.getItem(position);
-
-        BusStationViewHolder holder;
-        if (view != null) {
-            holder = (BusStationViewHolder) view.getTag();
-        } else {
-            view = inflater.inflate(R.layout.busstation_listview_component, parent, false);
-            holder = new BusStationViewHolder(view);
-            view.setTag(holder);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if(viewType == TYPE_SECTION)
+        {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.section_component, parent, false);
+            return new SectionViewHolder(v);
+        }
+        else{
+            View view = inflater.inflate(R.layout.busstation_listview_component, parent, false);
+            return new BusStationViewHolder(view);
         }
 
-        holder.nameView.setText(st.getName());
-        holder.idView.setText(st.getId());
-        holder.locationView.setText(st.getRegion());
+    }
+
+    public void addAll(List<BusStation> list) {
+        this.list.addAll(list);
+    }
+
+    public void add(BusStation obj) {
+        this.list.add(obj);
+    }
+
+    public void clear() {
+        this.list.clear();
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder vh, int position) {
+        // - get element from your dataset at this position
+        // - replace the contents of the view with that element
+        if(vh instanceof SectionViewHolder) {
+            BusStationTag tag = (BusStationTag) list.get(position);
+            SectionViewHolder holder = (SectionViewHolder) vh;
+
+            holder.sectionName.setText(tag.locate);
+        }
+        else{
+            BusStation st = list.get(position);
+            BusStationViewHolder holder = (BusStationViewHolder) vh;
+
+            holder.nameView.setText(st.getName());
+            holder.idView.setText(st.getId());
+            holder.locationView.setText(st.getRegion());
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if(list.get(position) instanceof BusStationTag)
+            return TYPE_SECTION;
+        return TYPE_ITEM;
+    }
 
 
-
-        return view;
+    @Override
+    public int getItemCount() {
+        return list.size();
     }
 }

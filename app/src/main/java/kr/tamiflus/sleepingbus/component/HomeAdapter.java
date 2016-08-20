@@ -11,8 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kr.tamiflus.sleepingbus.R;
+import kr.tamiflus.sleepingbus.holders.HomeBookMarkViewHolder;
 import kr.tamiflus.sleepingbus.holders.HomeNearStationListViewHolder;
 import kr.tamiflus.sleepingbus.holders.HomeNearStationViewHolder;
+import kr.tamiflus.sleepingbus.structs.BookMark;
 import kr.tamiflus.sleepingbus.structs.BusStation;
 import kr.tamiflus.sleepingbus.structs.HomeObject;
 import kr.tamiflus.sleepingbus.structs.NearStation;
@@ -28,7 +30,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     ArrayList<HomeObject> list = new ArrayList<>();
     private static final int NEAR_STATION_TYPE = 1;
     private static final int NEAR_STATION_DOUBLED_TYPE = 1;
-
+    private static final int BOOKMARK_TYPE = 3;
 
     public HomeAdapter(Context context) {
         //super(context, R.layout.busstation_route_listview);
@@ -42,21 +44,25 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_home_nearstation, parent, false);
             return new HomeNearStationViewHolder(v);
         }
-        else {
+        else if(viewType == NEAR_STATION_DOUBLED_TYPE){
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_home_nearstation_two, parent, false);
             return new HomeNearStationListViewHolder(v);
+        } else {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview_home_bookmark, parent, false);
+            return new HomeBookMarkViewHolder(v);
         }
     }
 
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder vh, int position) {
+        //TODO: 여기에서 OnClickListener 등을 구현할 것
         if(vh instanceof HomeNearStationViewHolder) {
             HomeNearStationViewHolder holder = (HomeNearStationViewHolder) vh;
             NearStation st = (NearStation) list.get(position);
             holder.nearStationNameView.setText(st.st.getName());
             holder.nearStationDistanceView.setText(Integer.toString(st.distance) + "m");
-        } else {
+        } else if(vh instanceof HomeNearStationListViewHolder) {
             final HomeNearStationListViewHolder holder = (HomeNearStationListViewHolder) vh;
             final NearTwoStation st = (NearTwoStation) list.get(position);
             holder.layout.initLayout(true);
@@ -93,6 +99,14 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
                 }
             });
+        } else {
+            HomeBookMarkViewHolder holder = (HomeBookMarkViewHolder) vh;
+            BookMark mark = (BookMark) list.get(position);
+            holder.name.setText(mark.name);
+            holder.routeName.setText(mark.arrivingBus.getRouteName());
+            holder.course.setText(mark.startSt.getName() + " > " + mark.endSt.getName());
+            holder.leftSeat.setText(String.format("(남은 좌석 : %d)", 27));
+            holder.leftTime.setText(Integer.toString(mark.arrivingBus.getTimeToWait()) + "분 전");
         }
     }
 

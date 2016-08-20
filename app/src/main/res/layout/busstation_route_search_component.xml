@@ -5,17 +5,31 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:background="#fff"
-        android:layout_height="wrap_content">
-        <ImageView
-            android:layout_marginLeft="4dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_search_black_36dp"/>
-        <EditText
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:gravity="center"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint='320 항목 검색'
-            android:id="@+id/busRouteStationSearchEditText"
-            android:textSize="18sp"/>
+            android:background="#fff"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:layout_marginLeft="8dp"
+                android:layout_margin="8dp"
+                android:layout_width="22dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_search_black_36dp"/>
+            <EditText
+                android:background="@android:color/transparent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint='320 항목 검색'
+                android:id="@+id/busRouteStationSearchEditText"
+                android:textSize="16sp"/>
+        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#ddd"
+            />
     </LinearLayout>
 </LinearLayout>

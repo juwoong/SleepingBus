@@ -34,9 +34,9 @@ public class BusStationByLocationParser{
         XmlPullParser xpp= factory.newPullParser();
         xpp.setInput(new StringReader(body));
 
-        String tag;
+        Log.d("XMLresult", body);
 
-        Log.d("body", body);
+        String tag;
 
         xpp.next();
         int eventType= xpp.getEventType();

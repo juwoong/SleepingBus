@@ -40,6 +40,8 @@ public class NearestStationParser {
         XmlPullParser xpp= factory.newPullParser();
         xpp.setInput(new StringReader(xml));
 
+        Log.d("body", xml);
+
         String tag;
 
         xpp.next();
@@ -50,13 +52,13 @@ public class NearestStationParser {
             switch(eventType){
                 case XmlPullParser.START_TAG:
                     tag = xpp.getName();
+                    xpp.next();
                     Log.i("tag", tag + " : " + xpp.getText());
 
-                    if(tag.equals("itemList")) { xpp.next(); station = new BusStation(); }
-                    else if(tag.equals("dist")) { xpp.next(); station.setDist(xpp.getText()); }
-                    else if(tag.equals("stationId")) { xpp.next(); station.setCode(xpp.getText()); }
+                    if(tag.equals("itemList")) { station = new BusStation(); }
+                    else if(tag.equals("dist")) { station.setDist(xpp.getText()); }
+                    else if(tag.equals("stationId")) { station.setCode(xpp.getText()); }
                     else if(tag.equals("headerMsg")) {
-                        xpp.next();
                         if(!"정상적으로 처리되었습니다.".equals(xpp.getText())) {
                             Log.d("ERROR", "ERROR");
                             throw new XmlPullParserException("error");
@@ -87,7 +89,7 @@ public class NearestStationParser {
 
         Request request = new Request.Builder()
                 .url("http://ws.bus.go.kr/api/rest/stationinfo/getStationByPos?ServiceKey=mprvOxIo4u5PCVIVStlnRI6rMDBmJGRvC6%2BNurrGAkl0Ctsmt7UJxU9XwMwP4IOAuaRxjScQ2hGKaDm1n1z%2BgA%3D%3D&tmX="
-                        + y + "&tmY=" + x + "&radius=" + FIND_RADIUS + "&numOfRows=999&pageSize=999&pageNo=1&startPage=1")
+                        + x + "&tmY=" + y + "&radius=" + FIND_RADIUS + "&numOfRows=999&pageSize=999&pageNo=1&startPage=1")
                 .build();
 
         Response response = client.newCall(request).execute();

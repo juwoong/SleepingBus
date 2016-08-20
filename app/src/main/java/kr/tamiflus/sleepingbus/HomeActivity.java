@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,21 +11,17 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import kr.tamiflus.sleepingbus.component.HomeAdapter;
-import kr.tamiflus.sleepingbus.structs.ArrivingBus;
-import kr.tamiflus.sleepingbus.structs.BookMark;
 import kr.tamiflus.sleepingbus.structs.BusStation;
 import kr.tamiflus.sleepingbus.structs.NearStation;
 import kr.tamiflus.sleepingbus.structs.NearTwoStation;
 import kr.tamiflus.sleepingbus.threads.FindNearStationThread;
-import kr.tamiflus.sleepingbus.utils.LocManager;
-import kr.tamiflus.sleepingbus.utils.NearestStationParser;
+import kr.tamiflus.sleepingbus.utils.BusStationToStrArray;
 
 public class HomeActivity extends AppCompatActivity {
     public static final int UPDATE_NEARSTATION_ONE = 1;
@@ -65,33 +59,33 @@ public class HomeActivity extends AppCompatActivity {
         adapter.add(nearStation);
 
         //test
-        //getNearestStationByLocation();
+        getNearestStationByLocation();
 
-        BusStation st1 = new BusStation();
-        st1.setName("와동중학교 방면");
-        st1.setDist("1");
+//        BusStation st1 = new BusStation();
+//        st1.setName("와동중학교 방면");
+//        st1.setDist("1");
+//
+//        BusStation st2 = new BusStation();
+//        st2.setName("와동주민센터 방면");
+//        st2.setDist("2");
+//
+//        NearTwoStation two = new NearTwoStation(st1, st2);
+//        two.name = "한국디지털미디어고등학교";
+//        two.d1 = 326;
+//        two.d2 = 341;
+//
+//        ArrivingBus arrivingBus = new ArrivingBus("234000011", "1113-1", "11", "경기77바2075", 9);
+//
+//        BusStation st3 = new BusStation();
+//        st3.setName("동성.현대아파트");
+//        BusStation st4 = new BusStation();
+//        st4.setName("천호역5번출구.천호사거리");
+//
+//        BookMark mark = new BookMark("외갓댁 가는 길", st3, st4,arrivingBus);
 
-        BusStation st2 = new BusStation();
-        st2.setName("와동주민센터 방면");
-        st2.setDist("2");
 
-        NearTwoStation two = new NearTwoStation(st1, st2);
-        two.name = "한국디지털미디어고등학교";
-        two.d1 = 326;
-        two.d2 = 341;
-
-        ArrivingBus arrivingBus = new ArrivingBus("234000011", "1113-1", "11", "경기77바2075", 9);
-
-        BusStation st3 = new BusStation();
-        st3.setName("동성.현대아파트");
-        BusStation st4 = new BusStation();
-        st4.setName("천호역5번출구.천호사거리");
-
-        BookMark mark = new BookMark("외갓댁 가는 길", st3, st4,arrivingBus);
-
-
-        adapter.add(two);
-        adapter.add(mark);
+//        adapter.add(two);
+//        adapter.add(mark);
 
         recyclerView.setAdapter(adapter);
 
@@ -128,10 +122,18 @@ public class HomeActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch(msg.what) {
                 case UPDATE_NEARSTATION_ONE:
-                    updateScreenContents((NearStation)msg.obj);
+                    updateScreenContents(new NearStation(((List<BusStation>)msg.obj).get(0)));
                     break;
                 case UPDATE_NEARSTATION_TWO:
-                    updateScreenContents((NearTwoStation)msg.obj);
+                    updateScreenContents(new NearTwoStation(((List<BusStation>)msg.obj).get(0), ((List<BusStation>)msg.obj).get(1)));
+
+                    //test code
+                    Toast.makeText(HomeActivity.this, "test start!!", Toast.LENGTH_SHORT).show();
+                    List<BusStation> test = new ArrayList<>();
+                    test.add(((List<BusStation>) msg.obj).get(0));
+                    test.add(((List<BusStation>) msg.obj).get(1));
+                    startMapActivity(test);
+
                     break;
                 case CANNOT_FIND_CURRENTLOCATION:
                     Log.d("D", "CANNOT find current location");
@@ -144,6 +146,27 @@ public class HomeActivity extends AppCompatActivity {
                     System.exit(-1);
                     break;
             }
+        }
+    }
+
+    /**
+     * list.size() must be 2
+     * 두 개의 이름이 같은 정류장을 구글맵을 통해 구별함.
+     * @param list
+     */
+    private void startMapActivity(List<BusStation> list) {
+        Log.d("HomeActivity", "startMapActivity()");
+        if(list.size() != 2) {
+            Log.d("HomeActivity", "unexpected list size");
+            Toast.makeText(this, "unexpected list size", Toast.LENGTH_SHORT).show();
+        } else {
+            Intent intent = new Intent(this, SearchBusStationByLocationActivity.class);
+            String[] arr1 = BusStationToStrArray.listToArr(list.get(0));
+            String[] arr2 = BusStationToStrArray.listToArr(list.get(1));
+
+            intent.putExtra("st1", arr1);
+            intent.putExtra("st2", arr2);
+            startActivity(intent);
         }
     }
 }

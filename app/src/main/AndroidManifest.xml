@@ -60,6 +60,10 @@
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <activity
+                 android:name=".SearchBusStationByLocationActivity"
+                 android:label="@string/title_activity_search_bus_station_by_location"></activity>
     </application>
 
 </manifest>

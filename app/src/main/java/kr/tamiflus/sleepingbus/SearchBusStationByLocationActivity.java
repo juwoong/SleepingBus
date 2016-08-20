@@ -17,17 +17,17 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.vision.text.Text;
 
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import kr.tamiflus.sleepingbus.structs.BusStation;
 import kr.tamiflus.sleepingbus.utils.BusStationByLocationParser;
 import kr.tamiflus.sleepingbus.utils.BusStationDBHelper;
-import kr.tamiflus.sleepingbus.utils.LocManager;
+import kr.tamiflus.sleepingbus.utils.BusStationToStrArray;
 
 public class SearchBusStationByLocationActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -36,7 +36,7 @@ public class SearchBusStationByLocationActivity extends FragmentActivity impleme
     TextView name, id, region;
     Animation up, down;
     boolean show = false;
-    ArrayList<BusStation> list = new ArrayList<BusStation>();
+    List<BusStation> list = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +46,11 @@ public class SearchBusStationByLocationActivity extends FragmentActivity impleme
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        BusStation st1 = BusStationToStrArray.arrToList(getIntent().getStringArrayExtra("st1"));
+        BusStation st2 = BusStationToStrArray.arrToList(getIntent().getStringArrayExtra("st2"));
+        list.add(st1);
+        list.add(st2);
+        Log.d("MapActivity", list.toString());
     }
 
 

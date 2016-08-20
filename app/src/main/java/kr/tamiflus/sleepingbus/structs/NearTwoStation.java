@@ -20,4 +20,6 @@ public class NearTwoStation extends HomeObject {
         this.d2 = Integer.parseInt(s2.getDist());
         this.name = s1.getName();
     }
+    public BusStation getS1() { return s1; }
+    public BusStation getS2() { return s2; }
 }

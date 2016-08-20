@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="fab">#FD4B54</color>
+    <color name="juaseok">#369EE8</color>
+    <color name="jikhang">#F66E5A</color>
+    <color name="ganseon">#7185ED</color>
+    <color name="normal">#5DB54A</color>
+    <color name="siwae">#A36EB1</color>
+    <color name="ddabeok">#DBA33C</color>
+    <color name="neonger">#E17E48</color>
+    <color name="country">#ecec79</color>
 </resources>

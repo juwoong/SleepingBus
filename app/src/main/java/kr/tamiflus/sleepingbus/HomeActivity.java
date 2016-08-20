@@ -1,13 +1,8 @@
 package kr.tamiflus.sleepingbus;
 
-import android.app.Service;
-import android.content.ComponentName;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,7 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -26,6 +20,8 @@ import java.io.IOException;
 import java.util.List;
 
 import kr.tamiflus.sleepingbus.component.HomeAdapter;
+import kr.tamiflus.sleepingbus.structs.ArrivingBus;
+import kr.tamiflus.sleepingbus.structs.BookMark;
 import kr.tamiflus.sleepingbus.structs.BusStation;
 import kr.tamiflus.sleepingbus.structs.NearStation;
 import kr.tamiflus.sleepingbus.structs.NearTwoStation;
@@ -41,8 +37,6 @@ public class HomeActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     HomeAdapter adapter;
-    Handler handler = new HomeHandler();
-//    ServiceConnection serviceConnection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,18 +48,6 @@ public class HomeActivity extends AppCompatActivity {
         TextView searchButton = (TextView) findViewById(R.id.searchButton);
         recyclerView = (RecyclerView) findViewById(R.id.homeRecyclerView);
 
-//        serviceConnection = new ServiceConnection() {
-//            @Override
-//            public void onServiceConnected(ComponentName name, IBinder service) {
-//                Log.d("onServiceConnected", "onServiceConnected");
-//            }
-//
-//            @Override
-//            public void onServiceDisconnected(ComponentName name) {
-//
-//            }
-//        };
-
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         llm.scrollToPosition(0);
@@ -73,33 +55,43 @@ public class HomeActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(llm);
 
         BusStation st = new BusStation();
-        st.setName("위치 확인 중..");
-        st.setDist("0");
+        st.setName("한국디지털미디어고등학교");
 
+        st.setDist("1");
         NearStation nearStation = new NearStation(st);
+        nearStation.distance=326;
 
         adapter = new HomeAdapter(getApplicationContext());
         adapter.add(nearStation);
 
         //test
-//        locService = new LocManager(getApplicationContext(), getApplicationContext(), handler);
-//        Intent serviceIntent = new Intent(this, LocManager.class);
-//        Log.d("d", "BEFORE BIND SERVICE");
-//        bindService(serviceIntent, serviceConnection, BIND_AUTO_CREATE);
-        getNearestStationByLocation();
+        //getNearestStationByLocation();
 
-//        BusStation st1 = new BusStation();
-//        st1.setName("와동중학교 방면");
-//
-//        BusStation st2 = new BusStation();
-//        st2.setName("와동주민센터 방면");
-//
-//        NearTwoStation two = new NearTwoStation(st1, st2);
-//        two.name = "한국디지털미디어고등학교";
-//        two.d1 = 326;
-//        two.d2 = 341;
-//
-//        adapter.add(two);
+        BusStation st1 = new BusStation();
+        st1.setName("와동중학교 방면");
+        st1.setDist("1");
+
+        BusStation st2 = new BusStation();
+        st2.setName("와동주민센터 방면");
+        st2.setDist("2");
+
+        NearTwoStation two = new NearTwoStation(st1, st2);
+        two.name = "한국디지털미디어고등학교";
+        two.d1 = 326;
+        two.d2 = 341;
+
+        ArrivingBus arrivingBus = new ArrivingBus("234000011", "1113-1", "11", "경기77바2075", 9);
+
+        BusStation st3 = new BusStation();
+        st3.setName("동성.현대아파트");
+        BusStation st4 = new BusStation();
+        st4.setName("천호역5번출구.천호사거리");
+
+        BookMark mark = new BookMark("외갓댁 가는 길", st3, st4,arrivingBus);
+
+
+        adapter.add(two);
+        adapter.add(mark);
 
         recyclerView.setAdapter(adapter);
 
@@ -114,7 +106,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void getNearestStationByLocation() {
-        FindNearStationThread thread = new FindNearStationThread(getApplicationContext(), handler);
+        FindNearStationThread thread = new FindNearStationThread(getApplicationContext(), new HomeHandler());
         thread.start();
 
     }
@@ -134,28 +126,19 @@ public class HomeActivity extends AppCompatActivity {
     public class HomeHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
-            Toast.makeText(HomeActivity.this, "msg.what : " + msg.what, Toast.LENGTH_SHORT).show();
             switch(msg.what) {
                 case UPDATE_NEARSTATION_ONE:
-                    updateScreenContents(new NearStation((BusStation)msg.obj));
+                    updateScreenContents((NearStation)msg.obj);
                     break;
                 case UPDATE_NEARSTATION_TWO:
-                    List<BusStation> res = (List)msg.obj;
-                    NearTwoStation two = new NearTwoStation(res.get(0), res.get(1));
-                    updateScreenContents(two);
+                    updateScreenContents((NearTwoStation)msg.obj);
                     break;
                 case CANNOT_FIND_CURRENTLOCATION:
                     Log.d("D", "CANNOT find current location");
                     BusStation temp = new BusStation();
                     temp.setName("현재 위치를 찾을 수 없습니다");
-                    temp.setDist("0");
                     updateScreenContents(new NearStation(temp));
-
-                    Log.d("HomeActivity", "getNearestStationByLocation() recall!");
-                    getNearestStationByLocation();
                     break;
-                case LOCATION_CHANGED:
-                    // TODO location changed
                 default:
                     Log.d("ERROR", "Unexpected Handler Message");
                     System.exit(-1);

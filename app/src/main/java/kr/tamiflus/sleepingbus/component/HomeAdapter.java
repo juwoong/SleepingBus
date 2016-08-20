@@ -19,6 +19,7 @@ import kr.tamiflus.sleepingbus.structs.BusStation;
 import kr.tamiflus.sleepingbus.structs.HomeObject;
 import kr.tamiflus.sleepingbus.structs.NearStation;
 import kr.tamiflus.sleepingbus.structs.NearTwoStation;
+import kr.tamiflus.sleepingbus.utils.ColorMap;
 
 /**
  * Created by tamiflus on 16. 8. 17..
@@ -29,7 +30,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     LayoutInflater inflater;
     ArrayList<HomeObject> list = new ArrayList<>();
     private static final int NEAR_STATION_TYPE = 1;
-    private static final int NEAR_STATION_DOUBLED_TYPE = 1;
+    private static final int NEAR_STATION_DOUBLED_TYPE = 2;
     private static final int BOOKMARK_TYPE = 3;
 
     public HomeAdapter(Context context) {
@@ -102,7 +103,9 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else {
             HomeBookMarkViewHolder holder = (HomeBookMarkViewHolder) vh;
             BookMark mark = (BookMark) list.get(position);
+
             holder.name.setText(mark.name);
+            holder.routeName.setTextColor(ColorMap.byID.get(mark.arrivingBus.getRouteTypeCd()));
             holder.routeName.setText(mark.arrivingBus.getRouteName());
             holder.course.setText(mark.startSt.getName() + " > " + mark.endSt.getName());
             holder.leftSeat.setText(String.format("(남은 좌석 : %d)", 27));

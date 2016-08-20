@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
@@ -23,6 +24,8 @@ public class HomeNearStationListViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.nearStationDownDistance) public TextView downDistance;
     @BindView(R.id.expandedList) public ExpandableRelativeLayout layout;
     @BindView(R.id.expand) public ImageView btn;
+    @BindView(R.id.nearStationUpView) public LinearLayout upView;
+    @BindView(R.id.nearStationDownView) public LinearLayout downView;
 
     public HomeNearStationListViewHolder (View v) {
         super(v);

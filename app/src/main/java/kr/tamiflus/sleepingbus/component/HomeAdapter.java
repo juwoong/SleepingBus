@@ -79,14 +79,14 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 }
             });
 
-            holder.upName.setOnClickListener(new View.OnClickListener() {
+            holder.upView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Toast.makeText(context, st.name + " : " + st.s1.getName(),Toast.LENGTH_LONG).show();
                 }
             });
 
-            holder.downName.setOnClickListener(new View.OnClickListener() {
+            holder.downView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Toast.makeText(context, st.name + " : " + st.s2.getName(),Toast.LENGTH_LONG).show();

@@ -6,6 +6,9 @@
     android:layout_height="wrap_content"
     android:foreground="?android:attr/selectableItemBackground">
     <android.support.v7.widget.CardView
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
         card_view:cardUseCompatPadding="true"
         card_view:cardElevation="1dp"
         android:layout_width="match_parent"
@@ -13,116 +16,160 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:layout_marginLeft="16dp"
-                android:layout_marginTop="18dp"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:src="@drawable/stop"/>
-        <LinearLayout
-            android:layout_marginTop="16dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginBottom="16dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:text="가장 가까운 정류장"/>
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                >
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="18sp"
-                    android:maxLines="1"
-                    android:maxLength="15"
-                    android:paddingRight="4dp"
-                    android:id="@+id/nearStationName"
-                    android:textColor="#000"
-                    android:text="한국디지털미디어고등학교"/>
-
-            </LinearLayout>
-            <com.github.aakira.expandablelayout.ExpandableRelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/expandedList"
-                app:ael_expanded="false"
-                app:ael_duration="500"
-                app:ael_interpolator="bounce"
-                app:ael_orientation="vertical">
+                android:orientation="vertical">
                 <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="18dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:src="@drawable/stop"/>
+                <LinearLayout
+                    android:layout_marginTop="16dp"
+                    android:layout_marginLeft="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-                <LinearLayout
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12sp"
+                        android:text="가장 가까운 정류장"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        >
+                        <TextView
+                            android:layout_marginBottom="16dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            android:maxLines="1"
+                            android:maxLength="15"
+                            android:paddingRight="4dp"
+                            android:id="@+id/nearStationName"
+                            android:textColor="#000"
+                            android:text="한국디지털미디어고등학교"/>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                </LinearLayout>
+                <com.github.aakira.expandablelayout.ExpandableRelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    >
-                    <TextView
-                        android:id="@+id/nearStationUpName"
-                        android:layout_width="wrap_content"
+                    android:id="@+id/expandedList"
+                    app:ael_expanded="false"
+                    app:ael_duration="500"
+                    app:ael_interpolator="bounce"
+                    app:ael_orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:maxLines="1"
-                        android:maxLength="15"
-                        android:paddingRight="4dp"
-                        android:textColor="#888"
-                        android:text="열녀문사거리방면"/>
-                    <TextView
-                        android:id="@+id/nearStationUpDistance"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:maxLines="1"
-                        android:maxLength="5"
-                        android:textColor="#EF5350"
-                        android:text="1238m"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    >
-                    <TextView
-                        android:id="@+id/nearStationDownName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:maxLines="1"
-                        android:maxLength="15"
-                        android:paddingRight="4dp"
-                        android:textColor="#888"
-                        android:text="와동주민센터방면"/>
-                    <TextView
-                        android:id="@+id/nearStationDownDistance"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:maxLines="1"
-                        android:maxLength="5"
-                        android:textColor="#EF5350"
-                        android:text="1238m"/>
-                </LinearLayout>
-                </LinearLayout>
-            </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
-        </LinearLayout>
+                        android:orientation="horizontal">
+                        <LinearLayout
+                            android:background="#eee"
+                            android:gravity="center"
+                            android:layout_width="0dp"
+                            android:id="@+id/nearStationUpView"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:layout_height="wrap_content"
+                            >
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="8dp"></View>
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                            <TextView
+
+                                android:id="@+id/nearStationUpName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp"
+                                android:maxLines="1"
+                                android:maxLength="15"
+                                android:paddingRight="4dp"
+                                android:textColor="#777"
+                                android:text="열녀문사거리방면"/>
+                                <TextView
+                                    android:id="@+id/nearStationUpDistance"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="14sp"
+                                    android:maxLines="1"
+                                    android:maxLength="5"
+                                    android:textColor="#EF5350"
+                                    android:text="1238m"/>
+                                </LinearLayout>
+
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="8dp"></View>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/nearStationDownView"
+                            android:gravity="center"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:layout_height="wrap_content"
+                            >
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="8dp"></View>
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:id="@+id/nearStationDownName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="14sp"
+                                    android:maxLines="1"
+                                    android:maxLength="15"
+                                    android:paddingRight="4dp"
+                                    android:textColor="#888"
+                                    android:text="와동주민센터방면"/>
+                                <TextView
+                                    android:id="@+id/nearStationDownDistance"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textSize="14sp"
+                                    android:maxLines="1"
+                                    android:maxLength="5"
+                                    android:textColor="#EF5350"
+                                    android:text="1238m"/>
+
+                            </LinearLayout>
+                            <View
+                                android:layout_width="1dp"
+                                android:layout_height="8dp"></View>
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
         </LinearLayout>
         <ImageView
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="64dp"
             android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
             android:id="@+id/expand"
-            android:layout_marginTop="20dp"
             android:layout_marginRight="16dp"
             />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </LinearLayout>
+

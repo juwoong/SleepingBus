@@ -22,6 +22,7 @@ import kr.tamiflus.sleepingbus.utils.BusArrivalTimeParser;
 
 public class AlarmService extends IntentService {
     public static final int WHAT_MINUTE_BEFORE = 2;
+    public static final int REQUEST_PER_SEC = 60;
 
     private String plateNo;
     String routeId, stationId;
@@ -46,7 +47,7 @@ public class AlarmService extends IntentService {
                 break;
             } else {
                 try {
-                    Thread.sleep(60000);    // request per ONE minute
+                    Thread.sleep(REQUEST_PER_SEC * 1000);
                 } catch(InterruptedException ie) { }
             }
         }

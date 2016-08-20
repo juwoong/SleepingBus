@@ -61,11 +61,7 @@ public class NearestStationParser {
                     else if(tag.equals("headerMsg")) {
                         if(!"정상적으로 처리되었습니다.".equals(xpp.getText())) {
                             Log.d("ERROR", "Bus Info Loading Failed");
-                            BusStation st = new BusStation();
-                            st.setName("GPS 정보 불러오기 실패");
-                            st.setDist("0");
-                            stations.add(st);
-                            return stations;
+                            return null;
                         }
 
                     }
@@ -99,7 +95,7 @@ public class NearestStationParser {
         Response response = client.newCall(request).execute();
 
         stations = xmlToObject(response.body().string());
-        if(stations.size() == 0) return null;
+        if(stations == null) return null;
         else {
             List<BusStation> result = new ArrayList<>();
             int index = findIndexOfNearestStation(stations);

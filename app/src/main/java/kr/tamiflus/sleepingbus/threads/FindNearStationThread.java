@@ -31,7 +31,7 @@ public class FindNearStationThread extends Thread {
         Log.d("FindNearStationThread", "Thread START");
 
         List<BusStation> list = null;
-        LocManager locManager = new LocManager(context, context);
+        LocManager locManager = new LocManager(context, context, handler);
         NearestStationParser parser = new NearestStationParser(context);
 
 //        locManager.checkIsGPSOn();
@@ -54,6 +54,8 @@ public class FindNearStationThread extends Thread {
         if(list != null) Log.d("NearStationList", list.toString());
         else {
             msg.what = HomeActivity.CANNOT_FIND_CURRENTLOCATION;
+            handler.sendMessage(msg);
+            return;
         }
 
         if(list.size() == 1) {

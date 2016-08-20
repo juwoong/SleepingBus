@@ -1,8 +1,13 @@
 package kr.tamiflus.sleepingbus;
 
+import android.app.Service;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -31,9 +37,12 @@ public class HomeActivity extends AppCompatActivity {
     public static final int UPDATE_NEARSTATION_ONE = 1;
     public static final int UPDATE_NEARSTATION_TWO = 2;
     public static final int CANNOT_FIND_CURRENTLOCATION = 3;
+    public static final int LOCATION_CHANGED = 4;
 
     RecyclerView recyclerView;
     HomeAdapter adapter;
+    Handler handler = new HomeHandler();
+//    ServiceConnection serviceConnection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +53,18 @@ public class HomeActivity extends AppCompatActivity {
 
         TextView searchButton = (TextView) findViewById(R.id.searchButton);
         recyclerView = (RecyclerView) findViewById(R.id.homeRecyclerView);
+
+//        serviceConnection = new ServiceConnection() {
+//            @Override
+//            public void onServiceConnected(ComponentName name, IBinder service) {
+//                Log.d("onServiceConnected", "onServiceConnected");
+//            }
+//
+//            @Override
+//            public void onServiceDisconnected(ComponentName name) {
+//
+//            }
+//        };
 
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -61,6 +82,10 @@ public class HomeActivity extends AppCompatActivity {
         adapter.add(nearStation);
 
         //test
+//        locService = new LocManager(getApplicationContext(), getApplicationContext(), handler);
+//        Intent serviceIntent = new Intent(this, LocManager.class);
+//        Log.d("d", "BEFORE BIND SERVICE");
+//        bindService(serviceIntent, serviceConnection, BIND_AUTO_CREATE);
         getNearestStationByLocation();
 
 //        BusStation st1 = new BusStation();
@@ -89,7 +114,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void getNearestStationByLocation() {
-        FindNearStationThread thread = new FindNearStationThread(getApplicationContext(), new HomeHandler());
+        FindNearStationThread thread = new FindNearStationThread(getApplicationContext(), handler);
         thread.start();
 
     }
@@ -109,6 +134,7 @@ public class HomeActivity extends AppCompatActivity {
     public class HomeHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
+            Toast.makeText(HomeActivity.this, "msg.what : " + msg.what, Toast.LENGTH_SHORT).show();
             switch(msg.what) {
                 case UPDATE_NEARSTATION_ONE:
                     updateScreenContents(new NearStation((BusStation)msg.obj));
@@ -122,8 +148,14 @@ public class HomeActivity extends AppCompatActivity {
                     Log.d("D", "CANNOT find current location");
                     BusStation temp = new BusStation();
                     temp.setName("현재 위치를 찾을 수 없습니다");
+                    temp.setDist("0");
                     updateScreenContents(new NearStation(temp));
+
+                    Log.d("HomeActivity", "getNearestStationByLocation() recall!");
+                    getNearestStationByLocation();
                     break;
+                case LOCATION_CHANGED:
+                    // TODO location changed
                 default:
                     Log.d("ERROR", "Unexpected Handler Message");
                     System.exit(-1);

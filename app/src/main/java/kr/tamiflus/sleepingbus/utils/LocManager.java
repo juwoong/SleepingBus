@@ -11,11 +11,16 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Binder;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+
+import kr.tamiflus.sleepingbus.HomeActivity;
 
 /**
  * Created by tamiflus on 2016. 8. 3..
@@ -25,13 +30,41 @@ public class LocManager extends Service implements LocationListener {
     LocationManager manager;
     double longitude, latitude;
     Location location;
+    private Handler handler;
+    private float accuracy;
 
-    public LocManager(Context context, Context dialogContext) {
+
+    public LocManager(Context context, Context dialogContext, Handler handler) {
         this.context = context;
         this.dialogContext = dialogContext;
+        this.handler = handler;
         manager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
         location = null;
     }
+
+    private final LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            longitude = location.getLongitude();
+            latitude = location.getLatitude();
+            accuracy = location.getAccuracy();
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    };
 
     public void checkIsGPSOn() {
         if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) return;
@@ -78,40 +111,45 @@ public class LocManager extends Service implements LocationListener {
             }
 
             if (gpsEnabled) {
-
-                if (location == null) {
-                    manager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                            1000,
-                            10, this);
-                    Log.d("LatLng", "Call Location");
-                    if (manager != null) {
-                        location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                        Log.d("LatLng", "Get Location");
-                        if (location != null) {
-                            latitude = location.getLatitude();
-                            longitude = location.getLongitude();
-                            Log.d("LatLng", "Lat : " + Double.toString(latitude) + ", Lng : " + Double.toString(longitude));
-                        }
-                    }
+                doWhenGpsEnabled();
+                if((longitude == 0 && latitude == 0) && networkEnabled) {
+                    doWhenNetworkEnalbed();
                 }
+//                if (location == null) {
+//                    manager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+//                            1000,
+//                            10, locationListener);
+//                    Log.d("LatLng", "Call Location");
+//
+//                    try { Thread.sleep(3000); } catch(Exception e) { }
+//
+//                    if (manager != null) {
+//                        location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//                        Log.d("LatLng", "Get Location");
+//                        if (location != null) {
+//                            latitude = location.getLatitude();
+//                            longitude = location.getLongitude();
+//                            Log.d("LatLng", "Lat : " + Double.toString(latitude) + ", Lng : " + Double.toString(longitude));
+//                        }
+//                    }
+//                }
             } else if (networkEnabled) {
-
-                manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 60 * 1000, 10, this);
-
-                if (manager != null) {
-                    location = manager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                    if (location != null) {
-                        // 위도 경도 저장
-                        latitude = location.getLatitude();
-                        longitude = location.getLongitude();
-                    }
-                }
+                doWhenNetworkEnalbed();
+//                manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 60 * 1000, 10, locationListener);
+//
+//                try { Thread.sleep(3000); } catch(Exception e) { }
+//                if (manager != null) {
+//                    location = manager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+//                    if (location != null) {
+//                        // 위도 경도 저장
+//                        latitude = location.getLatitude();
+//                        longitude = location.getLongitude();
+//                    }
+//                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
     public double getLongitude() {
@@ -130,6 +168,7 @@ public class LocManager extends Service implements LocationListener {
 
     @Override
     public IBinder onBind(Intent arg0) {
+        Log.d("LocManager", "onBind()");
         return null;
     }
 
@@ -137,7 +176,10 @@ public class LocManager extends Service implements LocationListener {
         // TODO Auto-generated method stub
         longitude = location.getLongitude();
         latitude = location.getLatitude();
-        Log.d("LatLng", "Lat : " + Double.toString(latitude) + ", Lng : " + Double.toString(longitude));
+        Message msg = new Message();
+        msg.what = HomeActivity.LOCATION_CHANGED;
+        handler.sendMessage(msg);
+        Log.d("onLocationChanged()", "Lat : " + Double.toString(latitude) + ", Lng : " + Double.toString(longitude));
     }
 
     public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -167,4 +209,69 @@ public class LocManager extends Service implements LocationListener {
         }
         manager.removeUpdates(this);
     }
+
+    private void doWhenGpsEnabled() {
+        Log.d("LocManager", "doWhenGpsEnabled() called");
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            Log.d("LatLng", "PERMISSION PROBLEM");
+            return;
+        }
+        try {
+            if (location == null) {
+                manager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                        1000,
+                        10, locationListener);
+                Log.d("LatLng", "Call Location");
+
+                Thread.sleep(3000);
+
+                if (manager != null) {
+                    location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    Log.d("LatLng", "Get Location");
+                    if (location != null) {
+                        latitude = location.getLatitude();
+                        longitude = location.getLongitude();
+                        Log.d("LatLng", "Lat : " + Double.toString(latitude) + ", Lng : " + Double.toString(longitude));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void doWhenNetworkEnalbed() {
+        Log.d("LocManager", "doWhenNetworkEnabled() called");
+
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            Log.d("LatLng", "PERMISSION PROBLEM");
+            return;
+        }
+        manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 60 * 1000, 10, locationListener);
+
+        try { Thread.sleep(3000); } catch(Exception e) { }
+        if (manager != null) {
+            location = manager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            if (location != null) {
+                // 위도 경도 저장
+                latitude = location.getLatitude();
+                longitude = location.getLongitude();
+            }
+        }
+    }
+
 }

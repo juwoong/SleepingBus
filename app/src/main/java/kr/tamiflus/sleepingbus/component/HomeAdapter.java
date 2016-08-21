@@ -2,26 +2,22 @@ package kr.tamiflus.sleepingbus.component;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import kr.tamiflus.sleepingbus.HomeActivity;
+import kr.tamiflus.sleepingbus.BusStationInfoActivity;
 import kr.tamiflus.sleepingbus.R;
 import kr.tamiflus.sleepingbus.SearchBusStationByLocationActivity;
-import kr.tamiflus.sleepingbus.StationInfoActivity;
 import kr.tamiflus.sleepingbus.holders.HomeBookMarkViewHolder;
 import kr.tamiflus.sleepingbus.holders.HomeNearStationListViewHolder;
 import kr.tamiflus.sleepingbus.holders.HomeNearStationViewHolder;
 import kr.tamiflus.sleepingbus.structs.BookMark;
-import kr.tamiflus.sleepingbus.structs.BusStation;
 import kr.tamiflus.sleepingbus.structs.HomeObject;
 import kr.tamiflus.sleepingbus.structs.NearStation;
 import kr.tamiflus.sleepingbus.structs.NearTwoStation;
@@ -74,7 +70,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     Log.d("HomeAdapter", "onClick()");
-                    Intent intent = new Intent(context, StationInfoActivity.class);
+                    Intent intent = new Intent(context, BusStationInfoActivity.class);
                     intent.putExtra("departStation", BusStationToStrArray.listToArr(st.getStation()));
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
@@ -90,8 +86,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, SearchBusStationByLocationActivity.class);
-                    Log.d("Home_list[0]", list.get(0).toString());
-                    Log.d("Home_list[1]", list.get(1).toString());
+
 
                     String[] arr1 = BusStationToStrArray.listToArr(st.getS1());
                     String[] arr2 = BusStationToStrArray.listToArr(st.getS2());

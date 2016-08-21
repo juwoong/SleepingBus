@@ -112,7 +112,7 @@ public class SearchBusStationByLocationActivity extends FragmentActivity impleme
                     public void onClick(View view) {
                         Toast.makeText(getApplicationContext(), list.get(val).getName(), Toast.LENGTH_LONG).show();
                         BusStation depart = list.get(val);
-                        Intent intent = new Intent(SearchBusStationByLocationActivity.this, StationInfoActivity.class);
+                        Intent intent = new Intent(SearchBusStationByLocationActivity.this, BusStationInfoActivity.class);
                         intent.putExtra("departStation", BusStationToStrArray.listToArr(depart));
                         startActivity(intent);
                     }

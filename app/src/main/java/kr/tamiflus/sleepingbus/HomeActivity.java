@@ -39,6 +39,10 @@ public class HomeActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        Intent intent = new Intent(this, SearchBusStationByLocationActivity.class);
+        startActivity(intent);
+
+
         TextView searchButton = (TextView) findViewById(R.id.searchButton);
         recyclerView = (RecyclerView) findViewById(R.id.homeRecyclerView);
 

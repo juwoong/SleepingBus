@@ -5,14 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import kr.tamiflus.sleepingbus.R;
-import kr.tamiflus.sleepingbus.holders.BusRouteStationHeaderViewHolder;
-import kr.tamiflus.sleepingbus.holders.BusRouteStationViewHolder;
 import kr.tamiflus.sleepingbus.holders.BusStationViewHolder;
 import kr.tamiflus.sleepingbus.holders.SectionViewHolder;
 import kr.tamiflus.sleepingbus.structs.BusStation;
@@ -38,7 +35,7 @@ public class BusStationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if(viewType == TYPE_SECTION)
         {
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.section_component, parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.section_busstation_component, parent, false);
             return new SectionViewHolder(v);
         }
         else{

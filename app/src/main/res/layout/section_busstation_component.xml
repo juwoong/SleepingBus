@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:textSize="14sp"
             android:text="경기도 광주"
-            android:textColor="#888"
+            android:textColor="#000"
             android:id="@+id/sectionName"
             android:maxLines="1"/>
     </LinearLayout>

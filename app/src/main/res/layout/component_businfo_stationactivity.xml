@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:gravity="center_vertical"
+    >
+    <LinearLayout
+        android:layout_alignParentLeft="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/normal"
+            android:textSize="24sp"
+            android:id="@+id/busRouteName"
+            android:text="101"/>
+        <TextView
+            android:id="@+id/busRouteWay"
+            android:layout_gravity="center_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="#555"
+            android:text="와동주민센터 방면"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_alignParentRight="true"
+        android:layout_width="match_parent"
+        android:gravity="right|center_vertical"
+        android:layout_gravity="center_vertical"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:textSize="8sp"
+            android:gravity="center"
+            android:id="@+id/busLeftStation"
+            android:layout_height="match_parent"
+            android:text="12번째전"
+            android:background="@drawable/patchbox"
+            android:textColor="#999"
+            android:layout_marginTop="1dp"
+            android:layout_marginBottom="1dp"
+            android:layout_marginRight="8dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="17분 남음"
+            android:id="@+id/busLeftTime"
+            android:textSize="18sp"
+            android:textColor="#000"/>
+    </LinearLayout>
+</LinearLayout>

@@ -55,7 +55,7 @@ public class BusStationInfoActivity extends AppCompatActivity {
         });
 
         departStation = BusStationToStrArray.arrToList(getIntent().getStringArrayExtra("departStation"));
-        List<BusRoute> list = getBusRoutesByStationId(departStation.getId());
+        List<BusRoute> list = getBusRoutesByStationId(departStation.getCode());
         Log.d("InfoActivity", "list.size() == " + list.size());
         for(int i = 0; i<list.size(); i++) {
             Log.d("InfoActivity", list.get(i).toString());
@@ -63,7 +63,7 @@ public class BusStationInfoActivity extends AppCompatActivity {
 
     }
 
-    public List<BusRoute> getBusRoutesByStationId(String stationId) {
-        return (new BusStationDBHelper(this)).getBusRoutesByStationId(stationId);
+    public List<BusRoute> getBusRoutesByStationId(String stationCode) {
+        return (new BusStationDBHelper(this)).getBusRoutesByStationCode(stationCode);
     }
 }

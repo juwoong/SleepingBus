@@ -198,18 +198,22 @@ public class BusStationDBHelper extends SQLiteOpenHelper{
         return list;
     }
 
-    public List<BusRoute> getBusRoutesByStationId(String stationId) {
+    public List<BusRoute> getBusRoutesByStationCode(String stationCode) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c;
         List<BusRoute> busRouteList = new ArrayList<>();
         List<String> routeIdList = new ArrayList<>();
 
-        c = db.rawQuery("SELECT * FROM BusRouteList WHERE busStationID=\'" + stationId + "\'", null);
-        int routeIdIndex = c.getColumnIndex("busRouteID");
+        Log.d("DBHelper", "stationCode : " + stationCode);
+        c = db.rawQuery("SELECT * FROM BusRouteList WHERE busStationID=\'" + stationCode + "\'", null);
+        int routeIdIndex = c.getColumnIndex("st_order");
+        Log.d("DBHelper", "busRouteId columnindex : " + routeIdIndex);
         if(c.moveToFirst()) {
             do {
+                Log.d("DBHelper", "busRouteID : " + c.getString(routeIdIndex));
                 if(!routeIdList.contains(c.getString(routeIdIndex))) {
                     routeIdList.add(c.getString(routeIdIndex));
+                    Log.d("DBHelper", "added! : " + c.getString(routeIdIndex));
                 }
             }while(c.moveToNext());
         }
@@ -235,7 +239,7 @@ public class BusStationDBHelper extends SQLiteOpenHelper{
         //debug code
         Log.d("DBHelper", "routeIdList.size() : " + routeIdList.size());
         for(int i = 0; i<routeIdList.size(); i++) {
-            Log.d("DBHelper", "routeIdList.toString : " + routeIdList.toString());
+            Log.d("DBHelper", "routeIdList.toString : " + routeIdList.get(i).toString());
         }
 
         return busRouteList;

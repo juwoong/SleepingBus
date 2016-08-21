@@ -19,7 +19,7 @@ public class MainActivity extends Activity {
         (findViewById(R.id.startBussingButton)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                Intent intent = new Intent(getApplicationContext(), FinalActivity.class);
                 startActivity(intent);
                 finish();
             }

@@ -133,6 +133,7 @@ public class SearchBusStationByLocationActivity extends FragmentActivity impleme
                 if(show == true) {
                     infoView.setAnimation(down);
                     infoView.setVisibility(View.INVISIBLE);
+                    infoView.clearAnimation();
                     show = false;
                 }
             }

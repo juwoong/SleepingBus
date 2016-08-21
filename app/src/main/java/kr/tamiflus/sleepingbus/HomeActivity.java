@@ -70,7 +70,8 @@ public class HomeActivity extends AppCompatActivity {
             Toast.makeText(this, "네트워크 연결 불가", Toast.LENGTH_SHORT).show();
         }
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION);
-
+        //TODO: 현재 검색중일 때, TextView에 검색중이라고 넣기
+        //TODO: 기본 상태에서 m(빨간 글자) 안보이게 만들기
 
 //        BusStation st1 = new BusStation();
 //        st1.setName("와동중학교 방면");

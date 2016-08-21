@@ -71,6 +71,10 @@
         <activity
             android:name=".BusStationInfoActivity"
             android:label="@string/title_activity_bus_station_info"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".FinalActivity"
+            android:label="@string/title_activity_final"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

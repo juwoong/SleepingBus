@@ -17,6 +17,7 @@ public class ArrivingBusViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.busRouteWay) public TextView wayView;
     @BindView(R.id.busLeftStation) public  TextView leftStView;
     @BindView(R.id.busLeftTime) public TextView leftTimeView;
+    @BindView(R.id.item) public View item;
 
     public ArrivingBusViewHolder(View v) {
         super(v);

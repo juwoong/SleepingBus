@@ -2,6 +2,9 @@ package kr.tamiflus.sleepingbus.component;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +64,25 @@ public class BusRouteStationAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         if(vh instanceof BusRouteStationHeaderViewHolder) {
+            BusRouteStationHeaderViewHolder holder = (BusRouteStationHeaderViewHolder) vh;
+            holder.text.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    String value = charSequence.toString();
+                    Log.i("Change", value);
+                    //TODO: 현 노선에서 정류장 검색 할 수 있게 만들기.
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                }
+            });
         }
         else{
             BusStation st = list.get(position);
@@ -70,6 +91,12 @@ public class BusRouteStationAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             holder.name.setText(st.getName());
             holder.id.setText(st.getId());
             holder.location.setText(st.getRegion());
+            holder.item.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //TODO: 목적지 정류장이 선택되었을 때 할 일 만들기
+                }
+            });
 
             if (position == 1) holder.arrowImage.setImageResource(R.drawable.start);
             else if (position == (list.size() - 1))

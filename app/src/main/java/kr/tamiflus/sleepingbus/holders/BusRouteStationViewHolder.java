@@ -3,6 +3,7 @@ package kr.tamiflus.sleepingbus.holders;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -17,6 +18,7 @@ public class BusRouteStationViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.busStationNameText) public TextView name;
     @BindView(R.id.busStationLocationText) public TextView location;
     @BindView(R.id.busStationIdText) public TextView id;
+    @BindView(R.id.item) public LinearLayout item;
 
     public BusRouteStationViewHolder(View v) {
         super(v);

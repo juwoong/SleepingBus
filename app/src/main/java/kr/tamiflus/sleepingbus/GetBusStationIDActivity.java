@@ -60,6 +60,7 @@ public class GetBusStationIDActivity extends AppCompatActivity {
                     adapter.addAll(db.getStation(value));
                     adapter.notifyDataSetChanged();
                 }
+                //TODO : length가 0일 때 즐겨찾기 보여주기.
             }
 
             @Override

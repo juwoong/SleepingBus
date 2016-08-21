@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/coordinator"
+    android:fitsSystemWindows="true"
+    android:background="@color/ddabeok"
+    tools:context="kr.tamiflus.sleepingbus.FinalActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#fff"
+            android:id="@+id/summaryText"
+            android:gravity="center"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            android:text="여의도환승센터 행\n320번 버스"/>
+
+        <TextView
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:layout_marginTop="12dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/whitebox9"
+            android:textColor="@color/ddabeok"
+            android:textSize="32sp"
+            android:id="@+id/boardBtn"
+            android:textStyle="bold"
+            android:text="탑승 시 눌러주세요"/>
+    </LinearLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>

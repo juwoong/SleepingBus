@@ -19,6 +19,7 @@ import android.os.Message;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import kr.tamiflus.sleepingbus.HomeActivity;
 
@@ -112,7 +113,7 @@ public class LocManager extends Service implements LocationListener {
 
             if (gpsEnabled) {
                 doWhenGpsEnabled();
-                if((longitude == 0 && latitude == 0) && networkEnabled) {
+                if ((longitude == 0 && latitude == 0) && networkEnabled) {
                     doWhenNetworkEnalbed();
                 }
 //                if (location == null) {
@@ -224,22 +225,21 @@ public class LocManager extends Service implements LocationListener {
             return;
         }
         try {
-            if (location == null) {
-                manager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                        1000,
-                        10, locationListener);
-                Log.d("LatLng", "Call Location");
+            Toast.makeText(context, "requestLocationUpdates(GPS)", Toast.LENGTH_SHORT).show();
+            manager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                    1000,
+                    10, locationListener);
+            Log.d("LatLng", "Call Location");
 
-                Thread.sleep(3000);
+            Thread.sleep(3000);
 
-                if (manager != null) {
-                    location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    Log.d("LatLng", "Get Location");
-                    if (location != null) {
-                        latitude = location.getLatitude();
-                        longitude = location.getLongitude();
-                        Log.d("LatLng", "Lat : " + Double.toString(latitude) + ", Lng : " + Double.toString(longitude));
-                    }
+            if (manager != null) {
+                location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                Log.d("LatLng", "Get Location");
+                if (location != null) {
+                    latitude = location.getLatitude();
+                    longitude = location.getLongitude();
+                    Log.d("LatLng", "Lat : " + Double.toString(latitude) + ", Lng : " + Double.toString(longitude));
                 }
             }
         } catch (Exception e) {
@@ -261,9 +261,14 @@ public class LocManager extends Service implements LocationListener {
             Log.d("LatLng", "PERMISSION PROBLEM");
             return;
         }
+        Toast.makeText(context, "requestLocationUpdates(NETWORK)", Toast.LENGTH_SHORT).show();
+
         manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 60 * 1000, 10, locationListener);
 
-        try { Thread.sleep(3000); } catch(Exception e) { }
+        try {
+            Thread.sleep(3000);
+        } catch (Exception e) {
+        }
         if (manager != null) {
             location = manager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             if (location != null) {

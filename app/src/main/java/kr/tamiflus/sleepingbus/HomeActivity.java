@@ -1,6 +1,9 @@
 package kr.tamiflus.sleepingbus;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -53,13 +56,17 @@ public class HomeActivity extends AppCompatActivity {
 
         st.setDist("1");
         NearStation nearStation = new NearStation(st);
-        nearStation.distance=326;
+        nearStation.distance = 326;
 
         adapter = new HomeAdapter(getApplicationContext());
         adapter.add(nearStation);
 
         //test
-        getNearestStationByLocation();
+        if (isNetworkAvailable()) {
+            getNearestStationByLocation();
+        } else {
+            Toast.makeText(this, "네트워크 연결 불가", Toast.LENGTH_SHORT).show();
+        }
 
 //        BusStation st1 = new BusStation();
 //        st1.setName("와동중학교 방면");
@@ -120,12 +127,12 @@ public class HomeActivity extends AppCompatActivity {
     public class HomeHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
-            switch(msg.what) {
+            switch (msg.what) {
                 case UPDATE_NEARSTATION_ONE:
-                    updateScreenContents(new NearStation((BusStation)msg.obj));
+                    updateScreenContents(new NearStation((BusStation) msg.obj));
                     break;
                 case UPDATE_NEARSTATION_TWO:
-                    updateScreenContents(new NearTwoStation(((List<BusStation>)msg.obj).get(0), ((List<BusStation>)msg.obj).get(1)));
+                    updateScreenContents(new NearTwoStation(((List<BusStation>) msg.obj).get(0), ((List<BusStation>) msg.obj).get(1)));
 
                     //test code
                     Toast.makeText(HomeActivity.this, "test start!!", Toast.LENGTH_SHORT).show();
@@ -152,11 +159,12 @@ public class HomeActivity extends AppCompatActivity {
     /**
      * list.size() must be 2
      * 두 개의 이름이 같은 정류장을 구글맵을 통해 구별함.
+     *
      * @param list
      */
     private void startMapActivity(List<BusStation> list) {
         Log.d("HomeActivity", "startMapActivity()");
-        if(list.size() != 2) {
+        if (list.size() != 2) {
             Log.d("HomeActivity", "unexpected list size");
             Toast.makeText(this, "unexpected list size", Toast.LENGTH_SHORT).show();
         } else {
@@ -171,5 +179,12 @@ public class HomeActivity extends AppCompatActivity {
             intent.putExtra("st2", arr2);
             startActivity(intent);
         }
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

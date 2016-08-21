@@ -37,7 +37,6 @@ public class SearchBusStationByLocationActivity extends FragmentActivity impleme
     Animation up, down;
     boolean show = false;
     List<BusStation> list = new ArrayList<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,8 +84,10 @@ public class SearchBusStationByLocationActivity extends FragmentActivity impleme
 //        OnCurrentLocationParseConnector parser = new OnCurrentLocationParseConnector();
 //        parser.execute(Double.toString(manager.getLongitude()), Double.toString(manager.getLatitude()));
 //        manager.stop();
+        setMarker(list);
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            // TODO 마커클릭시 나타나는 infoview 구성하기, 마커 생성시 카메라 이동하기
             @Override
             public boolean onMarkerClick(Marker marker) {
                 if(marker.getSnippet() == null) return false;
@@ -151,6 +152,14 @@ public class SearchBusStationByLocationActivity extends FragmentActivity impleme
             busStations = (ArrayList) helper.fillStation(busStations);
 
             list = busStations;
+        }
+    }
+
+    private void setMarker(List<BusStation> stations) {
+        for(int i=0; i<stations.size(); i++) {
+            double lat = Double.parseDouble(stations.get(i).getX());
+            double lng = Double.parseDouble(stations.get(i).getY());
+            mMap.addMarker(new MarkerOptions().position(new LatLng(lng, lat)).title(stations.get(i).getName()).snippet(Integer.toString(i)));
         }
     }
 }

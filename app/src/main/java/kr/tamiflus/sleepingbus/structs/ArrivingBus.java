@@ -8,6 +8,7 @@ package kr.tamiflus.sleepingbus.structs;
 public class ArrivingBus extends Bus {
     private String plateNo; // 차량 번호판. ex : 경기73바1577
     private int timeToWait; // 예상 대기 시간. 예를 들어 7분 후 도착이면 7 값을 가진다
+    private String numOfStationsToWait;    // 몇 정거장 전. 버스가 2정거장 전에 있다면 2 값을 가진다
 
     public ArrivingBus() { }
 
@@ -60,5 +61,22 @@ public class ArrivingBus extends Bus {
 
     public void setTimeToWait(int timeToWait) {
         this.timeToWait = timeToWait;
+    }
+
+    public String getNumOfStationsToWait() {
+        return numOfStationsToWait;
+    }
+
+    public void setNumOfStationsToWait(String numOfStationsToWait) {
+        this.numOfStationsToWait = numOfStationsToWait;
+    }
+
+    @Override
+    public String toString() {
+        return "ArrivingBus{" +
+                "plateNo='" + plateNo + '\'' +
+                ", timeToWait=" + timeToWait +
+                ", numOfStationsToWait='" + numOfStationsToWait + '\'' +
+                '}';
     }
 }

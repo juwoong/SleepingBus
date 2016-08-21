@@ -11,6 +11,8 @@ public class BusRoute {
     private String routeName;
     private String routeTypeCd;
     private String routeTypeName;
+    private ArrivingBus bus1;
+    private ArrivingBus bus2;
 
     public String getRegionName() {
         return regionName;
@@ -61,5 +63,21 @@ public class BusRoute {
                 ", routeTypeCd='" + routeTypeCd + '\'' +
                 ", routeTypeName='" + routeTypeName + '\'' +
                 '}';
+    }
+
+    public ArrivingBus getBus1() {
+        return bus1;
+    }
+
+    public void setBus1(ArrivingBus bus1) {
+        this.bus1 = bus1;
+    }
+
+    public ArrivingBus getBus2() {
+        return bus2;
+    }
+
+    public void setBus2(ArrivingBus bus2) {
+        this.bus2 = bus2;
     }
 }

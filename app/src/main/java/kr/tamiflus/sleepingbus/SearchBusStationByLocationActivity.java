@@ -47,6 +47,9 @@ public class SearchBusStationByLocationActivity extends FragmentActivity impleme
         mapFragment.getMapAsync(this);
         BusStation st1 = BusStationToStrArray.arrToList(getIntent().getStringArrayExtra("st1"));
         BusStation st2 = BusStationToStrArray.arrToList(getIntent().getStringArrayExtra("st2"));
+        Log.d("MapActivity_st1", st1.toString());
+        Log.d("MapActivity_st2", st2.toString());
+
         list.add(st1);
         list.add(st2);
         Log.d("MapActivity", list.toString());
@@ -90,7 +93,10 @@ public class SearchBusStationByLocationActivity extends FragmentActivity impleme
             // TODO 마커클릭시 나타나는 infoview 구성하기, 마커 생성시 카메라 이동하기
             @Override
             public boolean onMarkerClick(Marker marker) {
-                if(marker.getSnippet() == null) return false;
+                if(marker.getSnippet() == null) {
+                    Log.d("onMarkerClick", "snippet is null");
+                    return false;
+                }
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
 
                 int val = Integer.parseInt(marker.getSnippet());

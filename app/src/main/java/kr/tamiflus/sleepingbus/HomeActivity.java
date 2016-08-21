@@ -39,10 +39,6 @@ public class HomeActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Intent intent = new Intent(this, SearchBusStationByLocationActivity.class);
-        startActivity(intent);
-
-
         TextView searchButton = (TextView) findViewById(R.id.searchButton);
         recyclerView = (RecyclerView) findViewById(R.id.homeRecyclerView);
 
@@ -126,7 +122,7 @@ public class HomeActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch(msg.what) {
                 case UPDATE_NEARSTATION_ONE:
-                    updateScreenContents(new NearStation(((List<BusStation>)msg.obj).get(0)));
+                    updateScreenContents(new NearStation((BusStation)msg.obj));
                     break;
                 case UPDATE_NEARSTATION_TWO:
                     updateScreenContents(new NearTwoStation(((List<BusStation>)msg.obj).get(0), ((List<BusStation>)msg.obj).get(1)));
@@ -165,6 +161,9 @@ public class HomeActivity extends AppCompatActivity {
             Toast.makeText(this, "unexpected list size", Toast.LENGTH_SHORT).show();
         } else {
             Intent intent = new Intent(this, SearchBusStationByLocationActivity.class);
+            Log.d("Home_list[0]", list.get(0).toString());
+            Log.d("Home_list[1]", list.get(1).toString());
+
             String[] arr1 = BusStationToStrArray.listToArr(list.get(0));
             String[] arr2 = BusStationToStrArray.listToArr(list.get(1));
 

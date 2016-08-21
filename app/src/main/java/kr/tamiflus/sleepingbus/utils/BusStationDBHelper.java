@@ -206,7 +206,7 @@ public class BusStationDBHelper extends SQLiteOpenHelper{
 
         Log.d("DBHelper", "stationCode : " + stationCode);
         c = db.rawQuery("SELECT * FROM BusRouteList WHERE busStationID=\'" + stationCode + "\'", null);
-        int routeIdIndex = c.getColumnIndex("st_order");
+        int routeIdIndex = c.getColumnIndex("busRouteID");
         Log.d("DBHelper", "busRouteId columnindex : " + routeIdIndex);
         if(c.moveToFirst()) {
             do {

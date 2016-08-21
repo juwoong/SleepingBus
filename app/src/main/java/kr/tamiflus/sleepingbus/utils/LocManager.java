@@ -28,6 +28,8 @@ import kr.tamiflus.sleepingbus.HomeActivity;
  * Created by tamiflus on 2016. 8. 3..
  */
 public class LocManager extends Service implements LocationListener {
+    public static final int REQUEST_CODE_LOCATION = 2;
+
     Context context, dialogContext;
     Activity activity;
     LocationManager manager;
@@ -35,7 +37,6 @@ public class LocManager extends Service implements LocationListener {
     Location location;
     private Handler handler;
     private float accuracy;
-    private static final int REQUEST_CODE_LOCATION = 2;
 
     public LocManager(Activity activity, Context dialogContext, Handler handler) {
         this.context = activity.getApplicationContext();
@@ -264,6 +265,7 @@ public class LocManager extends Service implements LocationListener {
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
             Log.d("LatLng", "PERMISSION PROBLEM");
+
             return;
         }
         Toast.makeText(context, "requestLocationUpdates(NETWORK)", Toast.LENGTH_SHORT).show();

@@ -1,5 +1,6 @@
 package kr.tamiflus.sleepingbus;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -93,7 +94,6 @@ public class SearchBusStationByLocationActivity extends FragmentActivity impleme
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(list.get(0).getY()), Double.parseDouble(list.get(0).getX())), 17f));
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            // TODO 마커클릭시 나타나는 infoview 구성하기, 마커 생성시 카메라 이동하기
             @Override
             public boolean onMarkerClick(Marker marker) {
                 if(marker.getSnippet() == null) {
@@ -111,6 +111,10 @@ public class SearchBusStationByLocationActivity extends FragmentActivity impleme
                     @Override
                     public void onClick(View view) {
                         Toast.makeText(getApplicationContext(), list.get(val).getName(), Toast.LENGTH_LONG).show();
+                        BusStation depart = list.get(val);
+                        Intent intent = new Intent(SearchBusStationByLocationActivity.this, StationInfoActivity.class);
+                        intent.putExtra("departStation", BusStationToStrArray.listToArr(depart));
+                        startActivity(intent);
                     }
                 });
 

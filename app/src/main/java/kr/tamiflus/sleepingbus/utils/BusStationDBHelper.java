@@ -227,7 +227,6 @@ public class BusStationDBHelper extends SQLiteOpenHelper{
             busRoute.setRouteId(routeIdList.get(i));
             busRouteList.add(busRoute);
         }
-        // todo fillRoute
         busRouteList = fillBusRoute(busRouteList);
         return busRouteList;
     }

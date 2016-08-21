@@ -4,7 +4,7 @@ package kr.tamiflus.sleepingbus.structs;
  * Created by tamiflus on 16. 8. 17..
  */
 public class NearStation extends HomeObject {
-    public BusStation st = new BusStation();
+    private BusStation st = new BusStation();
     public int distance;
 
     public NearStation() {
@@ -16,5 +16,9 @@ public class NearStation extends HomeObject {
         this.st = st;
         if(st.getDist() == null) distance = 0;
         else this.distance = Integer.parseInt(st.getDist());
+    }
+
+    public BusStation getStation() {
+        return st;
     }
 }

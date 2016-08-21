@@ -1,5 +1,6 @@
 package kr.tamiflus.sleepingbus;
 
+import android.*;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -7,6 +8,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -31,6 +33,8 @@ public class HomeActivity extends AppCompatActivity {
     public static final int UPDATE_NEARSTATION_TWO = 2;
     public static final int CANNOT_FIND_CURRENTLOCATION = 3;
     public static final int LOCATION_CHANGED = 4;
+    public static final int REQUEST_CODE_LOCATION = 11;
+
 
     RecyclerView recyclerView;
     HomeAdapter adapter;
@@ -67,6 +71,8 @@ public class HomeActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "네트워크 연결 불가", Toast.LENGTH_SHORT).show();
         }
+        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION);
+
 
 //        BusStation st1 = new BusStation();
 //        st1.setName("와동중학교 방면");
@@ -135,11 +141,11 @@ public class HomeActivity extends AppCompatActivity {
                     updateScreenContents(new NearTwoStation(((List<BusStation>) msg.obj).get(0), ((List<BusStation>) msg.obj).get(1)));
 
                     //test code
-                    Toast.makeText(HomeActivity.this, "test start!!", Toast.LENGTH_SHORT).show();
-                    List<BusStation> test = new ArrayList<>();
-                    test.add(((List<BusStation>) msg.obj).get(0));
-                    test.add(((List<BusStation>) msg.obj).get(1));
-                    startMapActivity(test);
+//                    Toast.makeText(HomeActivity.this, "test start!!", Toast.LENGTH_SHORT).show();
+//                    List<BusStation> test = new ArrayList<>();
+//                    test.add(((List<BusStation>) msg.obj).get(0));
+//                    test.add(((List<BusStation>) msg.obj).get(1));
+//                    startMapActivity(test);
 
                     break;
                 case CANNOT_FIND_CURRENTLOCATION:

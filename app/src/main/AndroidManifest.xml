@@ -70,6 +70,7 @@
         <activity
                  android:name=".SearchBusStationByLocationActivity"
                  android:label="@string/title_activity_search_bus_station_by_location"></activity>
+        <activity android:name=".StationInfoActivity"></activity>
     </application>
 
 </manifest>

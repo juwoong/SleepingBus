@@ -115,7 +115,6 @@ public class NearestStationParser {
     }
 
     private int findIndexOfNearestStation(List<BusStation> list) {
-        // TODO 리스트에서 제일 가까운 버스정류장의 인덱스값 리턴해주는 함수 작성하기
         if(list.size() == 0) {
             Log.d("ERROR", "size of list cannot be 0");
             System.exit(-1);

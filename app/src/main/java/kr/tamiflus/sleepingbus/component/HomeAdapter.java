@@ -67,40 +67,14 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else if(vh instanceof HomeNearStationListViewHolder) {
             final HomeNearStationListViewHolder holder = (HomeNearStationListViewHolder) vh;
             final NearTwoStation st = (NearTwoStation) list.get(position);
-            holder.layout.initLayout(true);
+            //TODO: holder.cardView에 OnClickLister 달 것
+
             holder.name.setText(st.name);
             holder.upName.setText(st.s1.getName());
             holder.downName.setText(st.s2.getName());
             holder.downDistance.setText(Integer.toString(st.d2)+"m");
             holder.upDistance.setText(Integer.toString(st.d1)+"m");
-            holder.btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if(holder.layout.isExpanded()){
-                        holder.layout.collapse();
-                        holder.btn.setImageResource(R.drawable.ic_keyboard_arrow_down_black_24dp);
-                    } else {
-                        holder.layout.expand();
-                        holder.btn.setImageResource(R.drawable.ic_keyboard_arrow_up_black_24dp);
-                    }
 
-                }
-            });
-
-            holder.upView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Toast.makeText(context, st.name + " : " + st.s1.getName(),Toast.LENGTH_LONG).show();
-                }
-            });
-
-            holder.downView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Toast.makeText(context, st.name + " : " + st.s2.getName(),Toast.LENGTH_LONG).show();
-
-                }
-            });
         } else {
             HomeBookMarkViewHolder holder = (HomeBookMarkViewHolder) vh;
             BookMark mark = (BookMark) list.get(position);

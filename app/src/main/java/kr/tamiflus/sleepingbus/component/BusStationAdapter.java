@@ -71,6 +71,8 @@ public class BusStationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             BusStation st = list.get(position);
             BusStationViewHolder holder = (BusStationViewHolder) vh;
 
+            //TODO: holder.layout에 onClickListener 달 것
+
             holder.nameView.setText(st.getName());
             holder.idView.setText(st.getId());
             holder.locationView.setText(st.getRegion());

@@ -1,5 +1,6 @@
 package kr.tamiflus.sleepingbus;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -7,15 +8,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
+import java.util.List;
+
 import kr.tamiflus.sleepingbus.component.BusStationActivityAdapter;
+import kr.tamiflus.sleepingbus.structs.Bus;
+import kr.tamiflus.sleepingbus.structs.BusRoute;
+import kr.tamiflus.sleepingbus.structs.BusStation;
+import kr.tamiflus.sleepingbus.utils.BusStationDBHelper;
+import kr.tamiflus.sleepingbus.utils.BusStationToStrArray;
 
 public class BusStationInfoActivity extends AppCompatActivity {
     RecyclerView recyclerView;
+    private BusStation departStation = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("InfoActivity", "onCreate()");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bus_station_info);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -42,5 +53,17 @@ public class BusStationInfoActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        departStation = BusStationToStrArray.arrToList(getIntent().getStringArrayExtra("departStation"));
+        List<BusRoute> list = getBusRoutesByStationId(departStation.getId());
+        Log.d("InfoActivity", "list.size() == " + list.size());
+        for(int i = 0; i<list.size(); i++) {
+            Log.d("InfoActivity", list.get(i).toString());
+        }
+
+    }
+
+    public List<BusRoute> getBusRoutesByStationId(String stationId) {
+        return (new BusStationDBHelper(this)).getBusRoutesByStationId(stationId);
     }
 }

@@ -29,6 +29,7 @@ import kr.tamiflus.sleepingbus.HomeActivity;
  */
 public class LocManager extends Service implements LocationListener {
     public static final int REQUEST_CODE_LOCATION = 2;
+    public static final int DELAY_LOCATION_SEC = 2;
 
     Context context, dialogContext;
     Activity activity;
@@ -215,6 +216,7 @@ public class LocManager extends Service implements LocationListener {
             return;
         }
         manager.removeUpdates(this);
+        manager.removeUpdates(locationListener);
     }
 
     private void doWhenGpsEnabled() {
@@ -237,7 +239,7 @@ public class LocManager extends Service implements LocationListener {
                     10, locationListener);
             Log.d("LatLng", "Call Location");
 
-            Thread.sleep(3000);
+            Thread.sleep(DELAY_LOCATION_SEC * 1000);
 
             if (manager != null) {
                 location = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -273,7 +275,7 @@ public class LocManager extends Service implements LocationListener {
         manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 60 * 1000, 10, locationListener);
 
         try {
-            Thread.sleep(3000);
+            Thread.sleep(DELAY_LOCATION_SEC * 1000);
         } catch (Exception e) {
         }
         if (manager != null) {

@@ -70,6 +70,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     Log.d("HomeAdapter", "onClick()");
+                    Log.d("HomeAdapter", "toString() : " + st.getStation().toString());
                     Intent intent = new Intent(context, BusStationInfoActivity.class);
                     intent.putExtra("departStation", BusStationToStrArray.listToArr(st.getStation()));
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

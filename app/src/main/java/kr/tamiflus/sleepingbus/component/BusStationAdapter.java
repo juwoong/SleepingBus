@@ -10,9 +10,8 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import kr.tamiflus.sleepingbus.GetBusStationIDActivity;
+import kr.tamiflus.sleepingbus.BusStationInfoActivity;
 import kr.tamiflus.sleepingbus.R;
-import kr.tamiflus.sleepingbus.StationInfoActivity;
 import kr.tamiflus.sleepingbus.holders.BusStationViewHolder;
 import kr.tamiflus.sleepingbus.holders.SectionViewHolder;
 import kr.tamiflus.sleepingbus.structs.BusStation;
@@ -83,7 +82,7 @@ public class BusStationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             holder.layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, StationInfoActivity.class);
+                    Intent intent = new Intent(context, BusStationInfoActivity.class);
                     intent.putExtra("departStation", BusStationToStrArray.listToArr(st));
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);

@@ -213,6 +213,8 @@ public class BusStationDBHelper extends SQLiteOpenHelper{
                 }
             }while(c.moveToNext());
         }
+        Log.d("DBHelper", "routeIdList: " + routeIdList.toString());
+
         Comparator<String> comparator = new Comparator<String>() {
             @Override
             public int compare(String lhs, String rhs) {
@@ -225,9 +227,17 @@ public class BusStationDBHelper extends SQLiteOpenHelper{
         for(int i = 0; i<routeIdList.size(); i++) {
             busRoute = new BusRoute();
             busRoute.setRouteId(routeIdList.get(i));
+            Log.d("DBHelper", "routeIdList.get(i) : " + routeIdList.get(i));
             busRouteList.add(busRoute);
         }
         busRouteList = fillBusRoute(busRouteList);
+
+        //debug code
+        Log.d("DBHelper", "routeIdList.size() : " + routeIdList.size());
+        for(int i = 0; i<routeIdList.size(); i++) {
+            Log.d("DBHelper", "routeIdList.toString : " + routeIdList.toString());
+        }
+
         return busRouteList;
     }
 }

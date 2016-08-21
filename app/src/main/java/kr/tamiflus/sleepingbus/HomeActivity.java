@@ -1,6 +1,5 @@
 package kr.tamiflus.sleepingbus;
 
-import android.*;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -18,7 +17,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import kr.tamiflus.sleepingbus.component.HomeAdapter;
@@ -192,5 +190,11 @@ public class HomeActivity extends AppCompatActivity {
                 = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
     }
 }

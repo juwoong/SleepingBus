@@ -74,5 +74,6 @@ public class FindNearStationThread extends Thread {
         handler.sendMessage(msg);
 
         Log.d("FindNearStationThread", "FINISH");
+        locManager.stop();
     }
 }

@@ -89,8 +89,6 @@ public class NearestStationParser {
     public List<BusStation> getNearestStationByXY(String x, String y) throws IOException, XmlPullParserException{
         List<BusStation> stations;
 
-        if
-
         Request request = new Request.Builder()
                 .url("http://ws.bus.go.kr/api/rest/stationinfo/getStationByPos?ServiceKey=mprvOxIo4u5PCVIVStlnRI6rMDBmJGRvC6%2BNurrGAkl0Ctsmt7UJxU9XwMwP4IOAuaRxjScQ2hGKaDm1n1z%2BgA%3D%3D&tmX="
                         + x + "&tmY=" + y + "&radius=" + FIND_RADIUS + "&numOfRows=999&pageSize=999&pageNo=1&startPage=1")

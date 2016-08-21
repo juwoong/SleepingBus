@@ -19,10 +19,6 @@ import kr.tamiflus.sleepingbus.R;
  */
 public class HomeNearStationListViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.nearStationName) public TextView name;
-    @BindView(R.id.nearStationUpName) public TextView upName;
-    @BindView(R.id.nearStationUpDistance) public TextView upDistance;
-    @BindView(R.id.nearStationDownName) public TextView downName;
-    @BindView(R.id.nearStationDownDistance) public TextView downDistance;
     @BindView(R.id.cardView) public CardView view;
 
     public HomeNearStationListViewHolder (View v) {

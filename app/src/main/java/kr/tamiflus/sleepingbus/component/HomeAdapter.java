@@ -70,10 +70,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             //TODO: holder.cardView에 OnClickLister 달 것
 
             holder.name.setText(st.name);
-            holder.upName.setText(st.s1.getName());
-            holder.downName.setText(st.s2.getName());
-            holder.downDistance.setText(Integer.toString(st.d2)+"m");
-            holder.upDistance.setText(Integer.toString(st.d1)+"m");
+
 
         } else {
             HomeBookMarkViewHolder holder = (HomeBookMarkViewHolder) vh;

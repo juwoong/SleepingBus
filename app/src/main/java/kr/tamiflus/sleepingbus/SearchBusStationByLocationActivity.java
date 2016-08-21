@@ -10,6 +10,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -88,6 +89,7 @@ public class SearchBusStationByLocationActivity extends FragmentActivity impleme
 //        parser.execute(Double.toString(manager.getLongitude()), Double.toString(manager.getLatitude()));
 //        manager.stop();
         setMarker(list);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(list.get(0).getY()), Double.parseDouble(list.get(0).getX())), 17f));
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             // TODO 마커클릭시 나타나는 infoview 구성하기, 마커 생성시 카메라 이동하기
@@ -100,6 +102,7 @@ public class SearchBusStationByLocationActivity extends FragmentActivity impleme
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
 
                 int val = Integer.parseInt(marker.getSnippet());
+                Log.d("MarkerClicked", "" + val + " : " + list.get(val).toString());
                 name.setText(list.get(val).getName());
                 id.setText(list.get(val).getId());
                 region.setText(list.get(val).getRegion());

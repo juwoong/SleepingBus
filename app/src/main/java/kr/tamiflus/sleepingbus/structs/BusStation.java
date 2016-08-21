@@ -61,7 +61,15 @@ public class BusStation {
 
     @Override
     public String toString() {
-        return String.format("{%s, %s, %s}", name, x, y);
+        return "BusStation{" +
+                "name='" + name + '\'' +
+                ", id='" + id + '\'' +
+                ", region='" + region + '\'' +
+                ", code='" + code + '\'' +
+                ", x='" + x + '\'' +
+                ", y='" + y + '\'' +
+                ", dist='" + dist + '\'' +
+                '}';
     }
 
     public String getDist() { return dist; }

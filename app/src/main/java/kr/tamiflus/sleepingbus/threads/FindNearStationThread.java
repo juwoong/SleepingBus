@@ -1,5 +1,6 @@
 package kr.tamiflus.sleepingbus.threads;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -19,10 +20,12 @@ import kr.tamiflus.sleepingbus.utils.NearestStationParser;
 
 public class FindNearStationThread extends Thread {
     private Context context;
+    private Activity activity;
     private Handler handler;
 
-    public FindNearStationThread(Context context, Handler handler) {
-        this.context = context;
+    public FindNearStationThread(Activity activity, Handler handler) {
+        this.context = activity.getApplicationContext();
+        this.activity = activity;
         this.handler = handler;
     }
 
@@ -31,7 +34,7 @@ public class FindNearStationThread extends Thread {
         Log.d("FindNearStationThread", "Thread START");
 
         List<BusStation> list = null;
-        LocManager locManager = new LocManager(context, context, handler);
+        LocManager locManager = new LocManager(activity, context, handler);
         NearestStationParser parser = new NearestStationParser(context);
 
 //        locManager.checkIsGPSOn();

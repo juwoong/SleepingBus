@@ -107,7 +107,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void getNearestStationByLocation() {
-        FindNearStationThread thread = new FindNearStationThread(getApplicationContext(), new HomeHandler());
+        FindNearStationThread thread = new FindNearStationThread(this, new HomeHandler());
         thread.start();
 
     }

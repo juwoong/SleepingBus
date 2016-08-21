@@ -9,6 +9,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -101,11 +102,17 @@ public class SearchBusStationByLocationActivity extends FragmentActivity impleme
                 }
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
 
-                int val = Integer.parseInt(marker.getSnippet());
+                final int val = Integer.parseInt(marker.getSnippet());
                 Log.d("MarkerClicked", "" + val + " : " + list.get(val).toString());
                 name.setText(list.get(val).getName());
                 id.setText(list.get(val).getId());
                 region.setText(list.get(val).getRegion());
+                infoView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(getApplicationContext(), list.get(val).getName(), Toast.LENGTH_LONG).show();
+                    }
+                });
 
                 if(show == false ) {
                     infoView.setAnimation(up);

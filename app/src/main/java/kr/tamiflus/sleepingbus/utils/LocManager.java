@@ -2,6 +2,7 @@ package kr.tamiflus.sleepingbus.utils;
 
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
@@ -28,15 +29,17 @@ import kr.tamiflus.sleepingbus.HomeActivity;
  */
 public class LocManager extends Service implements LocationListener {
     Context context, dialogContext;
+    Activity activity;
     LocationManager manager;
     double longitude, latitude;
     Location location;
     private Handler handler;
     private float accuracy;
+    private static final int REQUEST_CODE_LOCATION = 2;
 
-
-    public LocManager(Context context, Context dialogContext, Handler handler) {
-        this.context = context;
+    public LocManager(Activity activity, Context dialogContext, Handler handler) {
+        this.context = activity.getApplicationContext();
+        this.activity = activity;
         this.dialogContext = dialogContext;
         this.handler = handler;
         manager = (LocationManager) context.getSystemService(context.LOCATION_SERVICE);
@@ -107,6 +110,8 @@ public class LocManager extends Service implements LocationListener {
                 //                                          int[] grantResults)
                 // to handle the case where the user grants the permission. See the documentation
                 // for ActivityCompat#requestPermissions for more details.
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        REQUEST_CODE_LOCATION);
                 Log.d("LatLng", "PERMISSION PROBLEM");
                 return;
             }

@@ -15,6 +15,7 @@ import java.util.List;
 import kr.tamiflus.sleepingbus.R;
 import kr.tamiflus.sleepingbus.holders.BusRouteStationHeaderViewHolder;
 import kr.tamiflus.sleepingbus.holders.BusRouteStationViewHolder;
+import kr.tamiflus.sleepingbus.structs.Bus;
 import kr.tamiflus.sleepingbus.structs.BusStation;
 
 public class BusRouteStationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -24,6 +25,7 @@ public class BusRouteStationAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     Context context;
     LayoutInflater inflater;
     ArrayList<BusStation> list = new ArrayList<>();
+    ArrayList<BusStation> listCopy = new ArrayList<>(); // store original pure list
 
     public BusRouteStationAdapter(Context context) {
         //super(context, R.layout.busstation_route_listview);
@@ -33,14 +35,17 @@ public class BusRouteStationAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     public void addAll(List<BusStation> list) {
         this.list.addAll(list);
+        this.listCopy.addAll(list);
     }
 
     public void add(BusStation obj) {
         this.list.add(obj);
+        this.listCopy.add(obj);
     }
 
     public void clear() {
         this.list.clear();
+        this.listCopy.clear();
     }
 
 
@@ -76,6 +81,28 @@ public class BusRouteStationAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     String value = charSequence.toString();
                     Log.i("Change", value);
                     //TODO: 현 노선에서 정류장 검색 할 수 있게 만들기.
+                    if(value.length() > 0) {
+                        list = new ArrayList<>();
+                        list.add(listCopy.get(0));
+                        for(int k = 1; k<listCopy.size(); k++) {
+                            if(listCopy.get(k).getName().contains(charSequence)) {
+                                list.add(listCopy.get(k));
+                            }
+                        }
+                    } else {
+                        list = new ArrayList<>();
+                        list.add(listCopy.get(0));
+                        for(int k = 1; k<listCopy.size(); k++) {
+                            list.add(listCopy.get(k));
+                        }
+                    }
+
+                    //debug
+
+                    for(int k = 0; k<list.size(); k++) {
+
+                    }
+                    notifyDataSetChanged();
                 }
 
                 @Override

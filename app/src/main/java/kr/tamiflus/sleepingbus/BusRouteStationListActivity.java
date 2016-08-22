@@ -36,7 +36,6 @@ public class BusRouteStationListActivity extends AppCompatActivity {
     Toolbar toolbar;
     View infoDetail, infoSummary;
     CollapsingToolbarLayout collapsingToolbarLayout;
-    ArrayList<BusStation> list;
     BusRouteStationAdapter adapter;
     Handler handler = new RouteStationListHandler();
 
@@ -56,7 +55,7 @@ public class BusRouteStationListActivity extends AppCompatActivity {
         infoSummary = findViewById(R.id.route_info_summary);
 
         //TODO: 현 버스 노선의 종류를 받아와서 색 넣어주기.
-        //노선 종류는 arrivingBus.getRouteTypeCd()로 알 수 있음
+        // TODO: 노선 종류는 arrivingBus.getRouteTypeCd()로 알 수 있음
         infoDetail.setBackgroundColor(getResources().getColor(R.color.normal));
         toolbar.setBackgroundColor(getResources().getColor(R.color.normal));
         collapsingToolbarLayout.setBackgroundColor(getResources().getColor(R.color.normal));
@@ -78,7 +77,6 @@ public class BusRouteStationListActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.BusRouteInfo)).setText(arrivingBus.getRegionName()); //버스 노선 정보
         ((TextView) findViewById(R.id.BusRouteName)).setText(arrivingBus.getRouteName()); //버스 노선 번호
         ((TextView) findViewById(R.id.BusHeadingInfo)).setText(arrivingBus.getNumOfStationsToWait() + "정류소전"); //버스 목적지 번호
-        // TODO: 로딩되기 전에 동그라미 띄우기
 
         // 버스정류장 리스트 셋
 //        for(int i=0; i<20; i++) {

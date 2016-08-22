@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +63,10 @@ public class BusStationInfoActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(activityAdapter);
 
+        //TODO: 버스정류장 정보 달아줄 것
+        ((TextView) findViewById(R.id.stationId)).setText("정류장 ID");
+        ((TextView) findViewById(R.id.stationName)).setText("정류장 이름");
+        ((TextView) findViewById(R.id.stationRegion)).setText("정류장 지역번호");
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {

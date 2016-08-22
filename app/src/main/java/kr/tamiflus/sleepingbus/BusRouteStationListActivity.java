@@ -2,6 +2,8 @@ package kr.tamiflus.sleepingbus;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -22,14 +24,21 @@ import java.util.List;
 import kr.tamiflus.sleepingbus.animations.OnOffChangeListener;
 import kr.tamiflus.sleepingbus.component.BusRouteStationAdapter;
 import kr.tamiflus.sleepingbus.structs.ArrivingBus;
+import kr.tamiflus.sleepingbus.structs.Bus;
 import kr.tamiflus.sleepingbus.structs.BusStation;
+import kr.tamiflus.sleepingbus.threads.RouteStationListThread;
 import kr.tamiflus.sleepingbus.utils.BusStationDBHelper;
 
 public class BusRouteStationListActivity extends AppCompatActivity {
+    public static final int STATION_LIST_LOADED = 0;
+
     AppBarLayout appBarLayout;
     Toolbar toolbar;
     View infoDetail, infoSummary;
     CollapsingToolbarLayout collapsingToolbarLayout;
+    ArrayList<BusStation> list;
+    BusRouteStationAdapter adapter;
+    Handler handler = new RouteStationListHandler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +46,8 @@ public class BusRouteStationListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bus_route_station_list);
 
         RecyclerView view = (RecyclerView) findViewById(R.id.busRouteListView);
-        ArrayList<BusStation> list = new ArrayList<>();
+        Intent intent = getIntent();
+        ArrivingBus arrivingBus = ArrivingBus.ArrayToArrivingBus(intent.getStringArrayExtra("departBus"));
 
         appBarLayout = (AppBarLayout) findViewById(R.id.appbarlayout);
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
@@ -46,6 +56,7 @@ public class BusRouteStationListActivity extends AppCompatActivity {
         infoSummary = findViewById(R.id.route_info_summary);
 
         //TODO: 현 버스 노선의 종류를 받아와서 색 넣어주기.
+        //노선 종류는 arrivingBus.getRouteTypeCd()로 알 수 있음
         infoDetail.setBackgroundColor(getResources().getColor(R.color.normal));
         toolbar.setBackgroundColor(getResources().getColor(R.color.normal));
         collapsingToolbarLayout.setBackgroundColor(getResources().getColor(R.color.normal));
@@ -60,15 +71,14 @@ public class BusRouteStationListActivity extends AppCompatActivity {
 
         OnOffChangeListener.startAlphaAnimation(infoSummary, 0, View.INVISIBLE);
 
-        Intent intent = getIntent();
-        ArrivingBus arrivingBus = ArrivingBus.ArrayToArrivingBus(intent.getStringArrayExtra("departBus"));
+
 
         //TODO: 버스 노선 정보 입력해주기
 //        ((TextView) findViewById(R.id.BusRouteInfo)).setText("경기도 안산시 시외버스"); //버스 노선 정보
         ((TextView) findViewById(R.id.BusRouteInfo)).setText(arrivingBus.getRegionName()); //버스 노선 정보
         ((TextView) findViewById(R.id.BusRouteName)).setText(arrivingBus.getRouteName()); //버스 노선 번호
-        ((TextView) findViewById(R.id.BusHeadingInfo)).setText("여의도 버스환승센터 방면"); //버스 목적지 번호
-
+        ((TextView) findViewById(R.id.BusHeadingInfo)).setText(arrivingBus.getNumOfStationsToWait() + "정류소전"); //버스 목적지 번호
+        // TODO: 로딩되기 전에 동그라미 띄우기
 
         // 버스정류장 리스트 셋
 //        for(int i=0; i<20; i++) {
@@ -79,21 +89,40 @@ public class BusRouteStationListActivity extends AppCompatActivity {
 //            list.add(st);
 //        }
         String routeId = arrivingBus.getRouteId();
-        List<BusStation> stations = (new BusStationDBHelper(this)).getStationsByRouteId(routeId);
-
-        list = (ArrayList<BusStation>)stations;
-        for(int i = 0; i<stations.size(); i++) {
-            Log.d("filledList", "" + i + " : " + list.get(i).toString());
-
-        }
-
-        list.add(0, stations.get(0));
-
-        //view.setNestedScrollingEnabled(true);
-        BusRouteStationAdapter adapter = new BusRouteStationAdapter(getApplicationContext());
-        adapter.addAll(list);
+        RouteStationListThread thread = new RouteStationListThread(handler, routeId, this);
+        thread.start();
+//        List<BusStation> stations = (new BusStationDBHelper(this)).getStationsByRouteId(routeId);
+//
+//        list = (ArrayList<BusStation>)stations;
+//        for(int i = 0; i<stations.size(); i++) {
+//            Log.d("filledList", "" + i + " : " + list.get(i).toString());
+//
+//        }
+//
+//        list.add(0, stations.get(0));
+//
+//        //view.setNestedScrollingEnabled(true);
+        adapter = new BusRouteStationAdapter(getApplicationContext());
+//        adapter.addAll(list);
 
         view.setAdapter(adapter);
+        findViewById(R.id.loadingPanel).setVisibility(View.VISIBLE);
+    }
+
+    class RouteStationListHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            switch(msg.what) {
+                case STATION_LIST_LOADED:
+                    List<BusStation> list = (List<BusStation>)msg.obj;
+                    list.add(0, list.get(0));
+                    adapter.clear();
+                    adapter.addAll(list);
+                    adapter.notifyDataSetChanged();
+                    findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                    break;
+            }
+        }
     }
 
 }

@@ -142,18 +142,18 @@ public class BusStationDBHelper extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c;
 
-        for(BusStation i : st) {
-            c = db.rawQuery("SELECT * FROM BusStation WHERE stCode=\'" + i.getCode() + "\'", null);
+        for(int i = 0; i<st.size(); i++) {
+            BusStation s = st.get(i);
+            c = db.rawQuery("SELECT * FROM BusStation WHERE stCode=\'" + s.getCode() + "\'", null);
             if(c.moveToFirst()) {
                 do {
-                    i.setName(c.getString(0));
-                    i.setId(c.getString(1));
-                    i.setRegion(c.getString(2));
-                    i.setRegion(c.getString(2));
-                    i.setCode(c.getString(3));
-                    i.setX(c.getString(4));
-                    i.setY(c.getString(5));
-                    Log.d("fillStation", i.toString());
+                    s.setName(c.getString(0));
+                    s.setId(c.getString(1));
+                    s.setRegion(c.getString(2));
+                    s.setCode(c.getString(3));
+                    s.setX(c.getString(4));
+                    s.setY(c.getString(5));
+                    Log.d("fillStation", "filling stations...");
                 }while(c.moveToNext());
             }
         }
@@ -173,7 +173,6 @@ public class BusStationDBHelper extends SQLiteOpenHelper{
                 st.setCode(c.getString(3));
                 st.setX(c.getString(4));
                 st.setY(c.getString(5));
-//                Log.d("SQL", c.getString(0) + ", " + c.getString(1) + ", " + c.getString(2) + ", " + c.getString(3) + ", " + c.getString(4) + ", " + c.getString(5));
             }while(c.moveToNext());
         }
         return st;
@@ -253,7 +252,6 @@ public class BusStationDBHelper extends SQLiteOpenHelper{
         c = db.rawQuery("SELECT busStationID FROM BusRouteList WHERE busRouteID=\'" + routeId + "\' ORDER BY st_order ASC", null); // 방면 할거면 여길 건드려야.
         if(c.moveToFirst()) {
             do {
-                Log.d("DBHelper", "busStationID : " + c.getString(0));
                 BusStation st = new BusStation();
                 st.setCode(c.getString(0));
                 stations.add(st);

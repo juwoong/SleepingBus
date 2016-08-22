@@ -38,6 +38,7 @@ import kr.tamiflus.sleepingbus.values.BusRouteType;
 
 public class BusStationInfoActivity extends AppCompatActivity {
     public static final int UPDATE_SCREEN = 0;
+    public static final int NEXT_ACTIVITY = 3;
 
     RecyclerView recyclerView;
     private BusStation departStation = null;
@@ -45,7 +46,7 @@ public class BusStationInfoActivity extends AppCompatActivity {
     LinearLayout infoDetail, infoSummary;
     FloatingActionButton fab;
     public BusStationActivityAdapter activityAdapter = null;
-    Handler handler = new InfoHandler();
+    public Handler handler = new InfoHandler();
     List<BusRoute> list = null;
 
     @Override
@@ -68,7 +69,7 @@ public class BusStationInfoActivity extends AppCompatActivity {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         llm.scrollToPosition(0);
 
-        activityAdapter = new BusStationActivityAdapter(getApplicationContext());
+        activityAdapter = new BusStationActivityAdapter(getApplicationContext(), handler);
 
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(activityAdapter);
@@ -161,6 +162,12 @@ public class BusStationInfoActivity extends AppCompatActivity {
                     BusStationActivityAdapter activityAdapter = (BusStationActivityAdapter) msg.obj;
                     activityAdapter.notifyDataSetChanged();
                     break;
+                case NEXT_ACTIVITY:
+                    Log.d("InfoHandler", "NEXT_ACTIVITY");
+                    Intent intent = new Intent(BusStationInfoActivity.this, BusRouteStationListActivity.class);
+                    intent.putExtra("departBus", (String[])msg.obj);
+                    startActivity(intent);
+                    break;
                 default:
                     Log.d("InfoHandler", "unexpected msg.what");
                     break;
@@ -191,4 +198,18 @@ public class BusStationInfoActivity extends AppCompatActivity {
         }
         return list;
     }
+
+//    @Override
+//    protected void onPause() {
+//        super.onPause();
+//        Log.d("InfoHandler", "SET_WAITINGCIRCLE_INVISIBLE");
+//        findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+//    }
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        Log.d("InfoHandler", "SET_WAITINGCIRCLE_INVISIBLE");
+//        findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+//    }
 }

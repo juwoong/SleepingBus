@@ -2,6 +2,8 @@ package kr.tamiflus.sleepingbus.component;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,9 +36,11 @@ public class BusStationActivityAdapter extends RecyclerView.Adapter<RecyclerView
     Context context;
     LayoutInflater inflater;
     ArrayList<Bus> list = new ArrayList<>();
+    Handler handler;
 
-    public BusStationActivityAdapter(Context context) {
+    public BusStationActivityAdapter(Context context, Handler handler) {
         this.context = context;
+        this.handler = handler;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
     public void addAll(List<Bus> list) {
@@ -101,11 +105,10 @@ public class BusStationActivityAdapter extends RecyclerView.Adapter<RecyclerView
             holder.item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(context, BusRouteStationListActivity.class);
-                    Log.d("InfoActivity", "putExtra : " + ((ArrivingBus)list.get(position)).toString());
-                    intent.putExtra("departBus", ArrivingBus.ArrivingBusToArray((ArrivingBus)list.get(position)));
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
+                    Message msg = new Message();
+                    msg.what = BusStationInfoActivity.NEXT_ACTIVITY;
+                    msg.obj = ArrivingBus.ArrivingBusToArray((ArrivingBus)list.get(position));
+                    handler.sendMessage(msg);
                 }
             });
         }

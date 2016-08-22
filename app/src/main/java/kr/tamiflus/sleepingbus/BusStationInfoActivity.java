@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -31,11 +32,15 @@ import kr.tamiflus.sleepingbus.utils.BusStationDBHelper;
 import kr.tamiflus.sleepingbus.utils.BusStationToStrArray;
 
 public class BusStationInfoActivity extends AppCompatActivity {
+    public static final int UPDATE_SCREEN = 0;
+
     RecyclerView recyclerView;
     private BusStation departStation = null;
     AppBarLayout appBarLayout;
     LinearLayout infoDetail, infoSummary;
     FloatingActionButton fab;
+    public BusStationActivityAdapter activityAdapter = null;
+    Handler handler = new InfoHandler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +62,7 @@ public class BusStationInfoActivity extends AppCompatActivity {
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         llm.scrollToPosition(0);
 
-        BusStationActivityAdapter activityAdapter = new BusStationActivityAdapter(getApplicationContext());
+        activityAdapter = new BusStationActivityAdapter(getApplicationContext());
 
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(activityAdapter);
@@ -84,7 +89,7 @@ public class BusStationInfoActivity extends AppCompatActivity {
             Log.d("InfoActivity", list.get(i).toString());
         }
         ParseTask task = new ParseTask();
-        task.execute(departStation.getCode(), list, activityAdapter);
+        task.execute(departStation.getCode(), list, activityAdapter, handler);
 
 
         OnOffChangeListener.startAlphaAnimation(infoSummary, 0, View.INVISIBLE);
@@ -101,6 +106,7 @@ public class BusStationInfoActivity extends AppCompatActivity {
             String stationId = (String)params[0];
             List<BusRoute> routeList = (List<BusRoute>)(params[1]);
             BusStationActivityAdapter adapter = (BusStationActivityAdapter)params[2];
+            Handler handler = (Handler)params[3];
             List<BusRoute> result;
             try {
                 routeList = (new BusArrivalTimeParser()).fillRouteListByStationId(stationId, routeList);
@@ -113,10 +119,30 @@ public class BusStationInfoActivity extends AppCompatActivity {
                 busList.add(routeList.get(i).getBus1());
             }
             adapter.addAll(busList);
-            adapter.notifyDataSetChanged();
+//            adapter.notifyDataSetChanged();
+            Message msg = new Message();
+            msg.what = UPDATE_SCREEN;
+            msg.obj = adapter;
+            handler.sendMessage(msg);
 
             return routeList;
         }
 
+    }
+
+    private class InfoHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            switch(msg.what) {
+                case UPDATE_SCREEN:
+                    Log.d("InfoHandler", "UPDATE_SCREEN");
+                    BusStationActivityAdapter activityAdapter = (BusStationActivityAdapter)msg.obj;
+                    activityAdapter.notifyDataSetChanged();
+                    break;
+                default:
+                    Log.d("InfoHandler", "unexpected msg.what");
+                    break;
+            }
+        }
     }
 }

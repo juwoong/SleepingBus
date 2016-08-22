@@ -9,6 +9,9 @@
     tools:context="kr.tamiflus.sleepingbus.BusRouteStationListActivity"
     tools:showIn="@layout/activity_bus_route_station_list">
     <android.support.v7.widget.RecyclerView
+        android:smoothScrollbar="true"
+        android:scrollingCache="false"
+        android:animationCache="false"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/busRouteListView"></android.support.v7.widget.RecyclerView>

@@ -1,0 +1,74 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+tools:context=".fragment.AlarmIntroFragment">
+
+
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1.0"
+    >
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/bg_night_gradient"
+        android:scaleType="centerCrop"/>
+
+    <FrameLayout
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_marginLeft="45dp"
+            android:id="@+id/busStopPannel"
+            android:layout_width="60dp"
+            android:layout_height="120dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/busstop" />
+
+        <ImageView
+            android:layout_width="240dp"
+            android:layout_height="90dp"
+            android:layout_marginLeft="30dp"
+            android:id="@+id/busImage"
+            android:layout_gravity="center_horizontal|bottom"
+            android:scaleType="fitCenter"
+            android:src="@drawable/bus" />
+    </FrameLayout>
+
+
+</FrameLayout>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/white"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:layout_marginBottom="18dp"
+        android:gravity="bottom"
+        android:textStyle="bold"
+        android:text="알람을 설정하세요"
+        android:textColor="#000"
+        android:textSize="32.5sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:gravity="center_horizontal|top"
+        android:text="출발 정류장과 도착 정류장\n그리고 탈 버스 노선만 정해주세요.\n불면증의 버스가 깨워 드립니다."
+        android:textColor="#888"
+        android:textSize="16sp" />
+
+</LinearLayout>
+
+</LinearLayout>

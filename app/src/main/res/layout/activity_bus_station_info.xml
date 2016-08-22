@@ -87,6 +87,7 @@
                 android:layout_height="wrap_content"
                 android:text="한국디지털미디어고등학교"
                 android:textSize="16sp"
+                android:id="@+id/stationSmallName"
                 android:textColor="#fff"/>
         </LinearLayout>
     </android.support.v7.widget.Toolbar>

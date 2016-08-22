@@ -66,31 +66,31 @@
                 </LinearLayout>
             </FrameLayout>
 
-
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_height="48dp"
+                android:layout_width="match_parent"
+                android:background="#FF686D"
+                app:layout_collapseMode="pin"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark"
+                app:popupTheme="@style/AppTheme.PopupOverlay">
+                <LinearLayout
+                    android:id="@+id/route.info.summary"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="320"
+                        android:textSize="16sp"
+                        android:textColor="#fff"/>
+                </LinearLayout>
+            </android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_height="48dp"
-        android:layout_width="match_parent"
-        android:background="#FF686D"
-        app:layout_collapseMode="pin"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark"
-        app:popupTheme="@style/AppTheme.PopupOverlay">
-        <LinearLayout
-            android:id="@+id/route.info.summary"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="320"
-                android:textSize="16sp"
-                android:textColor="#fff"/>
-        </LinearLayout>
-    </android.support.v7.widget.Toolbar>
+
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/scroll"
         android:layout_width="match_parent"

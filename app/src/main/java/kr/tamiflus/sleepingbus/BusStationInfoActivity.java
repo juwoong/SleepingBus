@@ -80,6 +80,7 @@ public class BusStationInfoActivity extends AppCompatActivity {
         ((TextView) findViewById(R.id.stationId)).setText(departStation.getId());
         ((TextView) findViewById(R.id.stationName)).setText(departStation.getName());
         ((TextView) findViewById(R.id.stationRegion)).setText(departStation.getRegion());
+        ((TextView) findViewById(R.id.stationSmallName)).setText(departStation.getName());
 
         //debug
         Log.d("InfoActivity", "list.size() == " + list.size());

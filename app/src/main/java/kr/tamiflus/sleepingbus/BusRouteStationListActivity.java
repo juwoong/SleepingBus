@@ -55,6 +55,8 @@ public class BusRouteStationListActivity extends AppCompatActivity {
 
         OnOffChangeListener.startAlphaAnimation(infoSummary, 0, View.INVISIBLE);
 
+
+        //왜 커밋이 안 도니 제발.
         //TODO: 버스 노선 정보 입력해주기
         ((TextView) findViewById(R.id.BusRouteInfo)).setText("경기도 안산시 시외버스"); //버스 노선 정보
         ((TextView) findViewById(R.id.BusRouteName)).setText("320"); //버스 노선 번호

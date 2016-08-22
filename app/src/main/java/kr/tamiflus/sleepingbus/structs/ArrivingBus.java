@@ -77,6 +77,8 @@ public class ArrivingBus extends Bus {
                 "plateNo='" + plateNo + '\'' +
                 ", timeToWait=" + timeToWait +
                 ", numOfStationsToWait='" + numOfStationsToWait + '\'' +
+                ", routeId='" + routeId + '\'' +
+                ", routeName='" + routeName + '\'' +
                 '}';
     }
 }

@@ -108,15 +108,28 @@ public class BusStationInfoActivity extends AppCompatActivity {
             BusStationActivityAdapter adapter = (BusStationActivityAdapter)params[2];
             Handler handler = (Handler)params[3];
             List<BusRoute> result;
+
             try {
                 routeList = (new BusArrivalTimeParser()).fillRouteListByStationId(stationId, routeList);
             } catch(Exception e) { e.printStackTrace(); }
+
+            //debug
+            Log.d("AFTER", "routeList.size() == " + routeList.size());
+            for(int i = 0; i<routeList.size(); i++) {
+                Log.d("InfoActivity", routeList.get(i).toString());
+            }
 
             List<Bus> busList = new ArrayList<>();
             //TODO: UI
             for(int i = 0; i<routeList.size(); i++) {
                 Log.d("doInBackground", "bus : " + routeList.get(i).getBus1().toString());
-                busList.add(routeList.get(i).getBus1());
+                Bus bus1 = routeList.get(i).getBus1();
+                bus1.setRouteName(routeList.get(i).getRouteName());
+                bus1.setRouteId(routeList.get(i).getRouteId());
+                bus1.setRegionName(routeList.get(i).getRegionName());
+                bus1.setRouteTypeCd(routeList.get(i).getRouteTypeCd());
+                bus1.setRouteTypeName(routeList.get(i).getRouteTypeName());
+                busList.add(bus1);
             }
             adapter.addAll(busList);
 //            adapter.notifyDataSetChanged();

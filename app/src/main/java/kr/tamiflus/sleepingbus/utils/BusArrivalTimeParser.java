@@ -193,6 +193,11 @@ public class BusArrivalTimeParser {
                 if(resultBuses[0].getRouteId().equals(routeId)) {
                     Log.d("ArrivalTimeParser", "setBus " + j + "_1 : " + resultBuses[0].toString());
                     Log.d("ArrivalTimeParser", "setBus " + j + "_2 : " + resultBuses[1].toString());
+                    resultBuses[0].setRouteId(routeList.get(i).getRouteId());
+                    resultBuses[0].setRouteId(routeList.get(i).getRouteId());
+                    resultBuses[1].setRouteName(routeList.get(i).getRouteName());
+                    resultBuses[1].setRouteName(routeList.get(i).getRouteName());
+
                     routeList.get(i).setBus1(resultBuses[0]);
                     routeList.get(i).setBus2(resultBuses[1]);
                 }

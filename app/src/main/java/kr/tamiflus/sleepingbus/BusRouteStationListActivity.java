@@ -1,6 +1,8 @@
 package kr.tamiflus.sleepingbus;
 
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,10 +15,15 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
+import kr.tamiflus.sleepingbus.animations.OnOffChangeListener;
 import kr.tamiflus.sleepingbus.component.BusRouteStationAdapter;
 import kr.tamiflus.sleepingbus.structs.BusStation;
 
 public class BusRouteStationListActivity extends AppCompatActivity {
+    AppBarLayout appBarLayout;
+    Toolbar toolbar;
+    View infoDetail, infoSummary;
+    CollapsingToolbarLayout collapsingToolbarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,12 +33,27 @@ public class BusRouteStationListActivity extends AppCompatActivity {
         RecyclerView view = (RecyclerView) findViewById(R.id.busRouteListView);
         ArrayList<BusStation> list = new ArrayList<>();
 
+        appBarLayout = (AppBarLayout) findViewById(R.id.appbarlayout);
+        collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        infoDetail = findViewById(R.id.route_info_detail);
+        infoSummary = findViewById(R.id.route_info_summary);
+
+        //TODO: 현 버스 노선의 종류를 받아와서 색 넣어주기.
+        infoDetail.setBackgroundColor(getResources().getColor(R.color.normal));
+        toolbar.setBackgroundColor(getResources().getColor(R.color.normal));
+        collapsingToolbarLayout.setBackgroundColor(getResources().getColor(R.color.normal));
+
+        appBarLayout.addOnOffsetChangedListener(new OnOffChangeListener(infoSummary, infoDetail));
+
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         llm.scrollToPosition(0);
 
         view.setLayoutManager(llm);
-        
+
+        OnOffChangeListener.startAlphaAnimation(infoSummary, 0, View.INVISIBLE);
+
 
         for(int i=0; i<20; i++) {
             BusStation st = new BusStation();

@@ -22,7 +22,7 @@
             android:gravity="center"
             android:textSize="36sp"
             android:textStyle="bold"
-            android:text="여의도환승센터 행\n320번 버스"/>
+            android:text="여의도환승센터 행\n따복형 버스"/>
 
         <TextView
             android:paddingLeft="24dp"

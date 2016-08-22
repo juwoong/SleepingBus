@@ -87,7 +87,7 @@ public class BusStationActivityAdapter extends RecyclerView.Adapter<RecyclerView
                 holder.leftTimeView.setText(show);
             }
 
-            String leftSt = ((ArrivingBus) list.get(position)).getNumOfStationsToWait();
+            String leftSt = ((ArrivingBus) list.get(position)).getNumOfStationsToWait() + "정류소전";
             if(leftSt == null) {
                 holder.leftStView.setText("정보 없음");
             } else {

@@ -109,9 +109,11 @@ public class BusStationInfoActivity extends AppCompatActivity {
             List<Bus> busList = new ArrayList<>();
             //TODO: UI
             for(int i = 0; i<routeList.size(); i++) {
+                Log.d("doInBackground", "bus : " + routeList.get(i).getBus1().toString());
                 busList.add(routeList.get(i).getBus1());
             }
             adapter.addAll(busList);
+            adapter.notifyDataSetChanged();
 
             return routeList;
         }

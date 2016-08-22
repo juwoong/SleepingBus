@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,8 +56,8 @@ public class BusStationActivityAdapter extends RecyclerView.Adapter<RecyclerView
             return new SectionViewHolder(v);
         }
         else{
-            View view = inflater.inflate(R.layout.busstation_route_listview, parent, false);
-            return new BusRouteStationViewHolder(view);
+            View view = inflater.inflate(R.layout.component_businfo_stationactivity, parent, false);
+            return new ArrivingBusViewHolder(view);
         }
 
     }
@@ -75,7 +76,7 @@ public class BusStationActivityAdapter extends RecyclerView.Adapter<RecyclerView
             ArrivingBusViewHolder holder = (ArrivingBusViewHolder) vh;
             ArrivingBus bus = (ArrivingBus) list.get(position);
             holder.nameView.setText(bus.getRouteName());
-            holder.nameView.setTextColor(context.getResources().getColor(ColorMap.byID.get(bus.getRouteTypeCd())));
+            //holder.nameView.setTextColor(context.getResources().getColor(ColorMap.byID.get(bus.getRouteTypeCd())));
             holder.wayView.setText("방면");
 
             if(((ArrivingBus) list.get(position)).getTimeToWait() > 40) {
@@ -98,8 +99,8 @@ public class BusStationActivityAdapter extends RecyclerView.Adapter<RecyclerView
             holder.item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //TODO : 버스 노선 액티비티로 넘어가기
-                    // TODO 넘어갈 때 파라미터로 목적지 stationId와 버스 번호판 주기
+                    Toast.makeText(context, "onclick()", Toast.LENGTH_SHORT).show();
+                    
                 }
             });
         }

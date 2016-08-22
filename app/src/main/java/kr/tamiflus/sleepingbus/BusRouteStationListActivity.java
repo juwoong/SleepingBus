@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -53,6 +54,11 @@ public class BusRouteStationListActivity extends AppCompatActivity {
         view.setLayoutManager(llm);
 
         OnOffChangeListener.startAlphaAnimation(infoSummary, 0, View.INVISIBLE);
+
+        //TODO: 버스 노선 정보 입력해주기
+        ((TextView) findViewById(R.id.BusRouteInfo)).setText("경기도 안산시 시외버스"); //버스 노선 정보
+        ((TextView) findViewById(R.id.BusRouteName)).setText("320"); //버스 노선 번호
+        ((TextView) findViewById(R.id.BusHeadingInfo)).setText("여의도 버스환승센터 방면"); //버스 목적지 번호
 
 
         for(int i=0; i<20; i++) {

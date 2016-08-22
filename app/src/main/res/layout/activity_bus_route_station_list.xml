@@ -53,6 +53,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="42sp"
+                        android:id="@+id/BusRouteName"
                         android:text="320"/>
 
                     <TextView

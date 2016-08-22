@@ -33,10 +33,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="18-312"
+                    android:id="@+id/stationId"
                     android:textSize="16sp"
                     android:layout_marginBottom="8dp"
                     android:textColor="#fff"/>
                 <TextView
+                    android:id="@+id/stationName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="한국디지털미디어고등학교"
@@ -44,6 +46,7 @@
                     android:textColor="#fff"/>
 
                 <TextView
+                    android:id="@+id/stationRegion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"

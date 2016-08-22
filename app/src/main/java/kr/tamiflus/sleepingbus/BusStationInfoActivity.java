@@ -30,9 +30,11 @@ import kr.tamiflus.sleepingbus.component.BusStationActivityAdapter;
 import kr.tamiflus.sleepingbus.structs.Bus;
 import kr.tamiflus.sleepingbus.structs.BusRoute;
 import kr.tamiflus.sleepingbus.structs.BusStation;
+import kr.tamiflus.sleepingbus.structs.BusTag;
 import kr.tamiflus.sleepingbus.utils.BusArrivalTimeParser;
 import kr.tamiflus.sleepingbus.utils.BusStationDBHelper;
 import kr.tamiflus.sleepingbus.utils.BusStationToStrArray;
+import kr.tamiflus.sleepingbus.values.BusRouteType;
 
 public class BusStationInfoActivity extends AppCompatActivity {
     public static final int UPDATE_SCREEN = 0;
@@ -44,6 +46,7 @@ public class BusStationInfoActivity extends AppCompatActivity {
     FloatingActionButton fab;
     public BusStationActivityAdapter activityAdapter = null;
     Handler handler = new InfoHandler();
+    List<BusRoute> list = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,25 +73,12 @@ public class BusStationInfoActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(activityAdapter);
 
-        //TODO: 버스정류장 정보 달아줄 것
-        ((TextView) findViewById(R.id.stationId)).setText("정류장 ID");
-        ((TextView) findViewById(R.id.stationName)).setText("정류장 이름");
-        ((TextView) findViewById(R.id.stationRegion)).setText("정류장 지역번호");
-
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //아래는 애니메이션이니 지우지 말 것
-                final OvershootInterpolator interpolator = new OvershootInterpolator();
-                ViewCompat.setRotation(fab, 0f);
-                ViewCompat.animate(fab).rotation(-360f).withLayer().setDuration(500).setInterpolator(interpolator).start();
-                //TODO : 새로고침 구현하기
-            }
-        });
-
         departStation = BusStationToStrArray.arrToList(getIntent().getStringArrayExtra("departStation"));
-        List<BusRoute> list = getBusRoutesByStationId(departStation.getCode());
+        list = getBusRoutesByStationId(departStation.getCode());
+
+        ((TextView) findViewById(R.id.stationId)).setText(departStation.getId());
+        ((TextView) findViewById(R.id.stationName)).setText(departStation.getName());
+        ((TextView) findViewById(R.id.stationRegion)).setText(departStation.getRegion());
 
         //debug
         Log.d("InfoActivity", "list.size() == " + list.size());
@@ -98,6 +88,18 @@ public class BusStationInfoActivity extends AppCompatActivity {
         ParseTask task = new ParseTask();
         task.execute(departStation.getCode(), list, activityAdapter, handler);
 
+        //Animation
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final OvershootInterpolator interpolator = new OvershootInterpolator();
+                ViewCompat.setRotation(fab, 0f);
+                ViewCompat.animate(fab).rotation(-360f).withLayer().setDuration(500).setInterpolator(interpolator).start();
+                ParseTask task = new ParseTask();
+                task.execute(departStation.getCode(), list, activityAdapter, handler);
+            }
+        });
 
         OnOffChangeListener.startAlphaAnimation(infoSummary, 0, View.INVISIBLE);
     }
@@ -135,10 +137,11 @@ public class BusStationInfoActivity extends AppCompatActivity {
             }
 
             //debug
+            Log.d("InfoActivity", "addTag Start!");
             addBusTagToList(busList);
 
+            adapter.clear();
             adapter.addAll(busList);
-//            adapter.notifyDataSetChanged();
             Message msg = new Message();
             msg.what = UPDATE_SCREEN;
             msg.obj = adapter;
@@ -173,11 +176,19 @@ public class BusStationInfoActivity extends AppCompatActivity {
             }
         };
         Collections.sort(list, comparator);
+
+        String tmp = "-1";
         for (int i = 0; i < list.size(); i++) {
             Log.d("COMPARATOR", list.get(i).toString());
+            if(!tmp.equals(list.get(i).getRouteTypeCd())) {
+                String code = list.get(i).getRouteTypeCd();
+                tmp = code;
+                BusTag tag = new BusTag(BusRouteType.RouteTypeToString(code));
+                Log.d("addBusTag", "" + i + "_code, tag : " + code + ", " + tag);
+                list.add(i, tag);
+                i++;
+            }
         }
-
-            // TODO 타입바뀔때마다 사이사이에 태그넣기
         return list;
     }
 }

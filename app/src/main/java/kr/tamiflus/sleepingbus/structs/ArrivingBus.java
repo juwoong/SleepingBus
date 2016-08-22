@@ -1,5 +1,6 @@
 package kr.tamiflus.sleepingbus.structs;
 
+
 /**
  * Created by 김정욱 on 2016-08-12.
  *
@@ -81,4 +82,35 @@ public class ArrivingBus extends Bus {
                 ", routeName='" + routeName + '\'' +
                 '}';
     }
+
+    public static String[] ArrivingBusToArray(ArrivingBus bus) {
+        String[] arr = new String[] {
+                bus.getDistrictCd(),
+                bus.getRegionName(),
+                bus.getRouteId(),
+                bus.getRouteName(),
+                bus.getRouteTypeCd(),
+                bus.getRouteTypeName(),
+                bus.getPlateNo(),
+                String.valueOf(bus.getTimeToWait()),
+                bus.getNumOfStationsToWait()
+        };
+        return arr;
+    }
+
+    public static ArrivingBus ArrayToArrivingBus(String[] arr) {
+        ArrivingBus bus = new ArrivingBus();
+        bus.setDistrictCd(arr[0]);
+        bus.setRegionName(arr[1]);
+        bus.setRouteId(arr[2]);
+        bus.setRouteName(arr[3]);
+        bus.setRouteTypeCd(arr[4]);
+        bus.setRouteTypeName(arr[5]);
+        bus.setPlateNo(arr[6]);
+        bus.setTimeToWait(Integer.parseInt(arr[7]));
+        bus.setNumOfStationsToWait(arr[8]);
+
+        return bus;
+    }
+
 }

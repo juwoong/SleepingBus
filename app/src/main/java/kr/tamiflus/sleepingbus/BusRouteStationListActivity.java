@@ -1,5 +1,6 @@
 package kr.tamiflus.sleepingbus;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 
 import kr.tamiflus.sleepingbus.animations.OnOffChangeListener;
 import kr.tamiflus.sleepingbus.component.BusRouteStationAdapter;
+import kr.tamiflus.sleepingbus.structs.ArrivingBus;
 import kr.tamiflus.sleepingbus.structs.BusStation;
 
 public class BusRouteStationListActivity extends AppCompatActivity {
@@ -55,6 +57,10 @@ public class BusRouteStationListActivity extends AppCompatActivity {
 
         OnOffChangeListener.startAlphaAnimation(infoSummary, 0, View.INVISIBLE);
 
+        Intent intent = getIntent();
+        ArrivingBus arrivingBus = ArrivingBus.ArrayToArrivingBus(intent.getStringArrayExtra("departBus"));
+        String routeId = arrivingBus.getRouteId();
+        // TODO routeId로 버스 노선의 모든 정류장 조회, 정렬해서 리스트로 반환해주는 함수 만들기
 
         //왜 커밋이 안 도니 제발.
         //TODO: 버스 노선 정보 입력해주기

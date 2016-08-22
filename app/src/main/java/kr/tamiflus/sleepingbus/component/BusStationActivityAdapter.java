@@ -1,7 +1,9 @@
 package kr.tamiflus.sleepingbus.component;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,8 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import kr.tamiflus.sleepingbus.BusRouteStationListActivity;
+import kr.tamiflus.sleepingbus.BusStationInfoActivity;
 import kr.tamiflus.sleepingbus.R;
 import kr.tamiflus.sleepingbus.holders.ArrivingBusViewHolder;
 import kr.tamiflus.sleepingbus.holders.BusRouteStationHeaderViewHolder;
@@ -62,7 +66,7 @@ public class BusStationActivityAdapter extends RecyclerView.Adapter<RecyclerView
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder vh, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder vh, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         if(vh instanceof SectionViewHolder) {
@@ -73,7 +77,7 @@ public class BusStationActivityAdapter extends RecyclerView.Adapter<RecyclerView
         else{
             // nameView, wayView, leftStView, leftTimeView,
             ArrivingBusViewHolder holder = (ArrivingBusViewHolder) vh;
-            ArrivingBus bus = (ArrivingBus) list.get(position);
+            final ArrivingBus bus = (ArrivingBus) list.get(position);
             holder.nameView.setText(bus.getRouteName());
             holder.nameView.setTextColor(context.getResources().getColor(ColorMap.byID.get(bus.getRouteTypeCd())));
             holder.wayView.setText("방면");
@@ -83,7 +87,7 @@ public class BusStationActivityAdapter extends RecyclerView.Adapter<RecyclerView
             } else if(((ArrivingBus) list.get(position)).getTimeToWait() == -1) {
                 holder.leftTimeView.setText("정보 없음");
             } else {
-                String show = ((ArrivingBus) list.get(position)).getTimeToWait() + "분 남음";
+                String show = ((ArrivingBus) list.get(position)).getTimeToWait() + "분 후 도착";
                 holder.leftTimeView.setText(show);
             }
 
@@ -91,15 +95,17 @@ public class BusStationActivityAdapter extends RecyclerView.Adapter<RecyclerView
             if(leftSt == null) {
                 holder.leftStView.setText("정보 없음");
             } else {
-                holder.leftStView.setText(((ArrivingBus) list.get(position)).getNumOfStationsToWait());
+                holder.leftStView.setText(leftSt);
             }
             //TODO : ArrivingBus 객체 수정. 필요한 사항(버스 방향, 남은 시간, 남은 정류장)
-            //TODO : 남은 시간 정류장 없을 시 분기 조절해서 뜨지 않으 남은 시간 > '한참 뒤' 로 바꿔주기
             holder.item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //TODO : 버스 노선 액티비티로 넘어가기
-                    // TODO 넘어갈 때 파라미터로 목적지 stationId와 버스 번호판 주기
+                    Intent intent = new Intent(context, BusRouteStationListActivity.class);
+                    Log.d("InfoActivity", "putExtra : " + ((ArrivingBus)list.get(position)).toString());
+                    intent.putExtra("departBus", ArrivingBus.ArrivingBusToArray((ArrivingBus)list.get(position)));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
                 }
             });
         }

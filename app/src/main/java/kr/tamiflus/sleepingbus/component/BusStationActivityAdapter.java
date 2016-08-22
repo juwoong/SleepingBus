@@ -71,10 +71,28 @@ public class BusStationActivityAdapter extends RecyclerView.Adapter<RecyclerView
             holder.sectionName.setText(tag.type);
         }
         else{
+            // nameView, wayView, leftStView, leftTimeView,
             ArrivingBusViewHolder holder = (ArrivingBusViewHolder) vh;
             ArrivingBus bus = (ArrivingBus) list.get(position);
             holder.nameView.setText(bus.getRouteName());
             holder.nameView.setTextColor(context.getResources().getColor(ColorMap.byID.get(bus.getRouteTypeCd())));
+            holder.wayView.setText("방면");
+
+            if(((ArrivingBus) list.get(position)).getTimeToWait() > 40) {
+                holder.leftTimeView.setText("한참 뒤");
+            } else if(((ArrivingBus) list.get(position)).getTimeToWait() == -1) {
+                holder.leftTimeView.setText("정보 없음");
+            } else {
+                String show = ((ArrivingBus) list.get(position)).getTimeToWait() + "분 남음";
+                holder.leftTimeView.setText(show);
+            }
+
+            String leftSt = ((ArrivingBus) list.get(position)).getNumOfStationsToWait();
+            if(leftSt == null) {
+                holder.leftStView.setText("정보 없음");
+            } else {
+                holder.leftStView.setText(((ArrivingBus) list.get(position)).getNumOfStationsToWait());
+            }
             //TODO : ArrivingBus 객체 수정. 필요한 사항(버스 방향, 남은 시간, 남은 정류장)
             //TODO : 남은 시간 정류장 없을 시 분기 조절해서 뜨지 않으 남은 시간 > '한참 뒤' 로 바꿔주기
             holder.item.setOnClickListener(new View.OnClickListener() {

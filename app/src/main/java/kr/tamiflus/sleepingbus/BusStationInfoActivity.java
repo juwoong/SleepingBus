@@ -1,8 +1,10 @@
 package kr.tamiflus.sleepingbus;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,6 +18,7 @@ import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.LinearLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import kr.tamiflus.sleepingbus.animations.OnOffChangeListener;
@@ -23,6 +26,7 @@ import kr.tamiflus.sleepingbus.component.BusStationActivityAdapter;
 import kr.tamiflus.sleepingbus.structs.Bus;
 import kr.tamiflus.sleepingbus.structs.BusRoute;
 import kr.tamiflus.sleepingbus.structs.BusStation;
+import kr.tamiflus.sleepingbus.utils.BusArrivalTimeParser;
 import kr.tamiflus.sleepingbus.utils.BusStationDBHelper;
 import kr.tamiflus.sleepingbus.utils.BusStationToStrArray;
 
@@ -73,15 +77,44 @@ public class BusStationInfoActivity extends AppCompatActivity {
 
         departStation = BusStationToStrArray.arrToList(getIntent().getStringArrayExtra("departStation"));
         List<BusRoute> list = getBusRoutesByStationId(departStation.getCode());
+
+        //debug
         Log.d("InfoActivity", "list.size() == " + list.size());
         for(int i = 0; i<list.size(); i++) {
             Log.d("InfoActivity", list.get(i).toString());
         }
+        ParseTask task = new ParseTask();
+        task.execute(departStation.getCode(), list, activityAdapter);
+
 
         OnOffChangeListener.startAlphaAnimation(infoSummary, 0, View.INVISIBLE);
     }
 
     public List<BusRoute> getBusRoutesByStationId(String stationCode) {
         return (new BusStationDBHelper(this)).getBusRoutesByStationCode(stationCode);
+    }
+
+    public class ParseTask extends AsyncTask<Object, Void, List<BusRoute>> {
+        @Override
+        protected List<BusRoute> doInBackground(Object... params) {
+            Log.d("ASyncTask", "doInBackground()");
+            String stationId = (String)params[0];
+            List<BusRoute> routeList = (List<BusRoute>)(params[1]);
+            BusStationActivityAdapter adapter = (BusStationActivityAdapter)params[2];
+            List<BusRoute> result;
+            try {
+                routeList = (new BusArrivalTimeParser()).fillRouteListByStationId(stationId, routeList);
+            } catch(Exception e) { e.printStackTrace(); }
+
+            List<Bus> busList = new ArrayList<>();
+            //TODO: UI
+            for(int i = 0; i<routeList.size(); i++) {
+                busList.add(routeList.get(i).getBus1());
+            }
+            adapter.addAll(busList);
+
+            return routeList;
+        }
+
     }
 }

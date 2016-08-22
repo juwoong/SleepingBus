@@ -76,7 +76,7 @@ public class BusStationActivityAdapter extends RecyclerView.Adapter<RecyclerView
             ArrivingBusViewHolder holder = (ArrivingBusViewHolder) vh;
             ArrivingBus bus = (ArrivingBus) list.get(position);
             holder.nameView.setText(bus.getRouteName());
-            //holder.nameView.setTextColor(context.getResources().getColor(ColorMap.byID.get(bus.getRouteTypeCd())));
+            holder.nameView.setTextColor(context.getResources().getColor(ColorMap.byID.get(bus.getRouteTypeCd())));
             holder.wayView.setText("방면");
 
             if(((ArrivingBus) list.get(position)).getTimeToWait() > 40) {

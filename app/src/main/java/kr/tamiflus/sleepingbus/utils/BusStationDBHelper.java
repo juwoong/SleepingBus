@@ -256,6 +256,7 @@ public class BusStationDBHelper extends SQLiteOpenHelper{
                 Log.d("DBHelper", "busStationID : " + c.getString(0));
                 BusStation st = new BusStation();
                 st.setCode(c.getString(0));
+                stations.add(st);
             }while(c.moveToNext());
         }
         return fillStation(stations);

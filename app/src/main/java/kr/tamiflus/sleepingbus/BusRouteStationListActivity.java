@@ -62,8 +62,6 @@ public class BusRouteStationListActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         ArrivingBus arrivingBus = ArrivingBus.ArrayToArrivingBus(intent.getStringArrayExtra("departBus"));
-        String routeId = arrivingBus.getRouteId();
-        List<BusStation> stations = (new BusStationDBHelper(this)).getStationsByRouteId(routeId);
 
         //TODO: 버스 노선 정보 입력해주기
 //        ((TextView) findViewById(R.id.BusRouteInfo)).setText("경기도 안산시 시외버스"); //버스 노선 정보
@@ -80,6 +78,9 @@ public class BusRouteStationListActivity extends AppCompatActivity {
 //            st.setId("18312");
 //            list.add(st);
 //        }
+        String routeId = arrivingBus.getRouteId();
+        List<BusStation> stations = (new BusStationDBHelper(this)).getStationsByRouteId(routeId);
+
         list = (ArrayList<BusStation>)stations;
         for(int i = 0; i<stations.size(); i++) {
             Log.d("filledList", "" + i + " : " + list.get(i).toString());

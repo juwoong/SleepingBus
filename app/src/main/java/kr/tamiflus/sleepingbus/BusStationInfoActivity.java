@@ -18,8 +18,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import kr.tamiflus.sleepingbus.animations.OnOffChangeListener;
@@ -89,11 +92,11 @@ public class BusStationInfoActivity extends AppCompatActivity {
 
         //debug
         Log.d("InfoActivity", "list.size() == " + list.size());
-        for(int i = 0; i<list.size(); i++) {
+        for (int i = 0; i < list.size(); i++) {
             Log.d("InfoActivity", list.get(i).toString());
         }
         ParseTask task = new ParseTask();
-        task.execute(departStation.getCode(), list, activityAdapter);
+        task.execute(departStation.getCode(), list, activityAdapter, handler);
 
 
         OnOffChangeListener.startAlphaAnimation(infoSummary, 0, View.INVISIBLE);
@@ -107,21 +110,33 @@ public class BusStationInfoActivity extends AppCompatActivity {
         @Override
         protected List<BusRoute> doInBackground(Object... params) {
             Log.d("ASyncTask", "doInBackground()");
-            String stationId = (String)params[0];
-            List<BusRoute> routeList = (List<BusRoute>)(params[1]);
-            BusStationActivityAdapter adapter = (BusStationActivityAdapter)params[2];
-            Handler handler = (Handler)params[3];
+            String stationId = (String) params[0];
+            List<BusRoute> routeList = (List<BusRoute>) (params[1]);
+            BusStationActivityAdapter adapter = (BusStationActivityAdapter) params[2];
+            Handler handler = (Handler) params[3];
             List<BusRoute> result;
             try {
                 routeList = (new BusArrivalTimeParser()).fillRouteListByStationId(stationId, routeList);
-            } catch(Exception e) { e.printStackTrace(); }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             List<Bus> busList = new ArrayList<>();
             //TODO: UI
-            for(int i = 0; i<routeList.size(); i++) {
+            for (int i = 0; i < routeList.size(); i++) {
                 Log.d("doInBackground", "bus : " + routeList.get(i).getBus1().toString());
-                busList.add(routeList.get(i).getBus1());
+                Bus bus1 = routeList.get(i).getBus1();
+                bus1.setRouteName(routeList.get(i).getRouteName());
+                bus1.setRouteId(routeList.get(i).getRouteId());
+                bus1.setRegionName(routeList.get(i).getRegionName());
+                bus1.setRouteTypeCd(routeList.get(i).getRouteTypeCd());
+                bus1.setRouteTypeName(routeList.get(i).getRouteTypeName());
+                busList.add(bus1);
             }
+
+            //debug
+            addBusTagToList(busList);
+
             adapter.addAll(busList);
 //            adapter.notifyDataSetChanged();
             Message msg = new Message();
@@ -137,10 +152,10 @@ public class BusStationInfoActivity extends AppCompatActivity {
     private class InfoHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
-            switch(msg.what) {
+            switch (msg.what) {
                 case UPDATE_SCREEN:
                     Log.d("InfoHandler", "UPDATE_SCREEN");
-                    BusStationActivityAdapter activityAdapter = (BusStationActivityAdapter)msg.obj;
+                    BusStationActivityAdapter activityAdapter = (BusStationActivityAdapter) msg.obj;
                     activityAdapter.notifyDataSetChanged();
                     break;
                 default:
@@ -148,5 +163,21 @@ public class BusStationInfoActivity extends AppCompatActivity {
                     break;
             }
         }
+    }
+
+    public List<Bus> addBusTagToList(List<Bus> list) {
+        Comparator<Bus> comparator = new Comparator<Bus>() {
+            @Override
+            public int compare(Bus lhs, Bus rhs) {
+                return lhs.getRouteTypeCd().compareTo(rhs.getRouteTypeCd());
+            }
+        };
+        Collections.sort(list, comparator);
+        for (int i = 0; i < list.size(); i++) {
+            Log.d("COMPARATOR", list.get(i).toString());
+        }
+
+            // TODO 타입바뀔때마다 사이사이에 태그넣기
+        return list;
     }
 }

@@ -55,8 +55,8 @@ public class BusStationActivityAdapter extends RecyclerView.Adapter<RecyclerView
             return new SectionViewHolder(v);
         }
         else{
-            View view = inflater.inflate(R.layout.busstation_route_listview, parent, false);
-            return new BusRouteStationViewHolder(view);
+            View view = inflater.inflate(R.layout.component_businfo_stationactivity, parent, false);
+            return new ArrivingBusViewHolder(view);
         }
 
     }

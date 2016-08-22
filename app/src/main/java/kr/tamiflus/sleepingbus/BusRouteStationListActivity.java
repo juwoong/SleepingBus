@@ -28,9 +28,11 @@ import kr.tamiflus.sleepingbus.structs.Bus;
 import kr.tamiflus.sleepingbus.structs.BusStation;
 import kr.tamiflus.sleepingbus.threads.RouteStationListThread;
 import kr.tamiflus.sleepingbus.utils.BusStationDBHelper;
+import kr.tamiflus.sleepingbus.utils.BusStationToStrArray;
 
 public class BusRouteStationListActivity extends AppCompatActivity {
     public static final int STATION_LIST_LOADED = 0;
+    public static final int NEXT_ACTIVITY = 1;
 
     AppBarLayout appBarLayout;
     Toolbar toolbar;
@@ -38,6 +40,7 @@ public class BusRouteStationListActivity extends AppCompatActivity {
     CollapsingToolbarLayout collapsingToolbarLayout;
     BusRouteStationAdapter adapter;
     Handler handler = new RouteStationListHandler();
+    ArrivingBus arrivingBus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +49,7 @@ public class BusRouteStationListActivity extends AppCompatActivity {
 
         RecyclerView view = (RecyclerView) findViewById(R.id.busRouteListView);
         Intent intent = getIntent();
-        ArrivingBus arrivingBus = ArrivingBus.ArrayToArrivingBus(intent.getStringArrayExtra("departBus"));
+        arrivingBus = ArrivingBus.ArrayToArrivingBus(intent.getStringArrayExtra("departBus"));
 
         appBarLayout = (AppBarLayout) findViewById(R.id.appbarlayout);
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
@@ -100,7 +103,7 @@ public class BusRouteStationListActivity extends AppCompatActivity {
 //        list.add(0, stations.get(0));
 //
 //        //view.setNestedScrollingEnabled(true);
-        adapter = new BusRouteStationAdapter(getApplicationContext());
+        adapter = new BusRouteStationAdapter(getApplicationContext(), handler);
 //        adapter.addAll(list);
 
         view.setAdapter(adapter);
@@ -112,12 +115,21 @@ public class BusRouteStationListActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch(msg.what) {
                 case STATION_LIST_LOADED:
+                    Log.d("RouteStationListHandler", "STATION_LIST_LOADED");
                     List<BusStation> list = (List<BusStation>)msg.obj;
                     list.add(0, list.get(0));
                     adapter.clear();
                     adapter.addAll(list);
                     adapter.notifyDataSetChanged();
                     findViewById(R.id.loadingPanel).setVisibility(View.GONE);
+                    break;
+                case NEXT_ACTIVITY:
+                    Log.d("RouteStationListHandler", "NEXT_ACTIVITY");
+                    BusStation dest = (BusStation)msg.obj;
+                    Intent intent = new Intent(BusRouteStationListActivity.this, FinalActivity.class);
+                    intent.putExtra("destStation", BusStationToStrArray.listToArr(dest));
+                    intent.putExtra("arrivingBus", ArrivingBus.ArrivingBusToArray(arrivingBus));
+                    startActivity(intent);
                     break;
             }
         }

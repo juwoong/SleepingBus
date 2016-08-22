@@ -1,6 +1,8 @@
 package kr.tamiflus.sleepingbus.component;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import kr.tamiflus.sleepingbus.BusRouteStationListActivity;
 import kr.tamiflus.sleepingbus.R;
 import kr.tamiflus.sleepingbus.holders.BusRouteStationHeaderViewHolder;
 import kr.tamiflus.sleepingbus.holders.BusRouteStationViewHolder;
@@ -26,10 +29,12 @@ public class BusRouteStationAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     LayoutInflater inflater;
     ArrayList<BusStation> list = new ArrayList<>();
     ArrayList<BusStation> listCopy = new ArrayList<>(); // store original pure list
+    Handler handler;
 
-    public BusRouteStationAdapter(Context context) {
+    public BusRouteStationAdapter(Context context, Handler handler) {
         //super(context, R.layout.busstation_route_listview);
         this.context = context;
+        this.handler = handler;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -112,7 +117,7 @@ public class BusRouteStationAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             });
         }
         else{
-            BusStation st = list.get(position);
+            final BusStation st = list.get(position);
             BusRouteStationViewHolder holder = (BusRouteStationViewHolder) vh;
 
             holder.name.setText(st.getName());
@@ -122,6 +127,10 @@ public class BusRouteStationAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 @Override
                 public void onClick(View view) {
                     //TODO: 목적지 정류장이 선택되었을 때 할 일 만들기
+                    Message msg = new Message();
+                    msg.what = BusRouteStationListActivity.NEXT_ACTIVITY;
+                    msg.obj = st;
+                    handler.sendMessage(msg);
                 }
             });
 

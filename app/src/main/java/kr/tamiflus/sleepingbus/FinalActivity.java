@@ -1,5 +1,6 @@
 package kr.tamiflus.sleepingbus;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -9,6 +10,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import kr.tamiflus.sleepingbus.structs.ArrivingBus;
+import kr.tamiflus.sleepingbus.structs.BusStation;
+import kr.tamiflus.sleepingbus.utils.BusStationToStrArray;
+
 public class FinalActivity extends AppCompatActivity {
 
     @Override
@@ -16,13 +21,20 @@ public class FinalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_final);
 
+        Intent intent = getIntent();
+        BusStation destStation = BusStationToStrArray.arrToList(intent.getStringArrayExtra("destStation"));
+        ArrivingBus arrivingBus = ArrivingBus.ArrayToArrivingBus(intent.getStringArrayExtra("arrivingBus"));
+
         CoordinatorLayout layout = (CoordinatorLayout) findViewById(R.id.coordinator);
         TextView summary = (TextView) findViewById(R.id.summaryText);
         TextView boardBtn = (TextView) findViewById(R.id.boardBtn);
 
         layout.setBackgroundColor(getResources().getColor(R.color.jikhang));
         boardBtn.setTextColor(getResources().getColor(R.color.jikhang));
-        summary.setText(String.format("%s 행\n%s번 버스", "천호역.천호사거리", "1113-1"));
+//        summary.setText(String.format("%s 행\n%s번 버스", "천호역.천호사거리", "1113-1"));
+        summary.setText(String.format("%s 행\n%s번 버스", destStation.getName(), arrivingBus.getRouteName()));
+
+
 
         boardBtn.setOnClickListener(new View.OnClickListener() {
             @Override

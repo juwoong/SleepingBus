@@ -1,12 +1,10 @@
 package kr.tamiflus.sleepingbus.component;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,8 +55,8 @@ public class BusStationActivityAdapter extends RecyclerView.Adapter<RecyclerView
             return new SectionViewHolder(v);
         }
         else{
-            View view = inflater.inflate(R.layout.component_businfo_stationactivity, parent, false);
-            return new ArrivingBusViewHolder(view);
+            View view = inflater.inflate(R.layout.busstation_route_listview, parent, false);
+            return new BusRouteStationViewHolder(view);
         }
 
     }
@@ -76,10 +74,8 @@ public class BusStationActivityAdapter extends RecyclerView.Adapter<RecyclerView
             // nameView, wayView, leftStView, leftTimeView,
             ArrivingBusViewHolder holder = (ArrivingBusViewHolder) vh;
             ArrivingBus bus = (ArrivingBus) list.get(position);
-            final ArrivingBus busInfo = bus;
             holder.nameView.setText(bus.getRouteName());
-            //holder.nameView.setTextColor(context.getResources().getColor(ColorMap.byID.get(bus.getRouteTypeCd())));
-            holder.nameView.setTextColor(Color.parseColor("#000000"));
+            holder.nameView.setTextColor(context.getResources().getColor(ColorMap.byID.get(bus.getRouteTypeCd())));
             holder.wayView.setText("방면");
 
             if(((ArrivingBus) list.get(position)).getTimeToWait() > 40) {
@@ -95,7 +91,7 @@ public class BusStationActivityAdapter extends RecyclerView.Adapter<RecyclerView
             if(leftSt == null) {
                 holder.leftStView.setText("정보 없음");
             } else {
-                holder.leftStView.setText(((ArrivingBus) list.get(position)).getNumOfStationsToWait() + "정거장 남음");
+                holder.leftStView.setText(((ArrivingBus) list.get(position)).getNumOfStationsToWait());
             }
             //TODO : ArrivingBus 객체 수정. 필요한 사항(버스 방향, 남은 시간, 남은 정류장)
             //TODO : 남은 시간 정류장 없을 시 분기 조절해서 뜨지 않으 남은 시간 > '한참 뒤' 로 바꿔주기
@@ -103,7 +99,6 @@ public class BusStationActivityAdapter extends RecyclerView.Adapter<RecyclerView
                 @Override
                 public void onClick(View view) {
                     //TODO : 버스 노선 액티비티로 넘어가기
-                    Toast.makeText(context, busInfo.getNumOfStationsToWait(), Toast.LENGTH_LONG).show();
                 }
             });
         }

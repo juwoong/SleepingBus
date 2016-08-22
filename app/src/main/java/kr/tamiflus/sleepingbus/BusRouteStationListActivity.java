@@ -10,17 +10,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import kr.tamiflus.sleepingbus.animations.OnOffChangeListener;
 import kr.tamiflus.sleepingbus.component.BusRouteStationAdapter;
 import kr.tamiflus.sleepingbus.structs.ArrivingBus;
 import kr.tamiflus.sleepingbus.structs.BusStation;
+import kr.tamiflus.sleepingbus.utils.BusStationDBHelper;
 
 public class BusRouteStationListActivity extends AppCompatActivity {
     AppBarLayout appBarLayout;
@@ -60,22 +63,30 @@ public class BusRouteStationListActivity extends AppCompatActivity {
         Intent intent = getIntent();
         ArrivingBus arrivingBus = ArrivingBus.ArrayToArrivingBus(intent.getStringArrayExtra("departBus"));
         String routeId = arrivingBus.getRouteId();
-        // TODO routeId로 버스 노선의 모든 정류장 조회, 정렬해서 리스트로 반환해주는 함수 만들기
+        List<BusStation> stations = (new BusStationDBHelper(this)).getStationsByRouteId(routeId);
 
-        //왜 커밋이 안 도니 제발.
         //TODO: 버스 노선 정보 입력해주기
-        ((TextView) findViewById(R.id.BusRouteInfo)).setText("경기도 안산시 시외버스"); //버스 노선 정보
-        ((TextView) findViewById(R.id.BusRouteName)).setText("320"); //버스 노선 번호
+//        ((TextView) findViewById(R.id.BusRouteInfo)).setText("경기도 안산시 시외버스"); //버스 노선 정보
+        ((TextView) findViewById(R.id.BusRouteInfo)).setText(arrivingBus.getRegionName()); //버스 노선 정보
+        ((TextView) findViewById(R.id.BusRouteName)).setText(arrivingBus.getRouteName()); //버스 노선 번호
         ((TextView) findViewById(R.id.BusHeadingInfo)).setText("여의도 버스환승센터 방면"); //버스 목적지 번호
 
 
-        for(int i=0; i<20; i++) {
-            BusStation st = new BusStation();
-            st.setName("한국디지털미디어고등학교");
-            st.setRegion("경기도 안산");
-            st.setId("18312");
-            list.add(st);
+        // 버스정류장 리스트 셋
+//        for(int i=0; i<20; i++) {
+//            BusStation st = new BusStation();
+//            st.setName("한국디지털미디어고등학교");
+//            st.setRegion("경기도 안산");
+//            st.setId("18312");
+//            list.add(st);
+//        }
+        list = (ArrayList<BusStation>)stations;
+        for(int i = 0; i<stations.size(); i++) {
+            Log.d("filledList", "" + i + " : " + list.get(i).toString());
+
         }
+
+        list.add(0, stations.get(0));
 
         //view.setNestedScrollingEnabled(true);
         BusRouteStationAdapter adapter = new BusRouteStationAdapter(getApplicationContext());

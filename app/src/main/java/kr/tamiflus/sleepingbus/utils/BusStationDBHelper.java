@@ -244,4 +244,20 @@ public class BusStationDBHelper extends SQLiteOpenHelper{
 
         return busRouteList;
     }
+
+    public List<BusStation> getStationsByRouteId(String routeId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c;
+        List<BusStation> stations = new ArrayList<>();
+
+        c = db.rawQuery("SELECT busStationID FROM BusRouteList WHERE busRouteID=\'" + routeId + "\' ORDER BY st_order ASC", null); // 방면 할거면 여길 건드려야.
+        if(c.moveToFirst()) {
+            do {
+                Log.d("DBHelper", "busStationID : " + c.getString(0));
+                BusStation st = new BusStation();
+                st.setCode(c.getString(0));
+            }while(c.moveToNext());
+        }
+        return fillStation(stations);
+    }
 }

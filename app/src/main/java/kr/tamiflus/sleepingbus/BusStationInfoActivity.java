@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.UiThread;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,7 +17,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.OvershootInterpolator;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +36,6 @@ public class BusStationInfoActivity extends AppCompatActivity {
     AppBarLayout appBarLayout;
     LinearLayout infoDetail, infoSummary;
     FloatingActionButton fab;
-    BusStationActivityAdapter activityAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,19 +50,14 @@ public class BusStationInfoActivity extends AppCompatActivity {
         infoSummary = (LinearLayout) findViewById(R.id.station_info_summary);
 
         appBarLayout.addOnOffsetChangedListener(new OnOffChangeListener(infoSummary, infoDetail));
+
         recyclerView = (RecyclerView) findViewById(R.id.stationActivityRecyclerView);
-
-        //TODO: 버스정류장 정보 달아줄 것
-        ((TextView) findViewById(R.id.stationId)).setText("정류장 ID");
-        ((TextView) findViewById(R.id.stationName)).setText("정류장 이름");
-        ((TextView) findViewById(R.id.stationRegion)).setText("정류장 지역번호");
-
 
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         llm.scrollToPosition(0);
 
-        activityAdapter = new BusStationActivityAdapter(getApplicationContext());
+        BusStationActivityAdapter activityAdapter = new BusStationActivityAdapter(getApplicationContext());
 
         recyclerView.setLayoutManager(llm);
         recyclerView.setAdapter(activityAdapter);
@@ -108,6 +100,7 @@ public class BusStationInfoActivity extends AppCompatActivity {
             Log.d("ASyncTask", "doInBackground()");
             String stationId = (String)params[0];
             List<BusRoute> routeList = (List<BusRoute>)(params[1]);
+            BusStationActivityAdapter adapter = (BusStationActivityAdapter)params[2];
             List<BusRoute> result;
             try {
                 routeList = (new BusArrivalTimeParser()).fillRouteListByStationId(stationId, routeList);
@@ -118,13 +111,7 @@ public class BusStationInfoActivity extends AppCompatActivity {
             for(int i = 0; i<routeList.size(); i++) {
                 busList.add(routeList.get(i).getBus1());
             }
-            activityAdapter.addAll(busList);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    activityAdapter.notifyDataSetChanged();
-                }
-            });
+            adapter.addAll(busList);
 
             return routeList;
         }

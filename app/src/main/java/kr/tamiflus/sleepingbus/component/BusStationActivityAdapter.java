@@ -99,6 +99,7 @@ public class BusStationActivityAdapter extends RecyclerView.Adapter<RecyclerView
                 @Override
                 public void onClick(View view) {
                     //TODO : 버스 노선 액티비티로 넘어가기
+                    // TODO 넘어갈 때 파라미터로 목적지 stationId와 버스 번호판 주기
                 }
             });
         }

@@ -31,9 +31,11 @@ public class HomeActivity extends AppCompatActivity {
     public static final int UPDATE_NEARSTATION_TWO = 2;
     public static final int CANNOT_FIND_CURRENTLOCATION = 3;
     public static final int LOCATION_CHANGED = 4;
+    public static final int INAVAILABLE_LOCATION = 5;
     public static final int REQUEST_CODE_LOCATION = 11;
     public static final String STRING_LOADING_LOCATION = "위치정보 가져오는 중..";
     public static final String STRING_FAILED_NETWORK = "네트워크 연결 실패";
+    public static final String STRING_FAILED_LOCATION = "위치 조회 실패";
 
 
 
@@ -58,8 +60,7 @@ public class HomeActivity extends AppCompatActivity {
 
         BusStation st = new BusStation();
         st.setName(STRING_LOADING_LOCATION);
-
-        st.setDist("1");
+        st.setDist(null);
         NearStation nearStation = new NearStation(st);
 //        nearStation.distance = -1;
 
@@ -73,6 +74,7 @@ public class HomeActivity extends AppCompatActivity {
             Toast.makeText(this, STRING_FAILED_NETWORK, Toast.LENGTH_SHORT).show();
             BusStation tmp = new BusStation();
             tmp.setName(STRING_FAILED_NETWORK);
+            tmp.setDist(null);
             NearStation tmp2 = new NearStation(tmp);
             adapter.clear();
             adapter.add(tmp2);
@@ -159,11 +161,14 @@ public class HomeActivity extends AppCompatActivity {
                 case CANNOT_FIND_CURRENTLOCATION:
                     Log.d("D", "CANNOT find current location");
                     BusStation temp = new BusStation();
-                    temp.setName("현재 위치를 찾을 수 없습니다");
+                    temp.setName(STRING_FAILED_LOCATION);
                     updateScreenContents(new NearStation(temp));
                     break;
+                case INAVAILABLE_LOCATION:
+                    Toast.makeText(HomeActivity.this, "위치정보 사용 불가 상태입니다.", Toast.LENGTH_SHORT).show();
+                    break;
                 default:
-                    Log.d("ERROR", "Unexpected Handler Message");
+                    Log.d("ERROR", "Unexpected Handler Message : " + msg.what);
                     System.exit(-1);
                     break;
             }

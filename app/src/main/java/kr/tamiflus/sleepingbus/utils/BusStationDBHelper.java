@@ -143,7 +143,7 @@ public class BusStationDBHelper extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c;
 
-        c = db.rawQuery("SELECT * FROM BusStation WHERE name = \'" + name + "\' ORDER BY stLocation", null);
+        c = db.rawQuery("SELECT * FROM BusStation WHERE stName = \'" + name + "\' ORDER BY stLocation", null);
 
         if (c.moveToFirst()) {
             do {

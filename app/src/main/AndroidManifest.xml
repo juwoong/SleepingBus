@@ -57,7 +57,8 @@
         <activity
             android:name=".BusRouteStationListActivity"
             android:label="@string/title_activity_bus_route_station_list"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"

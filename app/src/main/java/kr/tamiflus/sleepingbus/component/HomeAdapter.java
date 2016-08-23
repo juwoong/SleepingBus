@@ -72,7 +72,8 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 public void onClick(View v) {
                     Log.d("HomeAdapter", "onClick()");
                     Log.d("HomeAdapter", "toString() : " + st.getStation().toString());
-                    if(HomeActivity.STRING_FAILED_NETWORK.equals(st.getStation().getName()) || HomeActivity.STRING_LOADING_LOCATION.equals(st.getStation().getName())) {
+                    String name = st.getStation().getName();
+                    if((HomeActivity.STRING_FAILED_NETWORK.equals(name) || HomeActivity.STRING_LOADING_LOCATION.equals(name)) || HomeActivity.STRING_FAILED_LOCATION.equals(name)) {
                         return;
                     } else {
                         Intent intent = new Intent(context, BusStationInfoActivity.class);
@@ -92,7 +93,6 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, SearchBusStationByLocationActivity.class);
-
 
                     String[] arr1 = BusStationToStrArray.listToArr(st.getS1());
                     String[] arr2 = BusStationToStrArray.listToArr(st.getS2());

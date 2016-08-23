@@ -154,6 +154,11 @@ public class LocManager extends Service implements LocationListener {
 //                        longitude = location.getLongitude();
 //                    }
 //                }
+            } else {
+                Log.d("LocManager", "Network and GPS both inavailable");
+                Message msg = new Message();
+                msg.what = HomeActivity.INAVAILABLE_LOCATION;
+                handler.sendMessage(msg);
             }
         } catch (Exception e) {
             e.printStackTrace();

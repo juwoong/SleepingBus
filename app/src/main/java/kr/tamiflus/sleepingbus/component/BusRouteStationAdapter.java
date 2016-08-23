@@ -2,7 +2,9 @@ package kr.tamiflus.sleepingbus.component;
 
 import android.content.Context;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
+import android.os.MessageQueue;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -49,8 +51,9 @@ public class BusRouteStationAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public void clear() {
-        this.listCopy.clear();
-        for(int i=1; i<this.list.size(); i++) { this.list.remove(this.list.size() - i); }
+//        this.listCopy.clear();
+        for(int i=1; i<this.list.size(); i++) { this.list.remove(1); }
+        for(int i=1; i<this.listCopy.size(); i++) { this.listCopy.remove(1); }
     }
 
 
@@ -85,18 +88,23 @@ public class BusRouteStationAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     String value = charSequence.toString();
                     Log.i("Change", value);
                     //TODO: 현 노선에서 정류장 검색 할 수 있게 만들기.
-                    ArrayList<BusStation> st = new ArrayList<BusStation>();
-                    for(BusStation station : listCopy)
-                        if(station.getName().contains(value)) { st.add(station); }
-
-                    clear();
-                    addAll(st);
+                    int addCnt = 0;
+                    int beforeSize = list.size() - 1;
+                    for(int k=1; k<list.size(); k++) { list.remove(1); }
+                    for(int k = 1; k<listCopy.size(); k++) {
+                        if (listCopy.get(k).getName().contains(value)) {
+                            list.add(listCopy.get(k));
+                            addCnt++;
+                        }
+                    }
+//                    clear();
+//                    addAll(st);
+                    //TODO 여기 부분 고치기.
                     notifyDataSetChanged();
                 }
 
                 @Override
                 public void afterTextChanged(Editable editable) {
-
                 }
             });
         }

@@ -49,14 +49,13 @@ public class BusRouteStationAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
     public void clear() {
-        this.list.clear();
         this.listCopy.clear();
+        for(int i=1; i<this.list.size(); i++) { this.list.remove(this.list.size() - i); }
     }
 
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         if(viewType == TYPE_HEADER)
         {
             View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.busstation_route_search_component, parent, false);
@@ -86,27 +85,12 @@ public class BusRouteStationAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                     String value = charSequence.toString();
                     Log.i("Change", value);
                     //TODO: 현 노선에서 정류장 검색 할 수 있게 만들기.
-                    if(value.length() > 0) {
-                        list = new ArrayList<>();
-                        list.add(listCopy.get(0));
-                        for(int k = 1; k<listCopy.size(); k++) {
-                            if(listCopy.get(k).getName().contains(charSequence)) {
-                                list.add(listCopy.get(k));
-                            }
-                        }
-                    } else {
-                        list = new ArrayList<>();
-                        list.add(listCopy.get(0));
-                        for(int k = 1; k<listCopy.size(); k++) {
-                            list.add(listCopy.get(k));
-                        }
-                    }
+                    ArrayList<BusStation> st = new ArrayList<BusStation>();
+                    for(BusStation station : listCopy)
+                        if(station.getName().contains(value)) { st.add(station); }
 
-                    //debug
-
-                    for(int k = 0; k<list.size(); k++) {
-
-                    }
+                    clear();
+                    addAll(st);
                     notifyDataSetChanged();
                 }
 

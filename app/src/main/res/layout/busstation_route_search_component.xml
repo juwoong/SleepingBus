@@ -22,7 +22,7 @@
                 android:background="@android:color/transparent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint='320 항목 검색'
+                android:text='320 항목 검색'
                 android:id="@+id/busRouteStationSearchEditText"
                 android:textSize="16sp"/>
         </LinearLayout>

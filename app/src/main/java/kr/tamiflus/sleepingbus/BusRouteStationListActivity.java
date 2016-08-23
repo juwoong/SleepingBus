@@ -29,6 +29,7 @@ import kr.tamiflus.sleepingbus.structs.BusStation;
 import kr.tamiflus.sleepingbus.threads.RouteStationListThread;
 import kr.tamiflus.sleepingbus.utils.BusStationDBHelper;
 import kr.tamiflus.sleepingbus.utils.BusStationToStrArray;
+import kr.tamiflus.sleepingbus.utils.ColorMap;
 
 public class BusRouteStationListActivity extends AppCompatActivity {
     public static final int STATION_LIST_LOADED = 0;
@@ -59,9 +60,9 @@ public class BusRouteStationListActivity extends AppCompatActivity {
 
         //TODO: 현 버스 노선의 종류를 받아와서 색 넣어주기.
         // TODO: 노선 종류는 arrivingBus.getRouteTypeCd()로 알 수 있음
-        infoDetail.setBackgroundColor(getResources().getColor(R.color.normal));
-        toolbar.setBackgroundColor(getResources().getColor(R.color.normal));
-        collapsingToolbarLayout.setBackgroundColor(getResources().getColor(R.color.normal));
+        infoDetail.setBackgroundColor(getResources().getColor(ColorMap.byID.get(arrivingBus.getRouteTypeCd())));
+        toolbar.setBackgroundColor(getResources().getColor(ColorMap.byID.get(arrivingBus.getRouteTypeCd())));
+        collapsingToolbarLayout.setBackgroundColor(getResources().getColor(ColorMap.byID.get(arrivingBus.getRouteTypeCd())));
 
         appBarLayout.addOnOffsetChangedListener(new OnOffChangeListener(infoSummary, infoDetail));
 

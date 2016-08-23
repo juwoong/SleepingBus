@@ -32,6 +32,9 @@ public class HomeActivity extends AppCompatActivity {
     public static final int CANNOT_FIND_CURRENTLOCATION = 3;
     public static final int LOCATION_CHANGED = 4;
     public static final int REQUEST_CODE_LOCATION = 11;
+    public static final String STRING_LOADING_LOCATION = "위치정보 가져오는 중..";
+    public static final String STRING_FAILED_NETWORK = "네트워크 연결 실패";
+
 
 
     RecyclerView recyclerView;
@@ -54,11 +57,11 @@ public class HomeActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(llm);
 
         BusStation st = new BusStation();
-        st.setName("위치정보 받아오는 중..");
+        st.setName(STRING_LOADING_LOCATION);
 
         st.setDist("1");
         NearStation nearStation = new NearStation(st);
-        nearStation.distance = -1;
+//        nearStation.distance = -1;
 
         adapter = new HomeAdapter(getApplicationContext());
         adapter.add(nearStation);
@@ -67,7 +70,13 @@ public class HomeActivity extends AppCompatActivity {
         if (isNetworkAvailable()) {
             getNearestStationByLocation();
         } else {
-            Toast.makeText(this, "네트워크 연결 불가", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, STRING_FAILED_NETWORK, Toast.LENGTH_SHORT).show();
+            BusStation tmp = new BusStation();
+            tmp.setName(STRING_FAILED_NETWORK);
+            NearStation tmp2 = new NearStation(tmp);
+            adapter.clear();
+            adapter.add(tmp2);
+            adapter.notifyDataSetChanged();
         }
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION);
         //TODO: 현재 검색중일 때, TextView에 검색중이라고 넣기

@@ -99,6 +99,7 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="title_activity_final">FinalActivity</string>
+    <string name="loading_location_info">위치정보 받아오는 중..</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

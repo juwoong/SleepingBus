@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kr.tamiflus.sleepingbus.BusStationInfoActivity;
+import kr.tamiflus.sleepingbus.HomeActivity;
 import kr.tamiflus.sleepingbus.R;
 import kr.tamiflus.sleepingbus.SearchBusStationByLocationActivity;
 import kr.tamiflus.sleepingbus.holders.HomeBookMarkViewHolder;
@@ -71,10 +72,14 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 public void onClick(View v) {
                     Log.d("HomeAdapter", "onClick()");
                     Log.d("HomeAdapter", "toString() : " + st.getStation().toString());
-                    Intent intent = new Intent(context, BusStationInfoActivity.class);
-                    intent.putExtra("departStation", BusStationToStrArray.listToArr(st.getStation()));
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(intent);
+                    if(HomeActivity.STRING_FAILED_NETWORK.equals(st.getStation().getName()) || HomeActivity.STRING_LOADING_LOCATION.equals(st.getStation().getName())) {
+                        return;
+                    } else {
+                        Intent intent = new Intent(context, BusStationInfoActivity.class);
+                        intent.putExtra("departStation", BusStationToStrArray.listToArr(st.getStation()));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+                    }
                 }
             });
         } else if(vh instanceof HomeNearStationListViewHolder) {

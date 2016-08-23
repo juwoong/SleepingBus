@@ -54,11 +54,11 @@ public class HomeActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(llm);
 
         BusStation st = new BusStation();
-        st.setName("한국디지털미디어고등학교");
+        st.setName("위치정보 받아오는 중..");
 
         st.setDist("1");
         NearStation nearStation = new NearStation(st);
-        nearStation.distance = 326;
+        nearStation.distance = -1;
 
         adapter = new HomeAdapter(getApplicationContext());
         adapter.add(nearStation);

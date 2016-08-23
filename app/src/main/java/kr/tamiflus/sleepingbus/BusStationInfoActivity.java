@@ -128,7 +128,7 @@ public class BusStationInfoActivity extends AppCompatActivity {
             List<Bus> busList = new ArrayList<>();
             //TODO: UI
             for (int i = 0; i < routeList.size(); i++) {
-                Log.d("doInBackground", "bus : " + routeList.get(i).getBus1().toString());
+//                Log.d("doInBackground", "bus : " + routeList.get(i).getBus1().toString());
                 Bus bus1 = routeList.get(i).getBus1();
                 bus1.setRouteName(routeList.get(i).getRouteName());
                 bus1.setRouteId(routeList.get(i).getRouteId());

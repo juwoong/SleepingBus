@@ -146,14 +146,16 @@ public class BusArrivalTimeParser {
             switch(eventType){
                 case XmlPullParser.START_TAG:
                     tag = xpp.getName();
+                    xpp.next();
                     Log.i("tag", tag + " : " + xpp.getText());
 
-                    if(tag.equals("plateNo1")) { xpp.next(); bus1.setPlateNo(xpp.getText()); }
-                    else if(tag.equals("plateNo2")) { xpp.next(); bus2.setPlateNo(xpp.getText()); }
-                    else if(tag.equals("predictTime1")) { xpp.next(); bus1.setTimeToWait(Integer.parseInt(xpp.getText())); }
-                    else if(tag.equals("predictTime2")) { xpp.next(); bus2.setTimeToWait(Integer.parseInt(xpp.getText())); }
+                    if(tag.equals("plateNo1")) { bus1.setPlateNo(xpp.getText()); }
+                    else if(tag.equals("plateNo2")) { bus2.setPlateNo(xpp.getText()); }
+                    else if(tag.equals("predictTime1")) { bus1.setTimeToWait(Integer.parseInt(xpp.getText())); }
+                    else if(tag.equals("predictTime2")) { bus2.setTimeToWait(Integer.parseInt(xpp.getText())); }
+                    else if(tag.equals("locationNo1")) { bus1.setNumOfStationsToWait(xpp.getText()); }
+                    else if(tag.equals("locationNo2")) { bus2.setNumOfStationsToWait(xpp.getText()); }
                     else if(tag.equals("resultCode")) {
-                        xpp.next();
                         Log.d("ERROR", "param ERROR");
                         if("5".equals(xpp.getText())) throw new XmlPullParserException("parameter error");
                     }
@@ -164,6 +166,11 @@ public class BusArrivalTimeParser {
         }
         buses[0] = bus1;
         buses[1] = bus2;
+
+        //debug
+        Log.i("xmlToObject_old", "buses[0] : " + buses[0].toString());
+        Log.i("xmlToObject_old", "buses[1] : " + buses[1].toString());
+
         return buses;
     }
 
@@ -191,12 +198,12 @@ public class BusArrivalTimeParser {
                 ArrivingBus[] resultBuses = resultList.get(j);
                 Log.d("ArrivalTimeParser", "resultBuses[0].getRouteId() : " + resultBuses[0].getRouteId());
                 if(resultBuses[0].getRouteId().equals(routeId)) {
+                    resultBuses[0].setRouteId(routeList.get(i).getRouteId());
+                    resultBuses[0].setRouteId(routeList.get(i).getRouteId());
+                    resultBuses[1].setRouteName(routeList.get(i).getRouteName());
+                    resultBuses[1].setRouteName(routeList.get(i).getRouteName());
                     Log.d("ArrivalTimeParser", "setBus " + j + "_1 : " + resultBuses[0].toString());
                     Log.d("ArrivalTimeParser", "setBus " + j + "_2 : " + resultBuses[1].toString());
-                    resultBuses[0].setRouteId(routeList.get(i).getRouteId());
-                    resultBuses[0].setRouteId(routeList.get(i).getRouteId());
-                    resultBuses[1].setRouteName(routeList.get(i).getRouteName());
-                    resultBuses[1].setRouteName(routeList.get(i).getRouteName());
 
                     routeList.get(i).setBus1(resultBuses[0]);
                     routeList.get(i).setBus2(resultBuses[1]);
@@ -213,7 +220,8 @@ public class BusArrivalTimeParser {
                 .build();
 
         Response response = client.newCall(request).execute();
-
-        return xmlToObject_old(response.body().string());
+        String xml = response.body().string();
+        Log.d("XML", xml);
+        return xmlToObject_old(xml);
     }
 }

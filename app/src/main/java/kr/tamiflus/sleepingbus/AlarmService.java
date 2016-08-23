@@ -22,6 +22,7 @@ import kr.tamiflus.sleepingbus.utils.BusArrivalTimeParser;
 
 public class AlarmService extends IntentService {
     public static final int WHAT_MINUTE_BEFORE = 2;
+    public static final int WHAT_STATIONS_BEFORE = 1;
     public static final int REQUEST_PER_SEC = 60;
 
     private String plateNo;
@@ -41,14 +42,16 @@ public class AlarmService extends IntentService {
         Assert.assertNotNull(routeId);
         Assert.assertNotNull(stationId);
 
-        while(true) {
-            if(check()) {
+        while (true) {
+            if (check()) {
+                Log.i("AlarmService", "Trigger Alarm!!!!");
                 triggerAlarm();
                 break;
             } else {
                 try {
                     Thread.sleep(REQUEST_PER_SEC * 1000);
-                } catch(InterruptedException ie) { }
+                } catch (InterruptedException ie) {
+                }
             }
         }
     }
@@ -57,20 +60,24 @@ public class AlarmService extends IntentService {
         Intent intent = new Intent(getBaseContext(), AlarmActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-
     }
 
     private boolean check() {
+        Log.d("AlarmService", "CHECK IT OUT");
         ArrivingBus[] buses = null;
         try {
             buses = parser.parse(stationId, routeId);
-        } catch(Exception e) {
-            Log.d("ERROR", "ERROR");
+
+            //debug
+            Log.d("PARSE FINISHED", "buses : " + buses.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d("Check()_Exception", "Exception");
         }
-        if(plateNo.equals(buses[0].getPlateNo())) {
-            if (buses[0].getTimeToWait() <= WHAT_MINUTE_BEFORE) return true;
-        } else if(plateNo.equals(buses[2].getPlateNo())) {
-            if(buses[2].getTimeToWait() <= WHAT_MINUTE_BEFORE) return true;
+        if (plateNo.equals(buses[0].getPlateNo())) {
+            if (buses[0].getTimeToWait() <= WHAT_MINUTE_BEFORE || Integer.parseInt(buses[0].getNumOfStationsToWait()) <= WHAT_STATIONS_BEFORE) return true;
+        } else if (plateNo.equals(buses[1].getPlateNo())) {
+            if (buses[1].getTimeToWait() <= WHAT_MINUTE_BEFORE || Integer.parseInt(buses[1].getNumOfStationsToWait()) <= WHAT_STATIONS_BEFORE) return true;
         }
         return false;
     }

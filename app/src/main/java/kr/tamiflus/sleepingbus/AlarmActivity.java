@@ -1,5 +1,7 @@
 package kr.tamiflus.sleepingbus;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Vibrator;
@@ -25,10 +27,13 @@ public class AlarmActivity extends AppCompatActivity {
         Log.d("AlarmActivity", "알람 끄기");
         mp.stop();
         vibe.cancel();
+
     }
 
     public void startAlarm() {
         Log.d("AlarmActivity", "StartAlarm()");
+        cancelNotification();
+
         mp = MediaPlayer.create(this, R.raw.alarm);
         am = (AudioManager)getSystemService(AUDIO_SERVICE);
         if(am.isWiredHeadsetOn()) {
@@ -38,5 +43,13 @@ public class AlarmActivity extends AppCompatActivity {
         vibe = (Vibrator)getSystemService(VIBRATOR_SERVICE);
         long[] pattern = new long[] {0, 1000, 500};
         vibe.vibrate(pattern, 0);
+    }
+
+    public void cancelNotification()
+    {
+        Log.d("cancelNoti", "cancelNoti");
+        NotificationManager notificationManager = (NotificationManager)this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.cancel(FinalActivity.NOTIFICATION_ID);
     }
 }

@@ -35,7 +35,7 @@ public class AlarmService extends IntentService {
     String routeId, stationId;
     BusArrivalTimeParser parser = new BusArrivalTimeParser();
     Context context;
-    public static volatile boolean shouldContinue = true;
+    public static volatile boolean shouldContinue = false;
 
     public AlarmService() {
         super("AlarmService");
@@ -52,26 +52,26 @@ public class AlarmService extends IntentService {
         Assert.assertNotNull(routeId);
         Assert.assertNotNull(stationId);
 
-        if(!shouldContinue) {
+        if (!shouldContinue) {
             Log.d("IntentService", "IntentService STOPPED!!!!!!");
-            cancelNotification();
+//            cancelNotification();
             return;
         }
-        createNotification();
+//        createNotification();
 
         while (true) {
             if (check()) {
                 Log.i("AlarmService", "Trigger Alarm!!!!");
-                cancelNotification();
+//                cancelNotification();
                 triggerAlarm();
                 break;
             } else {
                 try {
-                    for(int i = 0; i<REQUEST_PER_SEC; i++) {
+                    for (int i = 0; i < REQUEST_PER_SEC; i++) {
                         Thread.sleep(1000);
-                        if(!shouldContinue) {
+                        if (!shouldContinue) {
                             Log.d("IntentService", "IntentService STOPPED!!!!!!");
-                            cancelNotification();
+//                            cancelNotification();
                             return;
                         }
                     }
@@ -84,6 +84,7 @@ public class AlarmService extends IntentService {
     private void triggerAlarm() {
         Intent intent = new Intent(getBaseContext(), AlarmActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 
@@ -100,44 +101,13 @@ public class AlarmService extends IntentService {
             Log.d("Check()_Exception", "Exception");
         }
         if (plateNo.equals(buses[0].getPlateNo())) {
-            if (buses[0].getTimeToWait() <= WHAT_MINUTE_BEFORE || Integer.parseInt(buses[0].getNumOfStationsToWait()) <= WHAT_STATIONS_BEFORE) return true;
+            if (buses[0].getTimeToWait() <= WHAT_MINUTE_BEFORE || Integer.parseInt(buses[0].getNumOfStationsToWait()) <= WHAT_STATIONS_BEFORE)
+                return true;
         } else if (plateNo.equals(buses[1].getPlateNo())) {
-            if (buses[1].getTimeToWait() <= WHAT_MINUTE_BEFORE || Integer.parseInt(buses[1].getNumOfStationsToWait()) <= WHAT_STATIONS_BEFORE) return true;
+            if (buses[1].getTimeToWait() <= WHAT_MINUTE_BEFORE || Integer.parseInt(buses[1].getNumOfStationsToWait()) <= WHAT_STATIONS_BEFORE)
+                return true;
         }
         return false;
     }
-
-    public void createNotification()
-    {
-        Log.d("createNotification", "createNotification()");
-        NotificationManager notificationManager = (NotificationManager)context.getSystemService(NOTIFICATION_SERVICE);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context)
-                .setContentTitle("SleepingBus")
-                .setContentText("알람 설정")
-//                .setSmallIcon(R.drawable.ic_launcher)
-                .setOngoing(true)
-                .setAutoCancel(false);
-
-        Intent intent = new Intent(context, AlarmDisableActivity.class);
-        intent.setAction(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-        stackBuilder.addParentStack(AlarmDisableActivity.class);
-        stackBuilder.addNextIntent(intent);
-
-        PendingIntent pendingIntent = stackBuilder.getPendingIntent(0,  PendingIntent.FLAG_UPDATE_CURRENT);
-
-        builder.setContentIntent(pendingIntent);
-
-        notificationManager.notify(NOTIFICATION_ID, builder.build());
-    }
-
-    public void cancelNotification()
-    {
-        NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        notificationManager.cancel(NOTIFICATION_ID);
-    }
 }
+

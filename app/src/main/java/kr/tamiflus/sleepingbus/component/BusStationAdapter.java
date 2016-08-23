@@ -86,7 +86,7 @@ public class BusStationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             holder.layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    List<BusStation> list = (new BusStationDBHelper(context)).getAllStation();
+                    List<BusStation> list = (new BusStationDBHelper(context)).getStationByStationName(st.getName());
 //                    Intent intent = new Intent(context, SearchBusStationByLocationActivity.class);
                     //TODO: DB에서 전체 리스트 받아와서 이름 같은거 있으면 두개 넣고 맵으로 넘어가기
 //                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

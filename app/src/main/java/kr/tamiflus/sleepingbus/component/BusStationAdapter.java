@@ -12,6 +12,7 @@ import java.util.List;
 
 import kr.tamiflus.sleepingbus.BusStationInfoActivity;
 import kr.tamiflus.sleepingbus.R;
+import kr.tamiflus.sleepingbus.SearchBusStationByLocationActivity;
 import kr.tamiflus.sleepingbus.holders.BusStationViewHolder;
 import kr.tamiflus.sleepingbus.holders.SectionViewHolder;
 import kr.tamiflus.sleepingbus.structs.BusStation;
@@ -82,8 +83,9 @@ public class BusStationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             holder.layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, BusStationInfoActivity.class);
-                    intent.putExtra("departStation", BusStationToStrArray.listToArr(st));
+                    Intent intent = new Intent(context, SearchBusStationByLocationActivity.class);
+//                    intent.putExtra("st1", );
+                    //TODO: DB에서 전체 리스트 받아와서 이름 같은거 있으면 두개 넣고 맵으로 넘어가기
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     context.startActivity(intent);
                 }

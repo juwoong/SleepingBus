@@ -138,6 +138,31 @@ public class BusStationDBHelper extends SQLiteOpenHelper{
         return result;
     }
 
+    public ArrayList<BusStation> getAllStation() {
+        ArrayList<BusStation> list = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c;
+
+        c = db.rawQuery("SELECT * FROM BusStation ORDER BY stLocation", null);
+
+        if (c.moveToFirst()) {
+            do {
+                BusStation st = new BusStation();
+
+                st.setName(c.getString(0));
+                st.setId(c.getString(1));
+                st.setRegion(c.getString(2));
+                st.setCode(c.getString(3));
+                st.setX(c.getString(4));
+                st.setY(c.getString(5));
+
+                list.add(st);
+                Log.i("station", st.toString());
+            } while (c.moveToNext());
+        }
+        return list;
+    }
+
     public List<BusStation> fillStation(List<BusStation> st) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c;

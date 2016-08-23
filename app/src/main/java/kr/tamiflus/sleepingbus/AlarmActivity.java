@@ -5,6 +5,7 @@ import android.media.MediaPlayer;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 public class AlarmActivity extends AppCompatActivity {
@@ -21,11 +22,13 @@ public class AlarmActivity extends AppCompatActivity {
     }
 
     public void onClickStop(View v) {
+        Log.d("AlarmActivity", "알람 끄기");
         mp.stop();
         vibe.cancel();
     }
 
     public void startAlarm() {
+        Log.d("AlarmActivity", "StartAlarm()");
         mp = MediaPlayer.create(this, R.raw.alarm);
         am = (AudioManager)getSystemService(AUDIO_SERVICE);
         if(am.isWiredHeadsetOn()) {

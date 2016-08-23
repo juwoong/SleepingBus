@@ -22,7 +22,7 @@
             android:gravity="center"
             android:textSize="36sp"
             android:textStyle="bold"
-            android:text="목적지에 거의 도착했습니다!"/>
+            android:text="알람이 설정되었습니다!\n편하게 주무세요."/>
 
         <TextView
             android:paddingLeft="24dp"
@@ -33,10 +33,10 @@
             android:background="@drawable/whitebox9"
             android:textColor="@color/ddabeok"
             android:textSize="32sp"
-            android:id="@+id/boardBtn"
+            android:id="@+id/disableAlarm"
+            android:onClick="onClickStopAlarm"
             android:textStyle="bold"
-            android:text="알람 끄기"
-            android:onClick="onClickStop"/>
+            android:text="알람 끄기"/>
     </LinearLayout>
 
 

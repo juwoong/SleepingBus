@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import kr.tamiflus.sleepingbus.structs.ArrivingBus;
 import kr.tamiflus.sleepingbus.structs.BusStation;
@@ -43,17 +44,22 @@ public class FinalActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //TODO: 다 설정되었을 때 알람 실행하기
-                Log.d("FinalActivity", arrivingBus.toString());
-                Log.d("FinalActivity", destStation.toString());
-                Intent intent = new Intent(FinalActivity.this, AlarmService.class);
-                intent.putExtra("plateNo", arrivingBus.getPlateNo());
-                intent.putExtra("routeId", arrivingBus.getRouteId());
-                intent.putExtra("stationId", destStation.getCode());
-                Log.d("SetAlarm", "plateNo : " + arrivingBus.getPlateNo());
-                Log.d("SetAlarm", "routeId : " + arrivingBus.getRouteId());
-                Log.d("SetAlarm", "stationId : " + destStation.getCode());
+                if(AlarmService.shouldContinue) {
+                    Toast.makeText(FinalActivity.this, "이미 설정된 알람이 있습니다.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.d("FinalActivity", arrivingBus.toString());
+                    Log.d("FinalActivity", destStation.toString());
+                    Intent intent = new Intent(FinalActivity.this, AlarmService.class);
+                    intent.putExtra("plateNo", arrivingBus.getPlateNo());
+                    intent.putExtra("routeId", arrivingBus.getRouteId());
+                    intent.putExtra("stationId", destStation.getCode());
+                    Log.d("SetAlarm", "plateNo : " + arrivingBus.getPlateNo());
+                    Log.d("SetAlarm", "routeId : " + arrivingBus.getRouteId());
+                    Log.d("SetAlarm", "stationId : " + destStation.getCode());
 
-                startService(intent);
+                    AlarmService.shouldContinue = true;
+                    startService(intent);
+                }
             }
         });
     }

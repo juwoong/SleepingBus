@@ -19,12 +19,22 @@
                 android:layout_height="24dp"
                 android:src="@drawable/ic_search_black_36dp"/>
             <EditText
+                android:singleLine="true"
+                android:imeOptions="actionSearch"
+                android:maxLines="1"
                 android:background="@android:color/transparent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text='320 항목 검색'
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:hint='320 항목 검색'
                 android:id="@+id/busRouteStationSearchEditText"
                 android:textSize="16sp"/>
+            <TextView
+                android:layout_width="60dp"
+                android:gravity="center"
+                android:id="@+id/cancelBtn"
+                android:layout_height="match_parent"
+                android:text="취소"/>
         </LinearLayout>
         <View
             android:layout_width="match_parent"

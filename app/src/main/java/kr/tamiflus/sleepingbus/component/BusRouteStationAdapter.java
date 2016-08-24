@@ -9,9 +9,12 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +33,7 @@ public class BusRouteStationAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     Context context;
     LayoutInflater inflater;
     ArrayList<BusStation> list = new ArrayList<>();
-    ArrayList<BusStation> listCopy = new ArrayList<>(); // store original pure list
+    ArrayList<BusStation> origin = new ArrayList<>();
     Handler handler;
 
     public BusRouteStationAdapter(Context context, Handler handler) {
@@ -42,18 +45,17 @@ public class BusRouteStationAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     public void addAll(List<BusStation> list) {
         this.list.addAll(list);
-        this.listCopy.addAll(list);
+        list.remove(0);
+        this.origin.addAll(list);
     }
 
     public void add(BusStation obj) {
         this.list.add(obj);
-        this.listCopy.add(obj);
     }
 
     public void clear() {
 //        this.listCopy.clear();
-        for(int i=1; i<this.list.size(); i++) { this.list.remove(1); }
-        for(int i=1; i<this.listCopy.size(); i++) { this.listCopy.remove(1); }
+        for(int i=this.list.size()-1; i>=1; i--) { this.list.remove(i); }
     }
 
 
@@ -77,34 +79,35 @@ public class BusRouteStationAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         // - replace the contents of the view with that element
         if(vh instanceof BusRouteStationHeaderViewHolder) {
             BusRouteStationHeaderViewHolder holder = (BusRouteStationHeaderViewHolder) vh;
-            holder.text.addTextChangedListener(new TextWatcher() {
+            holder.text.setOnEditorActionListener(new TextView.OnEditorActionListener() {
                 @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    String value = charSequence.toString();
+                public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                    String value = textView.getText().toString();
                     Log.i("Change", value);
                     //TODO: 현 노선에서 정류장 검색 할 수 있게 만들기.
-                    int addCnt = 0;
-                    int beforeSize = list.size() - 1;
-                    for(int k=1; k<list.size(); k++) { list.remove(1); }
-                    for(int k = 1; k<listCopy.size(); k++) {
-                        if (listCopy.get(k).getName().contains(value)) {
-                            list.add(listCopy.get(k));
-                            addCnt++;
+                    if(i == EditorInfo.IME_ACTION_SEARCH) {
+                        ArrayList<BusStation> stlist = new ArrayList<BusStation>();
+                        for (BusStation st : list) {
+                            if (st.getName() != null &&st.getName().contains(value)) {
+                                Log.d("Find", st.toString());
+                                stlist.add(st);
+                            }
                         }
+                        clear();
+                        list.addAll(stlist);
+                        //TODO 여기 부분 고치기.
+                        notifyDataSetChanged();
                     }
-//                    clear();
-//                    addAll(st);
-                    //TODO 여기 부분 고치기.
-                    notifyDataSetChanged();
+                    return true;
                 }
-
+            });
+            holder.btn.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void afterTextChanged(Editable editable) {
+                public void onClick(View view) {
+                    holder.text.setText("");
+                    clear();
+                    list.addAll(origin);
+                    notifyDataSetChanged();
                 }
             });
         }

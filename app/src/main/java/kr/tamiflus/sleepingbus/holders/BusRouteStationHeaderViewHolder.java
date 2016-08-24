@@ -13,6 +13,7 @@ import kr.tamiflus.sleepingbus.R;
  */
 public class BusRouteStationHeaderViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.busRouteStationSearchEditText) public EditText text;
+    @BindView(R.id.cancelBtn) public View btn;
 
     public BusRouteStationHeaderViewHolder(View v){
         super(v);

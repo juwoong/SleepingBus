@@ -83,8 +83,10 @@
         <activity
             android:name=".WelcomeActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".BusRouteStationSearchActivity"/>
-        <activity android:name=".AlarmDisableActivity">
+        <activity android:name=".BusRouteStationSearchActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".AlarmDisableActivity"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

@@ -44,6 +44,7 @@
 
 </android.support.design.widget.CoordinatorLayout>
     <LinearLayout
+        android:id="@+id/searchLocationBar"
         android:background="#fff"
         android:layout_alignParentBottom="true"
         android:gravity="center"

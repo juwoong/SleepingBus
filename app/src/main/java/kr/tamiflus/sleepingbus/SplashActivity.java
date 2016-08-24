@@ -1,6 +1,7 @@
 package kr.tamiflus.sleepingbus;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
@@ -19,6 +20,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
 
         if(!BusStationDBHelper.isCheckDB(getApplicationContext())) BusStationDBHelper.copyDB(getApplicationContext());
 

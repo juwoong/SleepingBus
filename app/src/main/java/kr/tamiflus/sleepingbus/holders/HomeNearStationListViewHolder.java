@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.github.aakira.expandablelayout.ExpandableRelativeLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

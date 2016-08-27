@@ -27,6 +27,7 @@ import java.util.List;
 
 import kr.tamiflus.sleepingbus.animations.OnOffChangeListener;
 import kr.tamiflus.sleepingbus.component.BusStationActivityAdapter;
+import kr.tamiflus.sleepingbus.structs.ArrivingBus;
 import kr.tamiflus.sleepingbus.structs.Bus;
 import kr.tamiflus.sleepingbus.structs.BusRoute;
 import kr.tamiflus.sleepingbus.structs.BusStation;
@@ -125,17 +126,38 @@ public class BusStationInfoActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
+            //debug
+            Log.d("doInBackground", "routeList toString ---------------------");
+            for(int i = 0; i<routeList.size(); i++) {
+                Log.d("routeList_" + i, routeList.get(i).toString() + "bus1:" + routeList.get(i).getBus1() + "bus2:" + routeList.get(i).getBus2());
+            }
+            Log.d("doInBackground", "END routeList toString -----------------");
+
+
             List<Bus> busList = new ArrayList<>();
             //TODO: UI
             for (int i = 0; i < routeList.size(); i++) {
 //                Log.d("doInBackground", "bus : " + routeList.get(i).getBus1().toString());
                 Bus bus1 = routeList.get(i).getBus1();
-                bus1.setRouteName(routeList.get(i).getRouteName());
-                bus1.setRouteId(routeList.get(i).getRouteId());
-                bus1.setRegionName(routeList.get(i).getRegionName());
-                bus1.setRouteTypeCd(routeList.get(i).getRouteTypeCd());
-                bus1.setRouteTypeName(routeList.get(i).getRouteTypeName());
-                busList.add(bus1);
+                if(bus1 == null) {
+                    ArrivingBus nullBus = new ArrivingBus();
+                    nullBus.setRouteName(routeList.get(i).getRouteName());
+                    nullBus.setRouteId(routeList.get(i).getRouteId());
+                    nullBus.setRegionName(routeList.get(i).getRegionName());
+                    nullBus.setRouteTypeCd(routeList.get(i).getRouteTypeCd());
+                    nullBus.setRouteTypeName(routeList.get(i).getRouteTypeName());
+                    nullBus.setNumOfStationsToWait("정보 없음");
+                    nullBus.setTimeToWait(999);
+                    nullBus.setPlateNo("정보 없음");
+                    busList.add(nullBus);
+                } else {
+                    bus1.setRouteName(routeList.get(i).getRouteName());
+                    bus1.setRouteId(routeList.get(i).getRouteId());
+                    bus1.setRegionName(routeList.get(i).getRegionName());
+                    bus1.setRouteTypeCd(routeList.get(i).getRouteTypeCd());
+                    bus1.setRouteTypeName(routeList.get(i).getRouteTypeName());
+                    busList.add(bus1);
+                }
             }
 
             //debug

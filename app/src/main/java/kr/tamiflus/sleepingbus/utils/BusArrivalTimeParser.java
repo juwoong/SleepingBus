@@ -196,7 +196,7 @@ public class BusArrivalTimeParser {
             Log.d("ArrivalTimeParser", "routeId : " + routeId);
             for(int j = 0; j<resultList.size(); j++) {
                 ArrivingBus[] resultBuses = resultList.get(j);
-                Log.d("ArrivalTimeParser", "resultBuses[0].getRouteId() : " + resultBuses[0].getRouteId());
+//                Log.d("ArrivalTimeParser", "resultBuses[0].getRouteId() : " + resultBuses[0].getRouteId());
                 if(resultBuses[0].getRouteId().equals(routeId)) {
                     resultBuses[0].setRouteId(routeList.get(i).getRouteId());
                     resultBuses[0].setRouteId(routeList.get(i).getRouteId());

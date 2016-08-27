@@ -100,8 +100,15 @@ public class NearestStationParser {
         if(stations == null) return null;
         else {
             List<BusStation> result = new ArrayList<>();
-            int index = findIndexOfNearestStation(stations);
             (new BusStationDBHelper(context)).fillStation(stations);
+            int index = findIndexOfNearestStation(stations);
+
+            //index cannot be -1
+            if(index == -1) {
+                Log.d("getNearestSt", "getNearestStationByXY returns -1 : index cannot be -1, May be API Problem.");
+                return null;
+            }
+
             Log.d("getNearestStationByXY", stations.get(index).getName() + ", " + stations.get(index).getCode() + ", " + stations.get(index).getDist());
             result.add(stations.get(index));
             stations.remove(index);
@@ -130,8 +137,8 @@ public class NearestStationParser {
             }
         }
         if(nearestIndex < 0) {
-            Log.d("ERROR", "unexpected nearestIndex");
-            System.exit(-1);
+            Log.d("ERROR", "unexpected nearestIndex : " + nearestIndex);
+            return -1;
         }
         return nearestIndex;
     }

@@ -169,6 +169,7 @@ public class HomeActivity extends AppCompatActivity {
                     break;
                 default:
                     Log.d("ERROR", "Unexpected Handler Message : " + msg.what);
+                    Toast.makeText(HomeActivity.this, "unexpected Handler Message", Toast.LENGTH_SHORT).show();
                     System.exit(-1);
                     break;
             }

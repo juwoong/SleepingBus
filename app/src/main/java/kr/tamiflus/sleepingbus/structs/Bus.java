@@ -74,4 +74,16 @@ public class Bus {
     public void setRouteTypeName(String routeTypeName) {
         this.routeTypeName = routeTypeName;
     }
+
+    @Override
+    public String toString() {
+        return "Bus{" +
+                "districtCd='" + districtCd + '\'' +
+                ", regionName='" + regionName + '\'' +
+                ", routeId='" + routeId + '\'' +
+                ", routeName='" + routeName + '\'' +
+                ", routeTypeCd='" + routeTypeCd + '\'' +
+                ", routeTypeName='" + routeTypeName + '\'' +
+                '}';
+    }
 }

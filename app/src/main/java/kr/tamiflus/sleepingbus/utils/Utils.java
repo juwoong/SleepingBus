@@ -18,6 +18,7 @@ import java.util.Date;
  */
 public class Utils {
 
+    public static final String hash = "4ad6103beb2cf3195633d491c5357cd4";
     /**
      * Format the given date relatively to now.
      *

@@ -14,6 +14,7 @@ import kr.tamiflus.sleepingbus.R;
  * Created by tamiflus on 16. 8. 20..
  */
 public class HomeBookMarkViewHolder extends RecyclerView.ViewHolder {
+    @BindView(R.id.cardView) public View cardView;
     @BindView(R.id.bookMarkRouteName) public TextView routeName;
     @BindView(R.id.bookMarkName) public TextView name;
     @BindView(R.id.bookMarkCourse) public TextView course;

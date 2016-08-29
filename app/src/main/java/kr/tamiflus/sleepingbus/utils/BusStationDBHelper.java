@@ -20,6 +20,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
 
+import kr.tamiflus.sleepingbus.structs.ArrivingBus;
 import kr.tamiflus.sleepingbus.structs.BusRoute;
 import kr.tamiflus.sleepingbus.structs.BusStation;
 import kr.tamiflus.sleepingbus.structs.BusStationTag;
@@ -134,7 +135,6 @@ public class BusStationDBHelper extends SQLiteOpenHelper{
             }
             result.add(list.get(i));
         }
-
         return result;
     }
 
@@ -163,9 +163,12 @@ public class BusStationDBHelper extends SQLiteOpenHelper{
         return list;
     }
 
+
+
     public List<BusStation> fillStation(List<BusStation> st) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c;
+        List<BusStation> result = new ArrayList<>();
 
         for(int i = 0; i<st.size(); i++) {
             BusStation s = st.get(i);
@@ -178,13 +181,53 @@ public class BusStationDBHelper extends SQLiteOpenHelper{
                     s.setCode(c.getString(3));
                     s.setX(c.getString(4));
                     s.setY(c.getString(5));
+                    result.add(s);
                     Log.d("fillStation", "filling stations...");
+                }while(c.moveToNext());
+            }
+        }
+
+        return result;
+    }
+
+    public String getDist(String stationId, String routeId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(String.format("SELECT busType FROM BusRouteList WHERE busRouteID=\'%s\' AND busStationID=\'%s\'", stationId, routeId), null);
+
+        if(c.moveToFirst()) {
+            do {
+                return c.getString(0);
+            }while(c.moveToNext());
+        }
+
+        return null;
+    }
+
+    public List<BusStation> fillStationWithDist(List<BusStation> st, String routeId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c;
+
+        for(int i = 0; i<st.size(); i++) {
+            BusStation s = st.get(i);
+            c = db.rawQuery(String.format("select * from BusStation join BusRouteList WHERE stCode=\'%s\' AND BusStation.stCode=BusRouteList.busStationID AND BusRouteList.busRouteID=\'%s\'",s.getCode(), routeId), null);
+            Log.i("fillStationWithDist", String.format("select * from BusStation join BusRouteList WHERE stCode=\'%s\' AND BusStation.stCode=BusRouteList.busStationID AND BusRouteList.busRouteID=\'%s\'",s.getCode(), routeId));
+            if(c.moveToFirst()) {
+                do {
+                    s.setName(c.getString(0));
+                    s.setId(c.getString(1));
+                    s.setRegion(c.getString(2));
+                    s.setCode(c.getString(3));
+                    s.setX(c.getString(4));
+                    s.setY(c.getString(5));
+                    s.setDist(c.getString(10));
+                    Log.d("fillStation", s.toString());
                 }while(c.moveToNext());
             }
         }
 
         return st;
     }
+
     public BusStation fillStation(BusStation st) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c;
@@ -269,6 +312,48 @@ public class BusStationDBHelper extends SQLiteOpenHelper{
         return busRouteList;
     }
 
+    public ArrivingBus getBusRouteByRouteId(String routeId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c;
+        ArrivingBus st = new ArrivingBus();
+        c = db.rawQuery("SELECT * FROM BusRoute WHERE routeId = \'" + routeId + "\';", null);
+
+        if(c.moveToFirst()) {
+            do {
+                st.setDistrictCd(c.getString(0));
+                st.setRegionName(c.getString(1));
+                st.setRouteId(c.getString(2));
+                st.setRouteName(c.getString(3));
+                st.setRouteTypeCd(c.getString(4));
+                st.setRouteTypeName(c.getString(5));
+                Log.d("BusStationDBHelper", st.toString());
+            }while(c.moveToNext());
+            Log.d("getBusRouteByRouteId", st.toString());
+            return st;
+        }
+        return st;
+    }
+
+    public BusStation getStationByStationId(String stationID) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c;
+        BusStation st = new BusStation();
+        c = db.rawQuery("SELECT * FROM BusStation WHERE stCode = \'" + stationID + "\';", null);
+
+        if(c.moveToFirst()) {
+            do {
+                st.setName(c.getString(0));
+                st.setId(c.getString(1));
+                st.setRegion(c.getString(2));
+                st.setCode(c.getString(3));
+                st.setX(c.getString(4));
+                st.setY(c.getString(5));
+            }while(c.moveToNext());
+        }
+        Log.d("getStationByStationId", st.toString());
+        return st;
+    }
+
     public List<BusStation> getStationsByRouteId(String routeId) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor c;
@@ -282,6 +367,6 @@ public class BusStationDBHelper extends SQLiteOpenHelper{
                 stations.add(st);
             }while(c.moveToNext());
         }
-        return fillStation(stations);
+        return fillStationWithDist(stations, routeId);
     }
 }

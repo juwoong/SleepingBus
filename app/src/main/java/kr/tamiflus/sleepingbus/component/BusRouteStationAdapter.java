@@ -45,7 +45,7 @@ public class BusRouteStationAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     public void addAll(List<BusStation> list) {
         this.list.addAll(list);
-        list.remove(0);
+        if(list.size() > 0) list.remove(0);
         this.origin.addAll(list);
     }
 

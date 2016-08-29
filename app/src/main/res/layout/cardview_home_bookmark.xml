@@ -9,6 +9,7 @@
         android:clickable="true"
         card_view:cardUseCompatPadding="true"
         card_view:cardElevation="1dp"
+        android:id="@+id/cardView"
         android:foreground="?android:attr/selectableItemBackground"        android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <LinearLayout

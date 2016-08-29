@@ -4,27 +4,43 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.OvershootInterpolator;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+import kr.tamiflus.sleepingbus.component.BusStationActivityAdapter;
 import kr.tamiflus.sleepingbus.component.HomeAdapter;
+import kr.tamiflus.sleepingbus.structs.ArrivingBus;
+import kr.tamiflus.sleepingbus.structs.BookMark;
+import kr.tamiflus.sleepingbus.structs.Bus;
+import kr.tamiflus.sleepingbus.structs.BusRoute;
 import kr.tamiflus.sleepingbus.structs.BusStation;
+import kr.tamiflus.sleepingbus.structs.HomeObject;
 import kr.tamiflus.sleepingbus.structs.NearStation;
 import kr.tamiflus.sleepingbus.structs.NearTwoStation;
 import kr.tamiflus.sleepingbus.threads.FindNearStationThread;
+import kr.tamiflus.sleepingbus.utils.BusArrivalTimeParser;
 import kr.tamiflus.sleepingbus.utils.BusStationToStrArray;
+import kr.tamiflus.sleepingbus.utils.InfomationDBHelper;
 
 public class HomeActivity extends AppCompatActivity {
     public static final int UPDATE_NEARSTATION_ONE = 1;
@@ -36,11 +52,25 @@ public class HomeActivity extends AppCompatActivity {
     public static final String STRING_LOADING_LOCATION = "위치정보 가져오는 중..";
     public static final String STRING_FAILED_NETWORK = "네트워크 연결 실패";
     public static final String STRING_FAILED_LOCATION = "위치 조회 실패";
-
+    InfomationDBHelper infomationDBHelper = null;
 
 
     RecyclerView recyclerView;
     HomeAdapter adapter;
+    FloatingActionButton fab;
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        for(int i=adapter.getList().size()-1; i>=1; i--) {
+            adapter.removeByPosition(i);
+        }
+        if(infomationDBHelper != null) {
+            adapter.addAll(infomationDBHelper.getBookMarks());
+            adapter.notifyDataSetChanged();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +78,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        infomationDBHelper = new InfomationDBHelper(getApplicationContext());
 
         TextView searchButton = (TextView) findViewById(R.id.searchButton);
         recyclerView = (RecyclerView) findViewById(R.id.homeRecyclerView);
@@ -64,6 +95,18 @@ public class HomeActivity extends AppCompatActivity {
         NearStation nearStation = new NearStation(st);
 //        nearStation.distance = -1;
 
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final OvershootInterpolator interpolator = new OvershootInterpolator();
+                ViewCompat.setRotation(fab, 0f);
+                ViewCompat.animate(fab).rotation(-360f).withLayer().setDuration(500).setInterpolator(interpolator).start();
+                ParseTask task = new ParseTask();
+                task.execute(adapter.getList());
+            }
+        });
+
         adapter = new HomeAdapter(getApplicationContext());
         adapter.add(nearStation);
 
@@ -76,8 +119,7 @@ public class HomeActivity extends AppCompatActivity {
             tmp.setName(STRING_FAILED_NETWORK);
             tmp.setDist(null);
             NearStation tmp2 = new NearStation(tmp);
-            adapter.clear();
-            adapter.add(tmp2);
+            adapter.setItemByPosition(0, tmp2);
             adapter.notifyDataSetChanged();
         }
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION);
@@ -109,8 +151,11 @@ public class HomeActivity extends AppCompatActivity {
 
 //        adapter.add(two);
 //        adapter.add(mark);
-
+        adapter.addAll(infomationDBHelper.getBookMarks());
         recyclerView.setAdapter(adapter);
+
+        ParseTask task = new ParseTask();
+        task.execute(adapter.getList());
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,6 +167,8 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+
+
     private void getNearestStationByLocation() {
         FindNearStationThread thread = new FindNearStationThread(this, new HomeHandler());
         thread.start();
@@ -129,14 +176,12 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void updateScreenContents(NearTwoStation two) {
-        adapter.clear();
-        adapter.add(two);
+        adapter.setItemByPosition(0, two);
         adapter.notifyDataSetChanged();
     }
 
     private void updateScreenContents(NearStation one) {
-        adapter.clear();
-        adapter.add(one);
+        adapter.setItemByPosition(0, one);
         adapter.notifyDataSetChanged();
     }
 
@@ -211,6 +256,42 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+
+    }
+
+    public class ParseTask extends AsyncTask<Object, Void, Void> {
+        @Override
+        protected Void doInBackground(Object... params){
+            Log.d("ASyncTask", "doInBackground()");
+            ArrayList<HomeObject> routeList = (ArrayList<HomeObject>) (params[0]);
+
+
+            try {
+                for(int i=0; i<routeList.size(); i++) {
+                    if(!(routeList.get(i) instanceof BookMark)) continue;
+                    BookMark mark = (BookMark) routeList.get(i);
+                    ArrivingBus bus = ((new BusArrivalTimeParser()).parse(mark.startSt.getCode(), mark.arrivingBus.getRouteId()))[0];
+
+                    mark.arrivingBus.setNumOfStationsToWait(bus.getNumOfStationsToWait());
+                    mark.arrivingBus.setPlateNo(bus.getPlateNo());
+                    mark.arrivingBus.setTimeToWait(bus.getTimeToWait());
+
+                    Log.d("mark", mark.toString());
+
+                    adapter.setItemByPosition(i, mark);
+                }
+            }catch(Exception e) {
+
+            }
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.notifyDataSetChanged();
+                }
+            });
+            return null;
+        }
 
     }
 }

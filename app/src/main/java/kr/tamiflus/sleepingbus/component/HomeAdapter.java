@@ -12,12 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kr.tamiflus.sleepingbus.BusStationInfoActivity;
+import kr.tamiflus.sleepingbus.FinalActivity;
 import kr.tamiflus.sleepingbus.HomeActivity;
 import kr.tamiflus.sleepingbus.R;
 import kr.tamiflus.sleepingbus.SearchBusStationByLocationActivity;
 import kr.tamiflus.sleepingbus.holders.HomeBookMarkViewHolder;
 import kr.tamiflus.sleepingbus.holders.HomeNearStationListViewHolder;
 import kr.tamiflus.sleepingbus.holders.HomeNearStationViewHolder;
+import kr.tamiflus.sleepingbus.structs.ArrivingBus;
 import kr.tamiflus.sleepingbus.structs.BookMark;
 import kr.tamiflus.sleepingbus.structs.HomeObject;
 import kr.tamiflus.sleepingbus.structs.NearStation;
@@ -36,6 +38,10 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int NEAR_STATION_TYPE = 1;
     private static final int NEAR_STATION_DOUBLED_TYPE = 2;
     private static final int BOOKMARK_TYPE = 3;
+
+    public HomeObject getItemByPosition(int position) { return list.get(position); }
+    public void setItemByPosition(int position, HomeObject object) { list.set(position, object); }
+    public ArrayList<HomeObject> getList() {return list; }
 
     public HomeAdapter(Context context) {
         //super(context, R.layout.busstation_route_listview);
@@ -112,8 +118,17 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             holder.routeName.setTextColor(context.getResources().getColor(ColorMap.byID.get(mark.arrivingBus.getRouteTypeCd())));
             holder.routeName.setText(mark.arrivingBus.getRouteName());
             holder.course.setText(mark.startSt.getName() + " > " + mark.endSt.getName());
-            holder.leftSeat.setText(String.format("(남은 좌석 : %d)", 27));
+            holder.leftSeat.setText(String.format("(남은 정류장 : %s)", mark.arrivingBus.getNumOfStationsToWait()));
             holder.leftTime.setText(Integer.toString(mark.arrivingBus.getTimeToWait()) + "분 전");
+            holder.cardView.setOnClickListener((v) -> {
+                Log.d("clicked", "clicked");
+                Intent intent = new Intent(context, FinalActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("departStation", BusStationToStrArray.listToArr(mark.startSt));
+                intent.putExtra("destStation", BusStationToStrArray.listToArr(mark.endSt));
+                intent.putExtra("arrivingBus", ArrivingBus.ArrivingBusToArray(mark.arrivingBus));
+                context.startActivity(intent);
+            });
         }
     }
 
@@ -139,5 +154,7 @@ public class HomeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public void clear() {
         this.list.clear();
     }
+
+    public void removeByPosition(int position) { this.list.remove(position); }
 
 }

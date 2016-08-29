@@ -11,8 +11,11 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
+import kr.tamiflus.sleepingbus.component.HomeAdapter;
 import kr.tamiflus.sleepingbus.fragment.WelcomeFragment;
+import kr.tamiflus.sleepingbus.structs.HomeObject;
 import kr.tamiflus.sleepingbus.utils.BusStationDBHelper;
+import kr.tamiflus.sleepingbus.utils.Utils;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -21,27 +24,47 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        SharedPreferences pref = getSharedPreferences(Utils.hash, MODE_PRIVATE);
+        if(pref.getBoolean("isNotFirst", false) == true) {
+            Handler handler = new Handler() {
+                @Override
+                public void handleMessage(Message msg) {
+                    super.handleMessage(msg);
+                    Intent intent = new Intent(SplashActivity.this, HomeActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            };
+            handler.sendEmptyMessageDelayed(0, 1000);
+        } else {
 
-        if(!BusStationDBHelper.isCheckDB(getApplicationContext())) BusStationDBHelper.copyDB(getApplicationContext());
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putBoolean("isNotFirst", true);
+            editor.commit();
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(ContextCompat.getColor(this, R.color.theme));
-        }
 
-        Handler handler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                super.handleMessage(msg);
+            if (!BusStationDBHelper.isCheckDB(getApplicationContext()))
+                BusStationDBHelper.copyDB(getApplicationContext());
 
-                Intent intent = new Intent(SplashActivity.this, WelcomeActivity.class);
-                startActivity(intent);
-                finish();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Window window = this.getWindow();
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                window.setStatusBarColor(ContextCompat.getColor(this, R.color.theme));
             }
-        };
 
-        handler.sendEmptyMessageDelayed(0, 1000);
+
+            Handler handler = new Handler() {
+                @Override
+                public void handleMessage(Message msg) {
+                    super.handleMessage(msg);
+
+                    Intent intent = new Intent(SplashActivity.this, WelcomeActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            };
+            handler.sendEmptyMessageDelayed(0, 1000);
+        }
     }
 }

@@ -74,7 +74,7 @@ public class ArrivingBus extends Bus {
 
     @Override
     public String toString() {
-        return "ArrivingBus{" +
+        return super.toString() + "\nArrivingBus{" +
                 "plateNo='" + plateNo + '\'' +
                 ", timeToWait=" + timeToWait +
                 ", numOfStationsToWait='" + numOfStationsToWait + '\'' +

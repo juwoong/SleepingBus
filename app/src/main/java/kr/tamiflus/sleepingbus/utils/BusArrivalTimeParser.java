@@ -219,6 +219,8 @@ public class BusArrivalTimeParser {
                 .url("http://openapi.gbis.go.kr/ws/rest/busarrivalservice?serviceKey=mprvOxIo4u5PCVIVStlnRI6rMDBmJGRvC6%2BNurrGAkl0Ctsmt7UJxU9XwMwP4IOAuaRxjScQ2hGKaDm1n1z%2BgA%3D%3D&stationId=" + stationId + "&routeId=" + routeId + "&numOfRows=999&pageSize=999&pageNo=1&startPage=1")
                 .build();
 
+        Log.d("parse", "http://openapi.gbis.go.kr/ws/rest/busarrivalservice?serviceKey=mprvOxIo4u5PCVIVStlnRI6rMDBmJGRvC6%2BNurrGAkl0Ctsmt7UJxU9XwMwP4IOAuaRxjScQ2hGKaDm1n1z%2BgA%3D%3D&stationId=" + stationId + "&routeId=" + routeId + "&numOfRows=999&pageSize=999&pageNo=1&startPage=1");
+
         Response response = client.newCall(request).execute();
         String xml = response.body().string();
         Log.d("XML", xml);

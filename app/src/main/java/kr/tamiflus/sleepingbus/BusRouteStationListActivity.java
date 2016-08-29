@@ -39,6 +39,7 @@ public class BusRouteStationListActivity extends AppCompatActivity {
 
     AppBarLayout appBarLayout;
     Toolbar toolbar;
+    BusStation departStation;
     View infoDetail, infoSummary;
     CollapsingToolbarLayout collapsingToolbarLayout;
     BusRouteStationAdapter adapter;
@@ -53,6 +54,7 @@ public class BusRouteStationListActivity extends AppCompatActivity {
         RecyclerView view = (RecyclerView) findViewById(R.id.busRouteListView);
         Intent intent = getIntent();
         arrivingBus = ArrivingBus.ArrayToArrivingBus(intent.getStringArrayExtra("departBus"));
+        departStation = BusStationToStrArray.arrToList(intent.getStringArrayExtra("departStation"));
 
         appBarLayout = (AppBarLayout) findViewById(R.id.appbarlayout);
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
@@ -119,8 +121,9 @@ public class BusRouteStationListActivity extends AppCompatActivity {
                 case STATION_LIST_LOADED:
                     Log.d("RouteStationListHandler", "STATION_LIST_LOADED");
                     List<BusStation> list = (List<BusStation>)msg.obj;
-                    list.add(0, list.get(0));
+
                     adapter.clear();
+
                     adapter.addAll(list);
                     adapter.notifyDataSetChanged();
                     findViewById(R.id.loadingPanel).setVisibility(View.GONE);
@@ -129,6 +132,7 @@ public class BusRouteStationListActivity extends AppCompatActivity {
                     Log.d("RouteStationListHandler", "NEXT_ACTIVITY");
                     BusStation dest = (BusStation)msg.obj;
                     Intent intent = new Intent(BusRouteStationListActivity.this, FinalActivity.class);
+                    intent.putExtra("departStation", BusStationToStrArray.listToArr(departStation));
                     intent.putExtra("destStation", BusStationToStrArray.listToArr(dest));
                     intent.putExtra("arrivingBus", ArrivingBus.ArrivingBusToArray(arrivingBus));
                     startActivity(intent);

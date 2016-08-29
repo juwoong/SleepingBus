@@ -188,6 +188,7 @@ public class BusStationInfoActivity extends AppCompatActivity {
                 case NEXT_ACTIVITY:
                     Log.d("InfoHandler", "NEXT_ACTIVITY");
                     Intent intent = new Intent(BusStationInfoActivity.this, BusRouteStationListActivity.class);
+                    intent.putExtra("departStation", BusStationToStrArray.listToArr(departStation));
                     intent.putExtra("departBus", (String[])msg.obj);
                     startActivity(intent);
                     break;
